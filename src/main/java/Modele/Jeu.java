@@ -31,7 +31,7 @@ import Patterns.Observable;
 public class Jeu extends Observable {
 	boolean enCours;
 	int[][] plateau;
-	int libre;
+
 	int joueurCourant;
 
 	public Jeu(int n) {
