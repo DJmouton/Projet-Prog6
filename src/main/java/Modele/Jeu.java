@@ -48,12 +48,12 @@ public class Jeu extends Observable {
 	public void jouer(int l, int c) {
 		if (enCours && (plateau[l][c] == 0)) {
 			plateau[l][c] = 1;
-			for (int i=l;i<plateau.length;i++){
-				for(int j=c; j<plateau[0].length;j++){
+			for (int i=l; i<plateau.length; i++){
+				for(int j=c; j<plateau[0].length; j++){
 					plateau[i][j]=1;
 				}
 			}
-				enCours = plateau[0][0]==0 ;
+				enCours = plateau[0][0]==0;
 			joueurCourant = 1 - joueurCourant;
 			metAJour();
 		}
