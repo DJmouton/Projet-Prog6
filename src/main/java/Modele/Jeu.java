@@ -34,26 +34,31 @@ public class Jeu extends Observable {
 
 	int joueurCourant;
 
-	public Jeu(int n) {
-		reset(n);
+	public Jeu(int largeur, int hauteur) {
+		reset(largeur, hauteur);
 	}
 
-	public void reset(int n) {
-		plateau = new int[n][n];
+	public void reset(int largeur, int hauteur) {
+		plateau = new int[hauteur][largeur];
 		enCours = true;
 		joueurCourant = 0;
 		metAJour();
 	}
 
+	/*
+	* Jouer un coup
+	*/
 	public void jouer(int l, int c) {
+		// verifier que la partie est en cours et que le coup est valide
 		if (enCours && (plateau[l][c] == 0)) {
-			plateau[l][c] = 1;
+			// actualiser le plateau
 			for (int i=l; i<plateau.length; i++){
 				for(int j=c; j<plateau[0].length; j++){
 					plateau[i][j]=1;
 				}
 			}
-				enCours = plateau[0][0]==0;
+			// partie finie si poison mangé
+			enCours = plateau[0][0]==0;
 			joueurCourant = 1 - joueurCourant;
 			metAJour();
 		}

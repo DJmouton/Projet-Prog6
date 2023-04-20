@@ -5,26 +5,61 @@ import org.junit.Before;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JeuTest {
-     Jeu jeu;
-    //@Before public void init(){
-
+    Jeu jeu;
 
     @org.junit.jupiter.api.Test
-
-    void jouer() {
-        jeu=new Jeu(16);
-        jeu.jouer(jeu.plateau.length -1,jeu.plateau[0].length -1 );
-        assertEquals(1,jeu.plateau[jeu.plateau.length -1][jeu.plateau[0].length -1 ]);
-        jeu.jouer((jeu.plateau.length -1)/2,(jeu.plateau[0].length -1)/2 );
-        for (int i=(jeu.plateau.length -1)/2; i<jeu.plateau.length -1; i++) {
-            for(int j=(jeu.plateau[0].length -1)/2; j<jeu.plateau[0].length-1; j++ ){
-                assertEquals(1, jeu.plateau[i][j]);
+    void jouerInfDroit() {
+        jeu=new Jeu(8, 8);
+        int l=7, c=7;
+        jeu.jouer(l, c);
+        for (int i = 0; i < jeu.plateau.length; i++) {
+            for (int j = 0; j < jeu.plateau[0].length; j++) {
+                if (i == l && j == c)
+                    assertEquals(1, jeu.plateau[i][j]);
+                else
+                    assertEquals(0, jeu.plateau[i][j]);
             }
         }
-        jeu.jouer(0,0);
-        for (int i=0; i<jeu.plateau.length; i++){
-            for (int j=0; j<jeu.plateau[0].length; j++){
+    }
+
+    @org.junit.jupiter.api.Test
+    void jouerMilieu() {
+        jeu=new Jeu(8, 8);
+        int l=4, c=4;
+        jeu.jouer(l, c);
+        for (int i = 0; i < jeu.plateau.length; i++) {
+            for (int j = 0; j < jeu.plateau[0].length; j++) {
+                if (i >= l && j >= c)
+                    assertEquals(1, jeu.plateau[i][j]);
+                else
+                    assertEquals(0, jeu.plateau[i][j]);
+            }
+        }
+    }
+
+    @org.junit.jupiter.api.Test
+    void jouerSupGauche() {
+        jeu=new Jeu(8, 8);
+        int l=0, c=0;
+        jeu.jouer(l, c);
+        for (int i = 0; i < jeu.plateau.length; i++)
+            for (int j = 0; j < jeu.plateau[0].length; j++)
                 assertEquals(1, jeu.plateau[i][j]);
+    }
+
+    @org.junit.jupiter.api.Test
+    void jouerInvalide() {
+        jeu=new Jeu(8, 8);
+        int l=3, c=6;
+        jeu.jouer(l, c);
+        int l2=4, c2=7;
+        jeu.jouer(l2, c2);
+        for (int i = 0; i < jeu.plateau.length; i++) {
+            for (int j = 0; j < jeu.plateau[0].length; j++) {
+                if (i >= l && j >= c)
+                    assertEquals(1, jeu.plateau[i][j]);
+                else
+                    assertEquals(0, jeu.plateau[i][j]);
             }
         }
     }

@@ -90,6 +90,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	@Override
 	public void changeTaille(int t) {
 		System.out.println("Nouvelle taille " + t);
-		jeu.reset(t);
+		jeu.reset(t, t);
 	}
 }
