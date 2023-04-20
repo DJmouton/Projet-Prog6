@@ -40,27 +40,20 @@ public class Jeu extends Observable {
 
 	public void reset(int n) {
 		plateau = new int[n][n];
-		libre = n*n;
 		enCours = true;
-		for (int i = 0; i < plateau.length; i++)
-			for (int j = 0; j < plateau[0].length; j++)
-				plateau[i][j] = -1;
 		joueurCourant = 0;
 		metAJour();
 	}
 
 	public void jouer(int l, int c) {
-		if (enCours && (plateau[l][c] == -1)) {
-			plateau[l][c] = joueurCourant;
-			libre--;
-			boolean vertical = true, horizontal = true, slash = true, antiSlash = true;
-			for (int p = 0; p < plateau.length; p++) {
-				horizontal = horizontal && (plateau[l][p] == joueurCourant);
-				vertical = vertical && (plateau[p][c] == joueurCourant);
-				slash = slash && (plateau[p][p] == joueurCourant);
-				antiSlash = antiSlash && (plateau[p][plateau.length - p - 1] == joueurCourant);
+		if (enCours && (plateau[l][c] == 0)) {
+			plateau[l][c] = 1;
+			for (int i=l;i<plateau.length;i++){
+				for(int j=c; j<plateau[0].length;j++){
+					plateau[i][j]=1;
+				}
 			}
-			enCours = !(horizontal || vertical || slash || antiSlash) && (libre > 0);
+				enCours = plateau[0][0]==0 ;
 			joueurCourant = 1 - joueurCourant;
 			metAJour();
 		}
