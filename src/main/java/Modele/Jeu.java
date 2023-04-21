@@ -46,11 +46,10 @@ public class Jeu extends Observable {
 	}
 
 	/*
-	* Jouer un coup
+	* Jouer un coup valide
 	*/
 	public void jouer(int l, int c) {
-		// verifier que la partie est en cours et que le coup est valide
-		if (enCours && (plateau[l][c] == 0)) {
+		if (enCours) {
 			// actualiser le plateau
 			for (int i=l; i<plateau.length; i++){
 				for(int j=c; j<plateau[0].length; j++){
@@ -60,12 +59,16 @@ public class Jeu extends Observable {
 			// partie finie si poison mangé
 			enCours = plateau[0][0]==0;
 			joueurCourant = 1 - joueurCourant;
+			// diffuser le changement d'état aux observateurs
 			metAJour();
 		}
 	}
 
+	/*
+	* Verifier si un coup est valide
+	*/
 	public boolean libre(int i, int j) {
-		return valeur(i, j) == -1;
+		return valeur(i, j) == 0;
 	}
 
 	public int valeur(int i, int j) {
