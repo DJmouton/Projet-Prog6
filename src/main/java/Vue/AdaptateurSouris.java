@@ -38,6 +38,9 @@ public class AdaptateurSouris extends MouseAdapter {
 		control = c;
 	}
 
+	/*
+	* Clic reçu. On calcule la case du plateau cliqué et on envoie un évènement
+	*/
 	@Override
 	public void mousePressed(MouseEvent e) {
 		int l = e.getY() / niv.hauteurCase();

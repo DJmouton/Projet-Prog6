@@ -48,8 +48,8 @@ public class Jeu extends Observable {
 	public void jouer(int l, int c) {
 		if (enCours) {
 			// actualiser le plateau
-			for (int i=l; i<plateau.length; i++){
-				for(int j=c; j<plateau[0].length; j++){
+			for (int i=l; i<hauteur(); i++){
+				for(int j=c; j<largeur(); j++){
 					plateau[i][j]=1;
 				}
 			}

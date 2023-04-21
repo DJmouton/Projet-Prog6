@@ -41,6 +41,9 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		jeu.ajouteObservateur(this);
 	}
 
+	/*
+	* Peindre le plateau de jeu
+	*/
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D drawable = (Graphics2D) g;

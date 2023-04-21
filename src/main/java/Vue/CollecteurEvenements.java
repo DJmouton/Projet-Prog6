@@ -26,6 +26,9 @@
  */
 package Vue;
 
+/*
+* Tous les évènements à gérer lors de l'éxecution du programme
+*/
 public interface CollecteurEvenements {
 	void clicSouris(int l, int c);
 	void tictac();

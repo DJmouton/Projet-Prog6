@@ -36,6 +36,9 @@ public class AdaptateurTemps implements ActionListener {
 		control = c;
 	}
 
+	/*
+	* Le timer a tiqué. On envoie un évènement.
+	*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		control.tictac();

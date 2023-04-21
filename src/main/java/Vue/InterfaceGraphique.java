@@ -45,6 +45,9 @@ public class InterfaceGraphique implements Runnable {
 		SwingUtilities.invokeLater(new InterfaceGraphique(j, control));
 	}
 
+	/*
+	* Définition des composants graphiques et de leurs évènements associés
+	*/
 	@Override
 	public void run() {
 		JFrame frame = new JFrame("Ma fenetre a moi");

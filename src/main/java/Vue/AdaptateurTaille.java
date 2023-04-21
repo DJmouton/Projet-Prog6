@@ -39,6 +39,9 @@ public class AdaptateurTaille implements ActionListener {
 		text = t;
 	}
 
+	/*
+	* Une taille a été entrée. On la convertie en entier et on envoie un évènement.
+	*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String ch = text.getText();
