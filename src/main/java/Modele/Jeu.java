@@ -54,8 +54,16 @@ public class Jeu extends Observable {
 					plateau[i][j]=1;
 				}
 			}
-			// partie finie si poison mangé
-			enCours = plateau[0][0]==0;
+			// partie n'est pas finie s'il reste de la gaufre
+			boolean flag=false;
+			for (int i=0;i<hauteur();i++){
+				for (int j=0;j<largeur()&& !flag;j++){
+					if (plateau[i][j]==0){
+						flag=true;
+					}
+				}
+			}
+			enCours=flag;
 			// diffuser le changement d'état aux observateurs
 			metAJour();
 		}
