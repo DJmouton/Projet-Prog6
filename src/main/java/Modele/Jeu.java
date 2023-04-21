@@ -32,8 +32,6 @@ public class Jeu extends Observable {
 	boolean enCours;
 	int[][] plateau;
 
-	int joueurCourant;
-
 	public Jeu(int largeur, int hauteur) {
 		reset(largeur, hauteur);
 	}
@@ -41,7 +39,6 @@ public class Jeu extends Observable {
 	public void reset(int largeur, int hauteur) {
 		plateau = new int[hauteur][largeur];
 		enCours = true;
-		joueurCourant = 0;
 		metAJour();
 	}
 
@@ -58,7 +55,6 @@ public class Jeu extends Observable {
 			}
 			// partie finie si poison mangé
 			enCours = plateau[0][0]==0;
-			joueurCourant = 1 - joueurCourant;
 			// diffuser le changement d'état aux observateurs
 			metAJour();
 		}
