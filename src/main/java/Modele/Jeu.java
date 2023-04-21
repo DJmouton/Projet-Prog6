@@ -38,6 +38,7 @@ public class Jeu extends Observable {
 
 	public void reset(int largeur, int hauteur) {
 		plateau = new int[hauteur][largeur];
+		plateau[0][0] = 1;
 		enCours = true;
 		metAJour();
 	}
@@ -69,6 +70,15 @@ public class Jeu extends Observable {
 
 	public int valeur(int i, int j) {
 		return plateau[i][j];
+	}
+
+	public int nombreCaseLibre(){
+		int r = 0;
+		for (int i = 0 ; i < largeur(); i++)
+			for (int j = 0; j < hauteur(); j++)
+				if(libre(i,j))
+					r++;
+		return r;
 	}
 
 	public boolean enCours() {

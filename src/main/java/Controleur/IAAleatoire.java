@@ -30,10 +30,10 @@ import Modele.Jeu;
 
 import java.util.Random;
 
-class JoueurIA extends Joueur {
+class IAAleatoire extends Joueur {
 	Random r;
 
-	JoueurIA(int n, Jeu p) {
+	IAAleatoire(int n, Jeu p) {
 		super(n, p);
 		r = new Random();
 	}
@@ -41,13 +41,19 @@ class JoueurIA extends Joueur {
 	@Override
 	boolean tempsEcoule() {
 		// Pour cette IA, on selectionne aléatoirement une case libre
-		int i, j;
-
-		i = r.nextInt(plateau.hauteur());
-		j = r.nextInt(plateau.largeur());
-		while (!plateau.libre(i, j)) {
-			i = r.nextInt(plateau.hauteur());
-			j = r.nextInt(plateau.largeur());
+		int taille = this.plateau.nombreCaseLibre();
+		int c = r.nextInt(taille);
+		int i = 1;
+		int j=0;
+		while(i < this.plateau.largeur() && c != 0){
+			j=0;
+			while(j < this.plateau.hauteur() && c != 0){
+				if(this.plateau.libre(i,j)){
+					c--;
+				}
+				j++;
+			}
+			i++;
 		}
 		plateau.jouer(i, j);
 		return true;
