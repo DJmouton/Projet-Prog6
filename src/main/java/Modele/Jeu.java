@@ -35,11 +35,11 @@ public class Jeu extends Observable {
 
 	public Jeu(int largeur, int hauteur) {
 		reset(largeur, hauteur);
-		hist = new Historique();
 	}
 
 	public void reset(int largeur, int hauteur) {
 		plateau = new int[hauteur][largeur];
+		hist = new Historique();
 		plateau[0][0] = 1;
 		enCours = true;
 		metAJour();
