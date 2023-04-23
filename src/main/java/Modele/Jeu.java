@@ -88,6 +88,21 @@ public class Jeu extends Observable {
 					r++;
 		return r;
 	}
+	// tableau de coups possibles à partir de l'état courant
+	public int[][] coups_possibles(){
+		int[][] tableau = new int[nombreCaseLibre()][2];
+		int k=0;
+		for(int i=0; i<largeur();i++){
+			for(int j=0; j<hauteur();j++){
+				if(libre(i,j)){
+					tableau[k][0]=i;
+					tableau[k][1]=j;
+					k++;
+				}
+			}
+		}
+		return tableau;
+	}
 
 	public boolean enCours() {
 		return enCours;
