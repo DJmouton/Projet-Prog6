@@ -35,7 +35,7 @@ public class IANiveau2 extends Joueur{
                 }
             }
         }
-        //
+        ////
         // si aucun coup non perdant ou gagnant on fait un choix aleatoire
         int c = r.nextInt(taille);
         int i = 1;
