@@ -31,6 +31,7 @@ import Patterns.Observable;
 public class Jeu extends Observable {
 	boolean enCours;
 	int[][] plateau;
+	Historique hist;
 
 	public Jeu(int largeur, int hauteur) {
 		reset(largeur, hauteur);
@@ -38,6 +39,7 @@ public class Jeu extends Observable {
 
 	public void reset(int largeur, int hauteur) {
 		plateau = new int[hauteur][largeur];
+		hist = new Historique();
 		plateau[0][0] = 1;
 		enCours = true;
 		metAJour();
@@ -47,6 +49,15 @@ public class Jeu extends Observable {
 	* Jouer un coup valide
 	*/
 	public void jouer(int l, int c) {
+		Coup coup;
+		coup = new Coup(this, l, c);
+		hist.faire(coup);
+	}
+
+	/*
+	* Manger la gaufre à partir de la coordonnée
+	*/
+	public void manger(int l, int c) {
 		if (enCours) {
 			// actualiser le plateau
 			for (int i=l; i<hauteur(); i++){
@@ -64,6 +75,22 @@ public class Jeu extends Observable {
 				}
 			}
 			enCours=flag;
+			// diffuser le changement d'état aux observateurs
+			metAJour();
+		}
+	}
+
+	/*
+	* Rétablir la gaufre à partir de la coordonnée
+	*/
+	public void retablir(int l, int c) {
+		if (enCours) {
+			// actualiser le plateau
+			for (int i = l; i < hauteur(); i++) {
+				for (int j = c; j < largeur(); j++) {
+					plateau[i][j] = 0;
+				}
+			}
 			// diffuser le changement d'état aux observateurs
 			metAJour();
 		}
@@ -114,5 +141,21 @@ public class Jeu extends Observable {
 
 	public int hauteur() {
 		return plateau.length;
+	}
+
+	public boolean peutAnnuler() {
+		return hist.peutAnnuler();
+	}
+
+	public boolean peutRefaire() {
+		return hist.peutRefaire();
+	}
+
+	public void refais() {
+		hist.refaire();
+	}
+
+	public void annule() {
+		hist.annuler();
 	}
 }
