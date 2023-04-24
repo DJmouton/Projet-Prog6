@@ -22,7 +22,7 @@ public class Coup implements Commande
 
 	public void desexecute()
 	{
-		jeu.retablir(l, c);
+		jeu.annuler();
 	}
 
 	public String toString()

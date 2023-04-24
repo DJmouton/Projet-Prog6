@@ -28,9 +28,12 @@ package Modele;
 
 import Patterns.Observable;
 
+import java.util.LinkedList;
+
 public class Jeu extends Observable {
 	boolean enCours;
 	int[][] plateau;
+	LinkedList<int[][]> liste_plateaux;
 	Historique hist;
 
 	public Jeu(int largeur, int hauteur) {
@@ -39,6 +42,7 @@ public class Jeu extends Observable {
 
 	public void reset(int largeur, int hauteur) {
 		plateau = new int[hauteur][largeur];
+		liste_plateaux = new LinkedList<>();
 		hist = new Historique();
 		plateau[0][0] = 1;
 		enCours = true;
@@ -58,7 +62,11 @@ public class Jeu extends Observable {
 	* Manger la gaufre à partir de la coordonnée
 	*/
 	public void manger(int l, int c) {
+		System.out.println("manger"+l+c);
 		if (enCours) {
+			// sauvegarder le plateau
+			int[][] nouv_plateau = plateau.clone();
+			liste_plateaux.addLast(nouv_plateau);
 			// actualiser le plateau
 			for (int i=l; i<hauteur(); i++){
 				for(int j=c; j<largeur(); j++){
@@ -81,16 +89,13 @@ public class Jeu extends Observable {
 	}
 
 	/*
-	* Rétablir la gaufre à partir de la coordonnée
+	* Annuler un coup
 	*/
-	public void retablir(int l, int c) {
+	public void annuler() {
 		if (enCours) {
 			// actualiser le plateau
-			for (int i = l; i < hauteur(); i++) {
-				for (int j = c; j < largeur(); j++) {
-					plateau[i][j] = 0;
-				}
-			}
+			plateau = liste_plateaux.getLast();
+			liste_plateaux.removeLast();
 			// diffuser le changement d'état aux observateurs
 			metAJour();
 		}
