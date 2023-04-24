@@ -26,8 +26,12 @@ package Modele;
  *          38401 Saint Martin d'Hères
  */
 
-import Patterns.Commande;
 import Patterns.Observable;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
 
 import java.util.LinkedList;
 
@@ -50,6 +54,61 @@ public class Jeu extends Observable {
 		plateau[0][0] = 1;
 		enCours = true;
 		metAJour();
+	}
+
+	public void reset(String fichier) throws FileNotFoundException {
+		FileInputStream in = new FileInputStream(fichier);
+		Scanner scanner = new Scanner(in);
+		hist = new Historique();
+
+		int nbLignes = scanner.nextInt();
+		int nbColonnes = scanner.nextInt();
+		String s;
+		Coup coup;
+		int l,c;
+		plateau = new int[nbLignes][nbColonnes];
+		plateau[0][0] = 1;
+		s=scanner.nextLine(); // Coup 2 4
+		while (!s.equals("fin")){
+			switch (s){
+				case "Coup":
+					l=scanner.nextInt();
+					c=scanner.nextInt();
+					coup=new Coup(this,l,c);
+					hist.faire(coup);
+			}
+			s=scanner.nextLine();
+		}
+		while (scanner.hasNextLine()){
+			switch (s){
+				case "Coup":
+					l=scanner.nextInt();
+					c=scanner.nextInt();
+					coup=new Coup(this,l,c);
+					hist.futur.push(coup);
+			}
+			s=scanner.nextLine();
+		}
+	}
+
+	public void sauver(String fichier) throws FileNotFoundException
+	{
+		// ouvrir fichier sortie
+
+		FileOutputStream out = new FileOutputStream(fichier);
+		PrintStream sortie = new PrintStream(out);
+
+		// ecrire dedans
+
+		sortie.println(hauteur());
+		sortie.println(largeur());
+		for (int i=0;i<hist.passe.size();i++){
+			sortie.println(hist.passe.get(i).toString());
+		}
+		sortie.println("fin");
+		for (int i=0;i<hist.futur.size();i++){
+			sortie.println(hist.futur.get(i).toString());
+		}
 	}
 
 	/*

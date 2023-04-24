@@ -30,6 +30,8 @@ package Controleur;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
 
+import java.io.FileNotFoundException;
+
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Joueur[][] joueurs;
@@ -106,10 +108,22 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void sauver(String fichier){
-		System.out.println("Fichier sauvé: " + fichier);
+		try {
+			jeu.sauver(fichier);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("Impossible de sauvegarder dans " + fichier);
+		}
+		System.out.println("Partie sauvegardée");
 	}
 
 	public void charger(String fichier){
-		System.out.println("Fichier chargé: " + fichier);
+		try {
+			jeu.reset(fichier);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("Impossible de charger depuis " + fichier);
+		}
+		System.out.println("Partie chargée");
 	}
 }
