@@ -22,11 +22,11 @@ public class Coup implements Commande
 
 	public void desexecute()
 	{
-		jeu.retablir(l, c);
+		jeu.annuler();
 	}
 
 	public String toString()
 	{
-		return "Coup en ("+l+";"+c+")";
+		return "Coup\n"+l+" "+c ;
 	}
 }
