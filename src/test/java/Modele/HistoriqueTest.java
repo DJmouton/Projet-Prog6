@@ -97,15 +97,15 @@ class HistoriqueTest
 		Historique hist = new Historique();
 		Coup coup;
 
-		jeu.liste_plateaux.addLast(jeu.plateau);
-		afficherListePlateaux();
+		//jeu.liste_plateaux.addLast(jeu.plateau);
+		//afficherListePlateaux();
 
 		coup = new Coup(jeu, 4, 2);
 		hist.faire(coup);
 		System.out.println("coup joué");
 
 		afficherPlateauCourant();
-		afficherListePlateaux();
+		//afficherListePlateaux();
 
 		assertTrue(hist.peutAnnuler());
 		assertFalse(hist.peutRefaire());

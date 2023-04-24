@@ -26,9 +26,12 @@ package Modele;
  *          38401 Saint Martin d'Hères
  */
 
+import Patterns.Commande;
 import Patterns.Observable;
 
 import java.util.LinkedList;
+
+
 
 public class Jeu extends Observable {
 	boolean enCours;
@@ -65,7 +68,11 @@ public class Jeu extends Observable {
 		System.out.println("manger"+l+c);
 		if (enCours) {
 			// sauvegarder le plateau
-			int[][] nouv_plateau = plateau.clone();
+			int[][] nouv_plateau = new int[plateau.length][];
+			for (int i = 0; i < plateau.length; i++) {
+				nouv_plateau[i] = plateau[i].clone();
+			}
+
 			liste_plateaux.addLast(nouv_plateau);
 			// actualiser le plateau
 			for (int i=l; i<hauteur(); i++){

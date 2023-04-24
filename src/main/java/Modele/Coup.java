@@ -27,6 +27,6 @@ public class Coup implements Commande
 
 	public String toString()
 	{
-		return "Coup en ("+l+";"+c+")";
+		return "Coup\n"+l+" "+c ;
 	}
 }
