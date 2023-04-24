@@ -29,12 +29,12 @@ package Vue;
 import Modele.Jeu;
 import Patterns.Observateur;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.*;
+import javax.swing.*;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -76,18 +76,14 @@ public class NiveauGraphique extends JComponent implements Observateur {
         g.clearRect(0, 0, largeur(), hauteur());
 
 		// Fin de la partie
-        if (!jeu.enCours()) {
-			g.setColor(Color.WHITE);
-	        g.drawRect(0, 0, largeur(), hauteur());
-			g.clearRect(0, 0, largeur(), hauteur());
-	        g.setColor(Color.BLACK);
-	        g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
+    	if (!jeu.enCours()) {
+			g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
         }
 
-        // Grille
+		// Case de poison
 		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
 
-        // Coups
+		// Coups
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
