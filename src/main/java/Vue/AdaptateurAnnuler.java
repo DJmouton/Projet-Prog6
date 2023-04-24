@@ -6,11 +6,9 @@ import java.awt.event.ActionListener;
 
 public class AdaptateurAnnuler implements ActionListener {
     CollecteurEvenements control;
-    JButton button;
 
-    AdaptateurAnnuler(CollecteurEvenements c, JButton b) {
+    AdaptateurAnnuler(CollecteurEvenements c) {
         control = c;
-        button = b;
     }
 
     @Override
