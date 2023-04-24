@@ -69,7 +69,7 @@ public class InterfaceGraphique implements Runnable {
 			frame.setIconImage(ImageIO.read(new File("src/main/resources/assets/gaufre.png")));
 		}
 		catch(IOException exc) {
-			System.out.println("Erreur d'image");
+			System.out.println("Erreur de chargement de l'icone");
 		}
 
 		// Barre du Menu Latéral
@@ -92,7 +92,8 @@ public class InterfaceGraphique implements Runnable {
 		barreTaille.add(tailleY);
 		barre.add(barreTaille);
 		barre.add(Box.createGlue());
-
+		
+		// Boutons toggle Joueurs/AIs 
 		for (int i=0; i<2; i++) {
 			barre.add(new JLabel("Joueur " + (i+1)));
 			JToggleButton but = new JToggleButton("IA");
