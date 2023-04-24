@@ -31,6 +31,10 @@ import Patterns.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.*;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -41,11 +45,49 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		jeu.ajouteObservateur(this);
 	}
 
+	/* Load assets */
+	BufferedImage gaufre = null;
+	BufferedImage poison = null;
+	BufferedImage quickGame = null;
+	BufferedImage p1 = null;
+	BufferedImage p2 = null;
+	BufferedImage perso = null;
+	BufferedImage menu = null;
+	BufferedImage couteau = null;
+	BufferedImage fourchette = null;
+	BufferedImage reticule = null;
+	BufferedImage retour = null;
+	BufferedImage question = null;
+	BufferedImage zoomIn = null;
+	BufferedImage zoomOut = null;
+
 	/*
 	* Peindre le plateau de jeu
 	*/
 	@Override
 	public void paintComponent(Graphics g) {
+		try
+		{
+			gaufre = ImageIO.read(new File("src/main/resources/assets/gaufre.png"));
+			couteau = ImageIO.read(new File("src/main/resources/assets/couteau.png"));
+			fourchette = ImageIO.read(new File("src/main/resources/assets/fourchette.png"));
+			menu = ImageIO.read(new File("src/main/resources/assets/menuList.png"));
+			perso = ImageIO.read(new File("src/main/resources/assets/personnage.png"));
+			p1 = ImageIO.read(new File("src/main/resources/assets/players_1.png"));
+			p2 = ImageIO.read(new File("src/main/resources/assets/players_2.png"));
+			poison = ImageIO.read(new File("src/main/resources/assets/poison.png"));
+			question = ImageIO.read(new File("src/main/resources/assets/question.png"));
+			quickGame = ImageIO.read(new File("src/main/resources/assets/quickgame.png"));
+			reticule = ImageIO.read(new File("src/main/resources/assets/reticule.png"));
+			retour = ImageIO.read(new File("src/main/resources/assets/return.png"));
+			zoomIn = ImageIO.read(new File("src/main/resources/assets/zoomIn.png"));
+			zoomOut = ImageIO.read(new File("src/main/resources/assets/zoomOut.png"));
+		}
+		catch(IOException exc)
+		{
+			System.out.println("Erreur d'affichage");
+		}
+
 		Graphics2D drawable = (Graphics2D) g;
         int lignes = jeu.hauteur();
         int colonnes = jeu.largeur();
@@ -53,24 +95,29 @@ public class NiveauGraphique extends JComponent implements Observateur {
         hauteurCase = hauteur() / lignes;
 
         g.clearRect(0, 0, largeur(), hauteur());
+		// Fin de la partie
         if (!jeu.enCours())
-            g.drawString("Fin", 20, hauteur()/2);
+            g.drawString("La partie est terminée", 20, hauteur()/2);
+
         // Grille
-        for (int i=1; i<lignes;i++) {
-            g.drawLine(0, i*hauteurCase, largeur(), i*hauteurCase);
-            g.drawLine(i*largeurCase, 0, i*largeurCase, hauteur());
-        }
+		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
+
         // Coups
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
                     case 0:
-                        g.drawOval(j*largeurCase, i*hauteurCase, largeurCase, hauteurCase);
+                        //g.drawOval(j*largeurCase, i*hauteurCase, largeurCase, hauteurCase);
+						g.drawImage(gaufre, j*largeurCase, i*hauteurCase, largeurCase, hauteurCase, this);
                         break;
                     case 1:
-                        g.drawLine(j*largeurCase, i*hauteurCase, (j+1)*largeurCase, (i+1)*hauteurCase);
-                        g.drawLine(j*largeurCase, (i+1)*hauteurCase, (j+1)*largeurCase, i*hauteurCase);
-                        break;
+						if(!(i == 0 && j == 0)) {
+							g.setColor(Color.RED);
+							g.drawLine(j * largeurCase, i * hauteurCase, (j + 1) * largeurCase, (i + 1) * hauteurCase);
+							g.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
+							g.setColor(Color.BLACK);
+						}
+						break;
                 }
 	}
 
