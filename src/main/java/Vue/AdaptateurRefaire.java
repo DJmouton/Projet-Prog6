@@ -6,11 +6,9 @@ import java.awt.event.ActionListener;
 
 public class AdaptateurRefaire implements ActionListener {
     CollecteurEvenements control;
-    JButton button;
 
-    AdaptateurRefaire(CollecteurEvenements c, JButton b) {
+    AdaptateurRefaire(CollecteurEvenements c) {
         control = c;
-        button = b;
     }
 
     @Override

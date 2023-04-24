@@ -82,16 +82,30 @@ public class InterfaceGraphique implements Runnable {
 		}
 		barre.add(Box.createGlue());
 
-		// Boutons annuler et refaire
+		// Annuler et refaire
 		JButton annuler = new JButton("Annuler");
-		annuler.addActionListener(new AdaptateurAnnuler(control, annuler));
+		annuler.addActionListener(new AdaptateurAnnuler(control));
 		barre.add(annuler);
-		JButton refaire = new JButton("refaire");
-		refaire.addActionListener(new AdaptateurRefaire(control, refaire));
+		JButton refaire = new JButton("Refaire");
+		refaire.addActionListener(new AdaptateurRefaire(control));
 		barre.add(refaire);
 		barre.add(Box.createGlue());
-		frame.add(barre, BorderLayout.LINE_END);
 
+		// Save and load
+		barre.add(new JLabel("Nom fichier:"));
+		JTextField fichier = new JTextField();
+		fichier.setMaximumSize(new Dimension(
+				fichier.getMaximumSize().width, fichier.getMinimumSize().height));
+		barre.add(fichier);
+		JButton sauver = new JButton("Sauver");
+		sauver.addActionListener(new AdaptateurSauver(control, fichier));
+		barre.add(sauver);
+		JButton charger = new JButton("Charger");
+		charger.addActionListener(new AdaptateurCharger(control, fichier));
+		barre.add(charger);
+		barre.add(Box.createGlue());
+
+		frame.add(barre, BorderLayout.LINE_END);
 		Timer chrono = new Timer( 16, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
