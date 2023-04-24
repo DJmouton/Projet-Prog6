@@ -27,15 +27,13 @@ public class IANiveau2 extends Joueur{
             }
         }
         // choix d'un coup gagnant
-        for(int i=0; i<plateau.largeur();i++){
-            for(int j=0;j<plateau.hauteur();j++){
-                if((i==0 && j==1) && !plateau.libre(0,1)){
-                    plateau.jouer(1,0);
-                    return true;
-                }
-            }
+        if(!plateau.libre(0,1) && plateau.libre(1,0)){
+            plateau.jouer(1, 0);
+            return true;
+        } else if (!plateau.libre(1,0) && plateau.libre(0,1)) {
+            plateau.jouer(1,0);
+            return true;
         }
-        ////
         // si aucun coup non perdant ou gagnant on fait un choix aleatoire
         int c = r.nextInt(taille);
         int i = 1;
