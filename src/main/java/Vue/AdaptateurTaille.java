@@ -32,22 +32,26 @@ import java.awt.event.ActionListener;
 
 public class AdaptateurTaille implements ActionListener {
 	CollecteurEvenements control;
-	JTextField text;
+	JTextField tailleX;
+	JTextField tailleY;
 
-	AdaptateurTaille(CollecteurEvenements c, JTextField t) {
+	AdaptateurTaille(CollecteurEvenements c, JTextField x, JTextField y) {
 		control = c;
-		text = t;
+		tailleX = x;
+		tailleY = y;
 	}
 
 	/*
-	* Une taille a été entrée. On la convertie en entier et on envoie un évènement.
-	*/
+	 * Une taille a été entrée. On la convertie en entier et on envoie un évènement.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String ch = text.getText();
+		String x = tailleX.getText();
+		String y = tailleY.getText();
 		try {
-			int val = Integer.parseInt(ch);
-			control.changeTaille(val);
+			int valX = Integer.parseInt(x);
+			int valY = Integer.parseInt(y);
+			control.changeTaille(valX, valY);
 		} catch (Exception ex) {
 			// On ne fait rien si la valeur est invalide
 		}
