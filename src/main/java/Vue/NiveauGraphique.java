@@ -31,6 +31,10 @@ import Patterns.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.*;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -41,36 +45,65 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		jeu.ajouteObservateur(this);
 	}
 
+	/* Load assets */
+	BufferedImage gaufre = null;
+	BufferedImage poison = null;
+
 	/*
 	* Peindre le plateau de jeu
 	*/
 	@Override
 	public void paintComponent(Graphics g) {
+		try
+		{
+			gaufre = ImageIO.read(new File("src/main/resources/assets/gaufre.png"));
+			poison = ImageIO.read(new File("src/main/resources/assets/poison.png"));
+		}
+
+		catch(IOException exc)
+		{
+			System.out.println("Erreur de chargement des assets");
+		}
+
 		Graphics2D drawable = (Graphics2D) g;
+
         int lignes = jeu.hauteur();
         int colonnes = jeu.largeur();
         largeurCase = largeur() / colonnes;
         hauteurCase = hauteur() / lignes;
 
+		// Rectangle clair en fond
         g.clearRect(0, 0, largeur(), hauteur());
-        if (!jeu.enCours())
-            g.drawString("Fin", 20, hauteur()/2);
-        // Grille
-        for (int i=1; i<lignes;i++) {
-            g.drawLine(0, i*hauteurCase, largeur(), i*hauteurCase);
-            g.drawLine(i*largeurCase, 0, i*largeurCase, hauteur());
+
+		// Fin de la partie
+        if (!jeu.enCours()) {
+			g.setColor(Color.WHITE);
+	        g.drawRect(0, 0, largeur(), hauteur());
+			g.clearRect(0, 0, largeur(), hauteur());
+	        g.setColor(Color.BLACK);
+	        g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
         }
+
+        // Grille
+		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
+
         // Coups
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
                     case 0:
-                        g.drawOval(j*largeurCase, i*hauteurCase, largeurCase, hauteurCase);
+                        // Case de gaufre
+						g.drawImage(gaufre, j*largeurCase, i*hauteurCase, largeurCase, hauteurCase, this);
                         break;
                     case 1:
-                        g.drawLine(j*largeurCase, i*hauteurCase, (j+1)*largeurCase, (i+1)*hauteurCase);
-                        g.drawLine(j*largeurCase, (i+1)*hauteurCase, (j+1)*largeurCase, i*hauteurCase);
-                        break;
+						if(!(i == 0 && j == 0)) {
+							// Croix rouge sur les cases mangées.
+							g.setColor(Color.RED);
+							g.drawLine(j * largeurCase, i * hauteurCase, (j + 1) * largeurCase, (i + 1) * hauteurCase);
+							g.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
+							g.setColor(Color.BLACK);
+						}
+						break;
                 }
 	}
 

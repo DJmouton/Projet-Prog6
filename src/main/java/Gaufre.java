@@ -7,6 +7,7 @@ public class Gaufre
 {
 	public static void main(String[] args) {
 		Jeu j = new Jeu(16, 16);
+		System.out.println("hi");
 		CollecteurEvenements control = new ControleurMediateur(j);
 		InterfaceGraphique.demarrer(j, control);
 	}
