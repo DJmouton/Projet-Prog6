@@ -65,7 +65,6 @@ public class Jeu extends Observable {
 	* Manger la gaufre à partir de la coordonnée
 	*/
 	public void manger(int l, int c) {
-		System.out.println("manger"+l+c);
 		if (enCours) {
 			// sauvegarder le plateau
 			int[][] nouv_plateau = new int[plateau.length][];

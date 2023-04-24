@@ -74,22 +74,6 @@ class HistoriqueTest
 		System.out.println();
 	}
 
-	public void afficherListePlateaux()
-	{
-		for (int i = 0; i<jeu.liste_plateaux.size(); i++)
-		{
-			for (int j = 0; j < jeu.liste_plateaux.get(i).length; j++)
-			{
-				for (int k = 0; k< jeu.liste_plateaux.get(i)[0].length; k++)
-				{
-					System.out.print(jeu.liste_plateaux.get(i)[j][k]);
-				}
-				System.out.println();
-			}
-			System.out.println();
-		}
-	}
-
 	@Test
 	public void bugHistorique()
 	{
@@ -97,15 +81,11 @@ class HistoriqueTest
 		Historique hist = new Historique();
 		Coup coup;
 
-		//jeu.liste_plateaux.addLast(jeu.plateau);
-		//afficherListePlateaux();
-
 		coup = new Coup(jeu, 4, 2);
 		hist.faire(coup);
 		System.out.println("coup joué");
 
 		afficherPlateauCourant();
-		//afficherListePlateaux();
 
 		assertTrue(hist.peutAnnuler());
 		assertFalse(hist.peutRefaire());
@@ -152,8 +132,4 @@ class HistoriqueTest
 		assertFalse(hist.peutAnnuler());
 		assertTrue(hist.peutRefaire());
 	}
-	// jouer un coup
-	// annuler
-	// refaire
-	// annuler
 }
