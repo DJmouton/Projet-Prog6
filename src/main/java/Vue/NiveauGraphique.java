@@ -48,18 +48,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	/* Load assets */
 	BufferedImage gaufre = null;
 	BufferedImage poison = null;
-	BufferedImage quickGame = null;
-	BufferedImage p1 = null;
-	BufferedImage p2 = null;
-	BufferedImage perso = null;
-	BufferedImage menu = null;
-	BufferedImage couteau = null;
-	BufferedImage fourchette = null;
-	BufferedImage reticule = null;
-	BufferedImage retour = null;
-	BufferedImage question = null;
-	BufferedImage zoomIn = null;
-	BufferedImage zoomOut = null;
 
 	/*
 	* Peindre le plateau de jeu
@@ -69,35 +57,32 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		try
 		{
 			gaufre = ImageIO.read(new File("src/main/resources/assets/gaufre.png"));
-			couteau = ImageIO.read(new File("src/main/resources/assets/couteau.png"));
-			fourchette = ImageIO.read(new File("src/main/resources/assets/fourchette.png"));
-			menu = ImageIO.read(new File("src/main/resources/assets/menuList.png"));
-			perso = ImageIO.read(new File("src/main/resources/assets/personnage.png"));
-			p1 = ImageIO.read(new File("src/main/resources/assets/players_1.png"));
-			p2 = ImageIO.read(new File("src/main/resources/assets/players_2.png"));
 			poison = ImageIO.read(new File("src/main/resources/assets/poison.png"));
-			question = ImageIO.read(new File("src/main/resources/assets/question.png"));
-			quickGame = ImageIO.read(new File("src/main/resources/assets/quickgame.png"));
-			reticule = ImageIO.read(new File("src/main/resources/assets/reticule.png"));
-			retour = ImageIO.read(new File("src/main/resources/assets/return.png"));
-			zoomIn = ImageIO.read(new File("src/main/resources/assets/zoomIn.png"));
-			zoomOut = ImageIO.read(new File("src/main/resources/assets/zoomOut.png"));
 		}
+
 		catch(IOException exc)
 		{
-			System.out.println("Erreur d'affichage");
+			System.out.println("Erreur de chargement des assets");
 		}
 
 		Graphics2D drawable = (Graphics2D) g;
+
         int lignes = jeu.hauteur();
         int colonnes = jeu.largeur();
         largeurCase = largeur() / colonnes;
         hauteurCase = hauteur() / lignes;
 
+		// Rectangle clair en fond
         g.clearRect(0, 0, largeur(), hauteur());
+
 		// Fin de la partie
-        if (!jeu.enCours())
-            g.drawString("La partie est terminée", 20, hauteur()/2);
+        if (!jeu.enCours()) {
+			g.setColor(Color.WHITE);
+	        g.drawRect(0, 0, largeur(), hauteur());
+			g.clearRect(0, 0, largeur(), hauteur());
+	        g.setColor(Color.BLACK);
+	        g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
+        }
 
         // Grille
 		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
@@ -107,11 +92,12 @@ public class NiveauGraphique extends JComponent implements Observateur {
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
                     case 0:
-                        //g.drawOval(j*largeurCase, i*hauteurCase, largeurCase, hauteurCase);
+                        // Case de gaufre
 						g.drawImage(gaufre, j*largeurCase, i*hauteurCase, largeurCase, hauteurCase, this);
                         break;
                     case 1:
 						if(!(i == 0 && j == 0)) {
+							// Croix rouge sur les cases mangées.
 							g.setColor(Color.RED);
 							g.drawLine(j * largeurCase, i * hauteurCase, (j + 1) * largeurCase, (i + 1) * hauteurCase);
 							g.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
