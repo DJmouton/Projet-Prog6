@@ -56,19 +56,39 @@ public class InterfaceGraphique implements Runnable {
 		frame.add(niv);
 		Box barre = Box.createVerticalBox();
 		barre.add(Box.createGlue());
-		barre.add(new JLabel("Taille"));
-		JTextField userSize = new JTextField();
-		userSize.setMaximumSize(new Dimension(
-				userSize.getMaximumSize().width, userSize.getMinimumSize().height));
-		userSize.addActionListener(new AdaptateurTaille(control, userSize));
-		barre.add(userSize);
+
+		// Taille custom:
+		Box barreTaille = Box.createHorizontalBox();
+		barre.add(new JLabel("Custom (x, y):"));
+		JTextField tailleX = new JTextField();
+		tailleX.setMaximumSize(new Dimension(
+				tailleX.getMaximumSize().width, tailleX.getMinimumSize().height));
+		barreTaille.add(tailleX);
+		JTextField tailleY = new JTextField();
+		tailleY.setMaximumSize(new Dimension(
+				tailleY.getMaximumSize().width, tailleY.getMinimumSize().height));
+		AdaptateurTaille tailleCustom = new AdaptateurTaille(control, tailleX, tailleY);
+		tailleX.addActionListener(tailleCustom);
+		tailleY.addActionListener(tailleCustom);
+		barreTaille.add(tailleY);
+		barre.add(barreTaille);
 		barre.add(Box.createGlue());
+
 		for (int i=0; i<2; i++) {
 			barre.add(new JLabel("Joueur " + (i+1)));
 			JToggleButton but = new JToggleButton("IA");
 			but.addActionListener(new AdaptateurJoueur(control, but, i));
 			barre.add(but);
 		}
+		barre.add(Box.createGlue());
+
+		// Boutons annuler et refaire
+		JButton annuler = new JButton("Annuler");
+		annuler.addActionListener(new AdaptateurAnnuler(control, annuler));
+		barre.add(annuler);
+		JButton refaire = new JButton("refaire");
+		refaire.addActionListener(new AdaptateurRefaire(control, refaire));
+		barre.add(refaire);
 		barre.add(Box.createGlue());
 		frame.add(barre, BorderLayout.LINE_END);
 
