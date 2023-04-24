@@ -36,4 +36,6 @@ public interface CollecteurEvenements {
 	void changeTaille(int x, int y);
 	void annuler();
 	void refaire();
+	void sauver(String fichier);
+	void charger(String fichier);
 }

@@ -104,4 +104,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.peutRefaire())
 			jeu.refais();
 	}
+
+	public void sauver(String fichier){
+		System.out.println("Fichier sauvé: " + fichier);
+	}
+
+	public void charger(String fichier){
+		System.out.println("Fichier chargé: " + fichier);
+	}
 }
