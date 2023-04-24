@@ -1,4 +1,6 @@
-package Vue;/*
+package Vue;
+
+/*
  * Morpion pédagogique
 
  * Copyright (C) 2016 Guillaume Huard
@@ -27,8 +29,11 @@ package Vue;/*
 
 import Modele.Jeu;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class InterfaceGraphique implements Runnable {
 	Jeu j;
@@ -50,10 +55,24 @@ public class InterfaceGraphique implements Runnable {
 	*/
 	@Override
 	public void run() {
-		JFrame frame = new JFrame("Ma fenetre a moi");
+
+		// Nom de la fenetre
+		JFrame frame = new JFrame("Gaufre Empoisonée");
+
+		// Jeu principal
 		NiveauGraphique niv = new NiveauGraphique(j);
 		niv.addMouseListener(new AdaptateurSouris(niv, control));
 		frame.add(niv);
+
+		// Change l'icone de la fenetre principale
+		try {
+			frame.setIconImage(ImageIO.read(new File("src/main/resources/assets/gaufre.png")));
+		}
+		catch(IOException exc) {
+			System.out.println("Erreur de chargement de l'icone");
+		}
+
+		// Barre du Menu Latéral
 		Box barre = Box.createVerticalBox();
 		barre.add(Box.createGlue());
 
@@ -73,7 +92,8 @@ public class InterfaceGraphique implements Runnable {
 		barreTaille.add(tailleY);
 		barre.add(barreTaille);
 		barre.add(Box.createGlue());
-
+		
+		// Boutons toggle Joueurs/AIs 
 		for (int i=0; i<2; i++) {
 			barre.add(new JLabel("Joueur " + (i+1)));
 			JToggleButton but = new JToggleButton("IA");
@@ -105,7 +125,7 @@ public class InterfaceGraphique implements Runnable {
 		barre.add(charger);
 		barre.add(Box.createGlue());
 
-		frame.add(barre, BorderLayout.LINE_END);
+		frame.add(barre, BorderLayout.LINE_START);
 		Timer chrono = new Timer( 16, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
