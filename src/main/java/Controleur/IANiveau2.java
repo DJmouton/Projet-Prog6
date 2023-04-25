@@ -16,29 +16,39 @@ public class IANiveau2 extends Joueur{
     boolean tempsEcoule() {
         // Pour cette IA, on choisit une coup non perdant s'il exite
         // sinon, on choisit un coup gagnat s'il existe
-        int[][] tableau = this.plateau.coups_possibles();
+        int taille = this.plateau.nombreCaseLibre();
         // choix d'un coup non perdant
-        for(int i=0;i< tableau.length;i++){
-            if((tableau[i][0]!=0 && tableau[i][1]!=1) && (tableau[i][0]!=1 && tableau[i][1]!=0)){
-                plateau.jouer(tableau[i][0],tableau[i][1]);
-                return true;
+        for(int i=0; i<plateau.largeur();i++){
+            for(int j=0;j<plateau.hauteur();j++){
+                if((i!=0 && j!=1) && (i!=1 && j!=0)){
+                    plateau.jouer(i,j);
+                    return true;
+                }
             }
         }
         // choix d'un coup gagnant
-        if(plateau.libre(tableau[0][1],tableau[1][0])){
-            plateau.jouer(tableau[1][0],tableau[0][1]);
+        if(!plateau.libre(0,1) && plateau.libre(1,0)){
+            plateau.jouer(1, 0);
+            return true;
+        } else if (!plateau.libre(1,0) && plateau.libre(0,1)) {
+            plateau.jouer(1,0);
             return true;
         }
-        // si aucun coup: non perdant ou gagnant on fait un choix aleatoire
-        int c = r.nextInt(tableau.length);
-        int k=0;
-        while(k< tableau.length && c!=0){
-            if(this.plateau.libre(tableau[k][0],tableau[k][1])){
-                c--;
+        // si aucun coup non perdant ou gagnant on fait un choix aleatoire
+        int c = r.nextInt(taille);
+        int i = 1;
+        int j=0;
+        while(i < this.plateau.largeur() && c != 0){
+            j=0;
+            while(j < this.plateau.hauteur() && c != 0){
+                if(this.plateau.libre(i,j)){
+                    c--;
+                }
+                j++;
             }
-            k++;
+            i++;
         }
-        plateau.jouer(tableau[k][0],tableau[k][1]);
+        plateau.jouer(i,j);
         return true;
     }
 }
