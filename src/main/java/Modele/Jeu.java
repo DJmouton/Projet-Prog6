@@ -181,7 +181,7 @@ public class Jeu extends Observable {
 		int r = 0;
 		for (int i = 0 ; i < largeur(); i++)
 			for (int j = 0; j < hauteur(); j++)
-				if(libre(i,j))
+				if(libre(i, j))
 					r++;
 		return r;
 	}

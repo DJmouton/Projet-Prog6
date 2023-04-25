@@ -34,19 +34,28 @@ public class IANiveau2 extends Joueur{
             plateau.jouer(1,0);
             return true;
         }
+        System.out.println("uiyhjkl");
         // si aucun coup non perdant ou gagnant on fait un choix aleatoire
         int c = r.nextInt(taille);
-        int i = 1;
+        int i;
         int j=0;
-        while(i < this.plateau.largeur() && c != 0){
-            j=0;
-            while(j < this.plateau.hauteur() && c != 0){
+        if(c==0){
+            int[][] table = this.plateau.coups_possibles();
+            this.plateau.jouer(table[0][0], table[0][1]);
+            return true;
+        }
+        for (i = 0; i < this.plateau.largeur(); i++){
+            for (j = 0; j < this.plateau.hauteur(); j++){
                 if(this.plateau.libre(i,j)){
                     c--;
                 }
-                j++;
+                if(c == 0){
+                    break;
+                }
             }
-            i++;
+            if(c == 0){
+                break;
+            }
         }
         plateau.jouer(i,j);
         return true;
