@@ -82,6 +82,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		// Case de poison
 		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
+		// Grille
 
 		// Coups
         for (int i=0; i<lignes; i++)
