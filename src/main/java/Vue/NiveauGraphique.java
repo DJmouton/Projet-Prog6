@@ -74,11 +74,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		largeurCase = largeur() / colonnes;
 		hauteurCase = hauteur() / lignes;
 
-		int[] xpoint = new int[6];
-		int[] ypoint = new int[6];
-		Arrays.fill(xpoint, 6);
-		Arrays.fill(ypoint, 6);
-
 		// Rectangle d'océan (bleu) en fond
 		g.drawImage(waterTile, 0, 0, largeur(), hauteur(), this);
 
