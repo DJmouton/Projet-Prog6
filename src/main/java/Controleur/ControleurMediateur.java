@@ -62,6 +62,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 		*/
 	}
 
+	public void annuler(){
+
+	}
+	public void refaire(){
+
+	}
+
 	void changeJoueur() {
 		joueurCourant = (joueurCourant + 1) % joueurs.length;
 		decompte = lenteurAttente;
@@ -108,20 +115,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 	@Override
 	public void changeTaille(int x, int y) {
 		System.out.println("Nouvelle taille: " + x + ", " + y);
-		jeu.reset(x, y);
+		jeu.reset();
 	}
 
-	@Override
-	public void annuler(){
-		if (jeu.peutAnnuler())
-			jeu.annule();
-	}
 
-	@Override
-	public void refaire(){
-		if (jeu.peutRefaire())
-			jeu.refais();
-	}
 
 	public void sauver(String fichier){
 		try {
