@@ -91,23 +91,31 @@ public class NiveauGraphique extends JComponent implements Observateur {
         }
 
 		// Grille
-
+		for (int i=0; i < lignes;i++)
+			for (int j=0; j < colonnes; j++)
+				if(i == 0 || j == 0 || i == (lignes-1) || j == (colonnes-1)) {
+					g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
+								largeurCase, hauteurCase, this);
+				}
+				else {
+					g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
+							largeurCase, hauteurCase, this);
+					g.drawImage(iceTile, j * largeurCase, i * hauteurCase,
+							largeurCase, hauteurCase, this);
+				}
 		// Coups
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
                     case 0:
-						g.drawImage(iceTile, j * largeurCase, i * hauteurCase,
-									largeurCase, hauteurCase, this);
+						//g.drawImage(iceTile, j * largeurCase, i * hauteurCase, largeurCase, hauteurCase, this);
                         break;
 
                     case 1:
-						if(!(i == 0 && j == 0)) {
-							g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
-									(j + 1) * largeurCase, (i + 1) * hauteurCase, this);
-							g.drawImage(waterTile, j * largeurCase, (i + 1) * hauteurCase,
-									(j + 1) * largeurCase, i * hauteurCase, this);
-						}
+						g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
+								(j + 1) * largeurCase, (i + 1) * hauteurCase, this);
+						g.drawImage(waterTile, j * largeurCase, (i + 1) * hauteurCase,
+								(j + 1) * largeurCase, i * hauteurCase, this);
 						break;
                 }
 	}
