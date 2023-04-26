@@ -33,6 +33,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.*;
 import javax.swing.*;
 
@@ -46,31 +47,40 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	}
 
 	/* Load assets */
-	BufferedImage gaufre = null;
-	BufferedImage poison = null;
 
 	/*
 	* Peindre le plateau de jeu
 	*/
 	@Override
 	public void paintComponent(Graphics g) {
-		try
-		{
-			gaufre = ImageIO.read(new File("src/main/resources/assets/gaufre.png"));
-			poison = ImageIO.read(new File("src/main/resources/assets/poison.png"));
-		}
-
-		catch(IOException exc)
-		{
-			System.out.println("Erreur de chargement des assets");
-		}
 
 		Graphics2D drawable = (Graphics2D) g;
+
+		/* Load Assets */
+		BufferedImage iceTile = null;
+		BufferedImage waterTile = null;
+		BufferedImage penguin = null;
+
+		try
+		{
+			iceTile = ImageIO.read(new File("resources/assets/tileSnow_full.png"));
+			waterTile = ImageIO.read(new File("resources/assets/waterTile.png"));
+			penguin = ImageIO.read(new File("resources/assets/penguin.png"));
+		}
+		catch(IOException exc)
+		{
+			System.out.println("Erreur dans le chargement des images");
+		}
 
         int lignes = jeu.hauteur();
         int colonnes = jeu.largeur();
         largeurCase = largeur() / colonnes;
         hauteurCase = hauteur() / lignes;
+
+		int[] xpoint = new int[6];
+		int[] ypoint = new int[6];
+		Arrays.fill(xpoint, 6);
+		Arrays.fill(ypoint, 6);
 
 		// Rectangle clair en fond
         g.clearRect(0, 0, largeur(), hauteur());
@@ -80,8 +90,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
         }
 
-		// Case de poison
-		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
 		// Grille
 
 		// Coups
@@ -89,16 +97,16 @@ public class NiveauGraphique extends JComponent implements Observateur {
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
                     case 0:
-                        // Case de gaufre
-						g.drawImage(gaufre, j*largeurCase, i*hauteurCase, largeurCase, hauteurCase, this);
+						g.drawImage(iceTile, j * largeurCase, i * hauteurCase,
+									largeurCase, hauteurCase, this);
                         break;
+
                     case 1:
 						if(!(i == 0 && j == 0)) {
-							// Croix rouge sur les cases mangées.
-							g.setColor(Color.RED);
-							g.drawLine(j * largeurCase, i * hauteurCase, (j + 1) * largeurCase, (i + 1) * hauteurCase);
-							g.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
-							g.setColor(Color.BLACK);
+							g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
+									(j + 1) * largeurCase, (i + 1) * hauteurCase, this);
+							g.drawImage(waterTile, j * largeurCase, (i + 1) * hauteurCase,
+									(j + 1) * largeurCase, i * hauteurCase, this);
 						}
 						break;
                 }
