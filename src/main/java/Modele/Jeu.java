@@ -1,5 +1,5 @@
 package Modele;
-
+import java.util.Random;
 /*
  * Morpion pédagogique
  * Copyright (C) 2016 Guillaume Huard
@@ -45,6 +45,15 @@ public class Jeu extends Observable {
 
 	public Jeu(int largeur, int hauteur) {
 		reset(largeur, hauteur);
+	}
+	public void initPlateau(int hauteur, int largeur){
+		Random rand=new Random();
+		int randomNum = rand.nextInt((2 ) + 1) + 1;
+		for (int i=0;i<hauteur;i++){
+			for (int j=0;j<largeur;j++){
+				plateau[i][j]=randomNum;
+			}
+		}
 	}
 
 	public void reset(int largeur, int hauteur) {
