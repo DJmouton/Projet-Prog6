@@ -28,6 +28,7 @@ package Controleur;
  */
 
 import Modele.Jeu;
+import Modele.Joueur;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
@@ -53,10 +54,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	@Override
 	public void clicSouris(int l, int c) {
+		/*
 		// Lors d'un clic, on le transmet au joueur courant.
 		// Si un coup a effectivement été joué (humain, coup valide), on change de joueur.
-		if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(l, c))
+		if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu())
 			changeJoueur();
+		*/
 	}
 
 	void changeJoueur() {
@@ -65,7 +68,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void tictac() {
-		if (jeu.enCours()) {
+		if (jeu.enCours()) {/*
 			if (decompte == 0) {
 				int type = typeJoueur[joueurCourant];
 				// Lorsque le temps est écoulé on le transmet au joueur courant.
@@ -79,12 +82,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 				}
 			} else {
 				decompte--;
-			}
+			}*/
 		}
 	}
 
 	@Override
 	public void changeJoueur(int j, int t) {
+		/*
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
 		if(t == 0) {
 			joueurs[j][0] = new JoueurHumain(j, jeu);
@@ -98,6 +102,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			}
 		}
 		typeJoueur[j] = t;
+		*/
 	}
 
 	@Override

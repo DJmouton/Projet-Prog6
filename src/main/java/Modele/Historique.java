@@ -32,6 +32,7 @@ public class Historique
 		cmd = passe.pop();
 		cmd.desexecute();
 		futur.push(cmd);
+
 	}
 
 	public void refaire()

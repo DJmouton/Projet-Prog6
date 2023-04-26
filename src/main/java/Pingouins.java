@@ -3,7 +3,7 @@ import Modele.Jeu;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceGraphique;
 
-public class Gaufre
+public class Pingouins
 {
 	public static void main(String[] args) {
 		Jeu j = new Jeu(16, 16);
