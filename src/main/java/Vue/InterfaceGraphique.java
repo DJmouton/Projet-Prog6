@@ -55,77 +55,29 @@ public class InterfaceGraphique implements Runnable {
 	*/
 	@Override
 	public void run() {
-
-		// Nom de la fenetre
-		JFrame frame = new JFrame("Gaufre Empoisonée");
-
-		// Jeu principal
-		NiveauGraphique niv = new NiveauGraphique(j);
-		niv.addMouseListener(new AdaptateurSouris(niv, control));
-		frame.add(niv);
-
-		// Change l'icone de la fenetre principale
+  
+    // Nom de la fenêtre
+		JFrame frame = new JFrame("Gaufre Empoisonnée");
+    
+    // Change l'icone de la fenetre principale
 		try {
 			frame.setIconImage(ImageIO.read(new File("src/main/resources/assets/gaufre.png")));
 		}
 		catch(IOException exc) {
 			System.out.println("Erreur de chargement de l'icone");
 		}
+    
+    // Jeu principal
+		NiveauGraphique niv = new NiveauGraphique(j);
+		niv.addMouseListener(new AdaptateurSouris(niv, control));
+		frame.add(niv);
 
-		// Barre du Menu Latéral
-		Box barre = Box.createVerticalBox();
-		barre.add(Box.createGlue());
+		ComposantMenuPartie menuLateral = new ComposantMenuPartie(BoxLayout.Y_AXIS, control);
+		ComposantBarreHaute barreHaute = new ComposantBarreHaute(BoxLayout.X_AXIS, control, menuLateral);
 
-		// Taille custom:
-		Box barreTaille = Box.createHorizontalBox();
-		barre.add(new JLabel("Custom (x, y):"));
-		JTextField tailleX = new JTextField();
-		tailleX.setMaximumSize(new Dimension(
-				tailleX.getMaximumSize().width, tailleX.getMinimumSize().height));
-		barreTaille.add(tailleX);
-		JTextField tailleY = new JTextField();
-		tailleY.setMaximumSize(new Dimension(
-				tailleY.getMaximumSize().width, tailleY.getMinimumSize().height));
-		AdaptateurTaille tailleCustom = new AdaptateurTaille(control, tailleX, tailleY);
-		tailleX.addActionListener(tailleCustom);
-		tailleY.addActionListener(tailleCustom);
-		barreTaille.add(tailleY);
-		barre.add(barreTaille);
-		barre.add(Box.createGlue());
-		
-		// Boutons toggle Joueurs/AIs 
-		for (int i=0; i<2; i++) {
-			barre.add(new JLabel("Joueur " + (i+1)));
-			JToggleButton but = new JToggleButton("IA");
-			but.addActionListener(new AdaptateurJoueur(control, but, i));
-			barre.add(but);
-		}
-		barre.add(Box.createGlue());
+		frame.add(barreHaute, BorderLayout.PAGE_START);
+		frame.add(menuLateral, BorderLayout.LINE_END);
 
-		// Annuler et refaire
-		JButton annuler = new JButton("Annuler");
-		annuler.addActionListener(new AdaptateurAnnuler(control));
-		barre.add(annuler);
-		JButton refaire = new JButton("Refaire");
-		refaire.addActionListener(new AdaptateurRefaire(control));
-		barre.add(refaire);
-		barre.add(Box.createGlue());
-
-		// Save and load
-		barre.add(new JLabel("Nom fichier:"));
-		JTextField fichier = new JTextField();
-		fichier.setMaximumSize(new Dimension(
-				fichier.getMaximumSize().width, fichier.getMinimumSize().height));
-		barre.add(fichier);
-		JButton sauver = new JButton("Sauver");
-		sauver.addActionListener(new AdaptateurSauver(control, fichier));
-		barre.add(sauver);
-		JButton charger = new JButton("Charger");
-		charger.addActionListener(new AdaptateurCharger(control, fichier));
-		barre.add(charger);
-		barre.add(Box.createGlue());
-
-		frame.add(barre, BorderLayout.LINE_START);
 		Timer chrono = new Timer( 16, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
