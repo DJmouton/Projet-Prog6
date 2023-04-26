@@ -1,4 +1,6 @@
-package Vue;/*
+package Vue;
+
+/*
  * Morpion pédagogique
 
  * Copyright (C) 2016 Guillaume Huard
@@ -27,8 +29,11 @@ package Vue;/*
 
 import Modele.Jeu;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class InterfaceGraphique implements Runnable {
 	Jeu j;
@@ -50,7 +55,19 @@ public class InterfaceGraphique implements Runnable {
 	*/
 	@Override
 	public void run() {
-		JFrame frame = new JFrame("Gaufre empoisonnée");
+  
+    // Nom de la fenêtre
+		JFrame frame = new JFrame("Gaufre Empoisonnée");
+    
+    // Change l'icone de la fenetre principale
+		try {
+			frame.setIconImage(ImageIO.read(new File("src/main/resources/assets/gaufre.png")));
+		}
+		catch(IOException exc) {
+			System.out.println("Erreur de chargement de l'icone");
+		}
+    
+    // Jeu principal
 		NiveauGraphique niv = new NiveauGraphique(j);
 		niv.addMouseListener(new AdaptateurSouris(niv, control));
 		frame.add(niv);

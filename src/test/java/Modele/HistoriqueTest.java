@@ -60,4 +60,76 @@ class HistoriqueTest
 		assertEquals(10, hist.passe.size());
 		assertFalse(hist.peutRefaire());
 	}
+
+	public void afficherPlateauCourant()
+	{
+		for (int i = 0; i < jeu.hauteur(); i++)
+		{
+			for (int j = 0; j < jeu.largeur(); j++)
+			{
+				System.out.print(jeu.plateau[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+
+	@Test
+	public void bugHistorique()
+	{
+		jeu = new Jeu(6, 6);
+		Historique hist = new Historique();
+		Coup coup;
+
+		coup = new Coup(jeu, 4, 2);
+		hist.faire(coup);
+		System.out.println("coup joué");
+
+		afficherPlateauCourant();
+
+		assertTrue(hist.peutAnnuler());
+		assertFalse(hist.peutRefaire());
+
+		hist.annuler();
+		System.out.println("coup annulé");
+
+		for (int i=0; i<jeu.hauteur(); i++){
+			for(int j=0; j<jeu.largeur(); j++){
+				System.out.print(jeu.plateau[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println();
+
+		assertFalse(hist.peutAnnuler());
+		assertTrue(hist.peutRefaire());
+
+		hist.refaire();
+		System.out.println("coup refait");
+
+		for (int i=0; i<jeu.hauteur(); i++){
+			for(int j=0; j<jeu.largeur(); j++){
+				System.out.print(jeu.plateau[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println();
+
+		assertTrue(hist.peutAnnuler());
+		assertFalse(hist.peutRefaire());
+
+		hist.annuler();
+		System.out.println("coup annulé");
+
+		for (int i=0; i<jeu.hauteur(); i++){
+			for(int j=0; j<jeu.largeur(); j++){
+				System.out.print(jeu.plateau[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println();
+
+		assertFalse(hist.peutAnnuler());
+		assertTrue(hist.peutRefaire());
+	}
 }

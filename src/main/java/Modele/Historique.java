@@ -1,7 +1,13 @@
 package Modele;
 
+
+
 import Patterns.Commande;
+
+
 import java.util.Stack;
+
+
 
 public class Historique
 {
@@ -35,6 +41,8 @@ public class Historique
 		cmd.execute();
 		passe.push(cmd);
 	}
+
+
 
 	public boolean peutAnnuler()
 	{

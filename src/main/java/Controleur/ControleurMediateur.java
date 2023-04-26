@@ -30,6 +30,8 @@ package Controleur;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
 
+import java.io.FileNotFoundException;
+
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Joueur[][] joueurs;
@@ -44,7 +46,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		typeJoueur = new int[2];
 		for (int i = 0; i < joueurs.length; i++) {
 			joueurs[i][0] = new JoueurHumain(i, jeu);
-			joueurs[i][1] = new IAAleatoire(i, jeu);
+			joueurs[i][1] = new JoueurHumain(i, jeu);
 			typeJoueur[i] = 0;
 		}
 	}
@@ -84,6 +86,17 @@ public class ControleurMediateur implements CollecteurEvenements {
 	@Override
 	public void changeJoueur(int j, int t) {
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
+		if(t == 0) {
+			joueurs[j][0] = new JoueurHumain(j, jeu);
+		}
+		else if(t == 1) {
+			if(j==0) {
+				joueurs[j][1] = new IAAleatoire(j, jeu);
+			}
+			else {
+				joueurs[j][1] = new IANiveau2(j, jeu);
+			}
+		}
 		typeJoueur[j] = t;
 	}
 
@@ -106,10 +119,22 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void sauver(String fichier){
-		System.out.println("Fichier sauvé: " + fichier);
+		try {
+			jeu.sauver(fichier);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("Impossible de sauvegarder dans " + fichier);
+		}
+		System.out.println("Partie sauvegardée");
 	}
 
 	public void charger(String fichier){
-		System.out.println("Fichier chargé: " + fichier);
+		try {
+			jeu.reset(fichier);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("Impossible de charger depuis " + fichier);
+		}
+		System.out.println("Partie chargée");
 	}
 }

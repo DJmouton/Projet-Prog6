@@ -27,10 +27,20 @@ package Modele;
  */
 
 import Patterns.Observable;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+import java.util.LinkedList;
+
+
 
 public class Jeu extends Observable {
 	boolean enCours;
 	int[][] plateau;
+	LinkedList<int[][]> liste_plateaux;
 	Historique hist;
 
 	public Jeu(int largeur, int hauteur) {
@@ -39,10 +49,66 @@ public class Jeu extends Observable {
 
 	public void reset(int largeur, int hauteur) {
 		plateau = new int[hauteur][largeur];
+		liste_plateaux = new LinkedList<>();
 		hist = new Historique();
 		plateau[0][0] = 1;
 		enCours = true;
 		metAJour();
+	}
+
+	public void reset(String fichier) throws FileNotFoundException {
+		FileInputStream in = new FileInputStream(fichier);
+		Scanner scanner = new Scanner(in);
+		hist = new Historique();
+
+		int nbLignes = scanner.nextInt();
+		int nbColonnes = scanner.nextInt();
+		String s;
+		Coup coup;
+		int l,c;
+		plateau = new int[nbLignes][nbColonnes];
+		plateau[0][0] = 1;
+		s=scanner.nextLine(); // Coup 2 4
+		while (!s.equals("fin")){
+			switch (s){
+				case "Coup":
+					l=scanner.nextInt();
+					c=scanner.nextInt();
+					coup=new Coup(this,l,c);
+					hist.faire(coup);
+			}
+			s=scanner.nextLine();
+		}
+		while (scanner.hasNextLine()){
+			switch (s){
+				case "Coup":
+					l=scanner.nextInt();
+					c=scanner.nextInt();
+					coup=new Coup(this,l,c);
+					hist.futur.push(coup);
+			}
+			s=scanner.nextLine();
+		}
+	}
+
+	public void sauver(String fichier) throws FileNotFoundException
+	{
+		// ouvrir fichier sortie
+
+		FileOutputStream out = new FileOutputStream(fichier);
+		PrintStream sortie = new PrintStream(out);
+
+		// ecrire dedans
+
+		sortie.println(hauteur());
+		sortie.println(largeur());
+		for (int i=0;i<hist.passe.size();i++){
+			sortie.println(hist.passe.get(i).toString());
+		}
+		sortie.println("fin");
+		for (int i=0;i<hist.futur.size();i++){
+			sortie.println(hist.futur.get(i).toString());
+		}
 	}
 
 	/*
@@ -59,6 +125,13 @@ public class Jeu extends Observable {
 	*/
 	public void manger(int l, int c) {
 		if (enCours) {
+			// sauvegarder le plateau
+			int[][] nouv_plateau = new int[plateau.length][];
+			for (int i = 0; i < plateau.length; i++) {
+				nouv_plateau[i] = plateau[i].clone();
+			}
+
+			liste_plateaux.addLast(nouv_plateau);
 			// actualiser le plateau
 			for (int i=l; i<hauteur(); i++){
 				for(int j=c; j<largeur(); j++){
@@ -81,16 +154,13 @@ public class Jeu extends Observable {
 	}
 
 	/*
-	* Rétablir la gaufre à partir de la coordonnée
+	* Annuler un coup
 	*/
-	public void retablir(int l, int c) {
+	public void annuler() {
 		if (enCours) {
 			// actualiser le plateau
-			for (int i = l; i < hauteur(); i++) {
-				for (int j = c; j < largeur(); j++) {
-					plateau[i][j] = 0;
-				}
-			}
+			plateau = liste_plateaux.getLast();
+			liste_plateaux.removeLast();
 			// diffuser le changement d'état aux observateurs
 			metAJour();
 		}
@@ -111,7 +181,7 @@ public class Jeu extends Observable {
 		int r = 0;
 		for (int i = 0 ; i < largeur(); i++)
 			for (int j = 0; j < hauteur(); j++)
-				if(libre(i,j))
+				if(libre(i, j))
 					r++;
 		return r;
 	}
