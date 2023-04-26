@@ -61,48 +61,53 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		BufferedImage waterTile = null;
 		BufferedImage penguin = null;
 
-		try
-		{
+		try {
 			iceTile = ImageIO.read(new File("resources/assets/tileSnow_full.png"));
 			waterTile = ImageIO.read(new File("resources/assets/waterTile.png"));
 			penguin = ImageIO.read(new File("resources/assets/penguin.png"));
-		}
-		catch(IOException exc)
-		{
+		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
 		}
 
-        int lignes = jeu.hauteur();
-        int colonnes = jeu.largeur();
-        largeurCase = largeur() / colonnes;
-        hauteurCase = hauteur() / lignes;
+		int lignes = jeu.hauteur();
+		int colonnes = jeu.largeur();
+		largeurCase = largeur() / colonnes;
+		hauteurCase = hauteur() / lignes;
 
 		int[] xpoint = new int[6];
 		int[] ypoint = new int[6];
 		Arrays.fill(xpoint, 6);
 		Arrays.fill(ypoint, 6);
 
-		// Rectangle clair en fond
-        g.clearRect(0, 0, largeur(), hauteur());
+		// Rectangle d'océan (bleu) en fond
+		g.drawImage(waterTile, 0, 0, largeur(), hauteur(), this);
 
 		// Fin de la partie
-    	if (!jeu.enCours()) {
+		if (!jeu.enCours()) {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
-        }
+		}
 
+		float height;
+		height = (float)3/4 * (float)hauteurCase;
+		int hauteur;
+		int largeur = largeurCase;
+		int test = (int)1.5;
 		// Grille
-		for (int i=0; i < lignes;i++)
-			for (int j=0; j < colonnes; j++)
-				if(i == 0 || j == 0 || i == (lignes-1) || j == (colonnes-1)) {
-					g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
+		for (double i = 2; i < (lignes); i++) {
+			hauteur = (int)((float)i * (height));
+			if (i % 2 == 1) {
+					for (double j = 1.5; j < (colonnes - 2); j++) {
+							g.drawImage(iceTile, (int)(j) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+						}
+					} else {
+				for (double j = 0.5; j < (colonnes - 2); j++) {
+						g.drawImage(iceTile, (int)(j + 1) * largeurCase, hauteur,
 								largeurCase, hauteurCase, this);
+					}
 				}
-				else {
-					g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
-							largeurCase, hauteurCase, this);
-					g.drawImage(iceTile, j * largeurCase, i * hauteurCase,
-							largeurCase, hauteurCase, this);
-				}
+			}
+
 		// Coups
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)

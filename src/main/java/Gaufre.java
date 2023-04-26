@@ -6,7 +6,7 @@ import Vue.InterfaceGraphique;
 public class Gaufre
 {
 	public static void main(String[] args) {
-		Jeu j = new Jeu(16, 16);
+		Jeu j = new Jeu(10, 10);
 		CollecteurEvenements control = new ControleurMediateur(j);
 		InterfaceGraphique.demarrer(j, control);
 	}
