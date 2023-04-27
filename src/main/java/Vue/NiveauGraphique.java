@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.*;
 import javax.swing.*;
+import java.util.Random;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -46,8 +47,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		jeu.ajouteObservateur(this);
 	}
 
-	/* Load assets */
-
 	/*
 	* Peindre le plateau de jeu
 	*/
@@ -57,14 +56,22 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		Graphics2D drawable = (Graphics2D) g;
 
 		/* Load Assets */
-		BufferedImage iceTile = null;
-		BufferedImage waterTile = null;
-		BufferedImage penguin = null;
+		BufferedImage[] assetsPlateau = new BufferedImage[8];
+		BufferedImage waterBG = null;
+
 
 		try {
-			iceTile = ImageIO.read(new File("resources/assets/tileSnow_full.png"));
-			waterTile = ImageIO.read(new File("resources/assets/waterTile.png"));
-			penguin = ImageIO.read(new File("resources/assets/penguin.png"));
+			waterBG = ImageIO.read(new File("resources/assets/waterTile.png"));
+			assetsPlateau[0] = ImageIO.read(new File("resources/assets/water.png"));
+			assetsPlateau[1] = ImageIO.read(new File("resources/assets/poisson1.png"));
+			assetsPlateau[2] = ImageIO.read(new File("resources/assets/poisson2.png"));
+			assetsPlateau[3] = ImageIO.read(new File("resources/assets/poisson3.png"));
+			assetsPlateau[4] = ImageIO.read(new File("resources/assets/penguinBleu.png"));
+			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
+			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
+			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+
+
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
 		}
@@ -74,36 +81,38 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		largeurCase = largeur() / colonnes;
 		hauteurCase = hauteur() / lignes;
 
+		//g.clearRect(0, 0, largeur() + largeurCase, hauteur() + hauteurCase);
+
 		// Rectangle d'océan (bleu) en fond
-		g.drawImage(waterTile, 0, 0, largeur(), hauteur(), this);
+		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
+
+		// DIMINUE LA TAILLE DES IMAGES
+		((Graphics2D) g).scale(0.9, 1.3);
 
 		// Fin de la partie
 		if (!jeu.enCours()) {
-			g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
+			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
 		}
 
+		// Grille
 		float height;
+		// Formule pour calculer la distance entre 2 hexagons
 		height = (float)3/4 * (float)hauteurCase;
 		int hauteur;
-		int largeur = largeurCase;
-		int test = (int)1.5;
-		// Grille
-		for (double i = 2; i < (lignes); i++) {
-			hauteur = (int)((float)i * (height));
-			if (i % 2 == 1) {
-					for (double j = 1.5; j < (colonnes - 2); j++) {
-							g.drawImage(iceTile, (int)(j) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-						}
-					} else {
-				for (double j = 0.5; j < (colonnes - 2); j++) {
-						g.drawImage(iceTile, (int)(j + 1) * largeurCase, hauteur,
+		for (int i = 0; i < (lignes); i++) {
+			hauteur = (int) ((float) i * (height));
+			for (int j = 0; j < (colonnes); j++) {
+				if (jeu.valeur(i, j) == 0) continue;
+				if (i % 2 == 1)
+					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
 								largeurCase, hauteurCase, this);
-					}
-				}
+				else
+					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
+								largeurCase, hauteurCase, this);
 			}
+		}
 
-		// Coups
+		// Coups / Placement des Pingouins
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
@@ -111,11 +120,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 						//g.drawImage(iceTile, j * largeurCase, i * hauteurCase, largeurCase, hauteurCase, this);
                         break;
 
-                    case 1:
-						g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
-								(j + 1) * largeurCase, (i + 1) * hauteurCase, this);
-						g.drawImage(waterTile, j * largeurCase, (i + 1) * hauteurCase,
-								(j + 1) * largeurCase, i * hauteurCase, this);
+	                case 1:
+
 						break;
                 }
 	}

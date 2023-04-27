@@ -12,14 +12,12 @@ public class ComposantMenuPartie extends Box {
         add(new ComposantTaille(axis, control));
         add(Box.createGlue());
         for (int i=0; i<2; i++) {
-            add(new JLabel("Joueur " + (i+1)));
-            JToggleButton but = new JToggleButton("IA");
+            JToggleButton but = new JToggleButton("Joueur " + (i+1));
             but.addActionListener(new AdaptateurJoueur(control, but, i));
             add(but);
         }
         add(Box.createGlue());
         add(new ComposantSauverCharger(axis, control));
         add(Box.createGlue());
-
     }
 }

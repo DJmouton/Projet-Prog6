@@ -1,7 +1,7 @@
-package Controleur;
+package Modele;
+
 /*
  * Morpion pédagogique
-
  * Copyright (C) 2016 Guillaume Huard
 
  * Ce programme est libre, vous pouvez le redistribuer et/ou le
@@ -28,42 +28,31 @@ package Controleur;
 
 import Modele.Jeu;
 
-import java.util.Random;
+// Classe commune à tous les joueurs : IA ou humain
+// L'idée est que, en ayant la même interface, tous les joueurs sont traités de la même
+// manière par le moteur de jeu. C'est plus simple et permet toutes les combinaisons.
+//
+// Tous les joueurs ont donc potentiellement la possibilité de :
+// - provoquer une temporisation (utilisé dans une IA)
+// - tenir compte d'une temporisation écoulée (utilisé dans une IA)
+// - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
+public abstract class Joueur {
+	Jeu plateau;
+	int num;
 
-class IAAleatoire extends Joueur {
-	Random r;
-
-	IAAleatoire(int n, Jeu p) {
-		super(n, p);
-		r = new Random();
+	// Le joueur connait son numéro, cela lui permet d'inspecter le plateau en
+	// sachant
+	// repérer ses pions et évaluer où il en est
+	public Joueur(int n, Jeu p) {
+		num = n;
+		plateau = p;
 	}
 
-	@Override
-	boolean tempsEcoule() {
-		// Pour cette IA, on selectionne aléatoirement une case libre
-		int taille = this.plateau.nombreCaseLibre();
-		int c = r.nextInt(taille);
-		int i;
-		int j=0;
-		if(c==0){
-			int[][] table = this.plateau.coups_possibles();
-			this.plateau.jouer(table[0][0], table[0][1]);
-			return true;
-		}
-		for (i = 0; i < this.plateau.largeur(); i++){
-			for (j = 0; j < this.plateau.hauteur(); j++){
-				if(this.plateau.libre(i,j)){
-					c--;
-				}
-				if(c == 0){
-					break;
-				}
-			}
-			if(c == 0){
-				break;
-			}
-		}
-		plateau.jouer(i, j);
-		return true;
+	public int num() {
+		return num;
 	}
+
+	// Méthode appelée pour tous les joueurs lors d'un clic sur le plateau
+	// Si un joueur n'est pas concerné, il lui suffit de l'ignorer
+	public abstract Coup jeu();
 }
