@@ -39,6 +39,7 @@ import Modele.Jeu;
 public abstract class Joueur {
 	Jeu plateau;
 	int num;
+	int score;
 
 	// Le joueur connait son numéro, cela lui permet d'inspecter le plateau en
 	// sachant
@@ -52,7 +53,10 @@ public abstract class Joueur {
 		return num;
 	}
 
+	// Placement initial d'un pingouin par le joueur
+	public abstract void placement();
+
 	// Méthode appelée pour tous les joueurs lors d'un clic sur le plateau
 	// Si un joueur n'est pas concerné, il lui suffit de l'ignorer
-	public abstract Coup jeu();
+	public abstract void jeu();
 }
