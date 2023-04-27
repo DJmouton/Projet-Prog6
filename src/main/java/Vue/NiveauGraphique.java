@@ -99,11 +99,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		float height;
 		height = (float)3/4 * (float)hauteurCase;
 		int hauteur;
-		for (double i = 0; i < (lignes); i++) {
+		for (int i = 0; i < (lignes); i++) {
 			hauteur = (int) ((float) i * (height));
 			if (i % 2 == 1) {
-				for (double j = 0; j < (colonnes - 3); j++) {
-					switch (jeu.plateau[i][j]) {
+				for (int j = 0; j < (colonnes); j++) {
+					switch (jeu.valeur(i, j)) {
 						case 0:
 							g.drawImage(water, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
 									largeurCase, hauteurCase, this);
@@ -141,14 +141,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 									largeurCase, hauteurCase, this);
 							break;
 					}
-					g.drawImage(poisson3, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-							largeurCase, hauteurCase, this);
 				}
 			} else {
-				for (double j = 0; j < (colonnes - 2); j++) {
-					g.drawImage(poisson3, (int) (j + 1) * largeurCase, hauteur,
-							largeurCase, hauteurCase, this);
-					switch (jeu.plateau[i][j]) {
+				for (int j = 0; j < (colonnes); j++) {
+					switch (jeu.valeur(i, j)) {
 						case 0:
 							g.drawImage(water, (int) (j + 1) * largeurCase, hauteur,
 									largeurCase, hauteurCase, this);
