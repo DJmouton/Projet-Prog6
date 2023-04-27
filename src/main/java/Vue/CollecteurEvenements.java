@@ -34,8 +34,10 @@ public interface CollecteurEvenements {
 	void tictac();
 	void changeJoueur(int j, int t);
 	void changeTaille(int x, int y);
-	void annuler();
-	void refaire();
 	void sauver(String fichier);
 	void charger(String fichier);
+
+	void annuler();
+
+	void refaire();
 }
