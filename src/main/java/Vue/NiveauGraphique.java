@@ -81,13 +81,13 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		largeurCase = largeur() / colonnes;
 		hauteurCase = hauteur() / lignes;
 
-		g.clearRect(0, 0, largeur() + largeurCase, hauteur() + hauteurCase);
+		//g.clearRect(0, 0, largeur() + largeurCase, hauteur() + hauteurCase);
 
 		// Rectangle d'océan (bleu) en fond
 		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
 
 		// DIMINUE LA TAILLE DES IMAGES
-		((Graphics2D) g).scale(0.9, 0.9);
+		((Graphics2D) g).scale(0.9, 1.3);
 
 		// Fin de la partie
 		if (!jeu.enCours()) {
@@ -110,8 +110,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
 								largeurCase, hauteurCase, this);
 			}
-			g.drawImage(assetsPlateau[0], largeur()+largeurCase, hauteur(), largeurCase, hauteurCase, this);
-			g.drawImage(assetsPlateau[0], largeur()+1, hauteur()+1, largeurCase, hauteurCase, this);
 		}
 
 		// Coups / Placement des Pingouins
