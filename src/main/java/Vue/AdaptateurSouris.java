@@ -43,8 +43,11 @@ public class AdaptateurSouris extends MouseAdapter {
 	*/
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int l = e.getY() / niv.hauteurCase();
-		int c = e.getX() / niv.largeurCase();
-		control.clicSouris(l, c);
+		int x = e.getX();
+		int y = e.getY();
+		int size = niv.hauteurCase / 2;
+		int q = (int)((Math.sqrt(3)/3 * x) - ((-1.0)/3.0 * y) / size);
+		int r = (int)((2.0/3.0 * y) / size);
+		control.clicSouris(q, r);
 	}
 }
