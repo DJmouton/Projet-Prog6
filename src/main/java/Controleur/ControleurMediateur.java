@@ -42,9 +42,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
 		this.jeu.joueurs = new Joueur[2];
-		for (int i = 0; i < this.jeu.joueurs.length; i++) {
-			this.jeu.joueurs[i] = new JoueurHumain(i, jeu);
-		}
+		this.jeu.joueurs[0] = new JoueurHumain(4, jeu);
+		this.jeu.joueurs[1] = new JoueurHumain(5, jeu);
+
 	}
 
 	@Override

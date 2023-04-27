@@ -8,18 +8,19 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 public class Jeu extends Observable {
-	boolean enCours;
+
 	int[][] plateau;
 	public Joueur[] joueurs;
 	int largeur=8;
 	int hauteur=8;
+	int nombreP=8;
 
 	public Jeu() {
 		reset();
 	}
 
-	public Jeu(boolean enCours, int[][] plateau, int largeur, int hauteur) {
-		this.enCours = enCours;
+	public Jeu( int[][] plateau, int largeur, int hauteur) {
+
 		this.largeur = largeur;
 		this.hauteur = hauteur;
 		this.plateau = plateau.clone();
@@ -27,10 +28,8 @@ public class Jeu extends Observable {
 
 	public void reset() {
 		initPlateau();
-		enCours = true;
 		metAJour();
 	}
-
 	public void reset(String fichier) throws FileNotFoundException {
 		FileInputStream in = new FileInputStream(fichier);
 		Scanner scanner = new Scanner(in);
@@ -92,7 +91,7 @@ public class Jeu extends Observable {
 	}
 
 	public boolean enCours() {
-		return enCours;
+		return nombreP!=0;
 	}
 
 	public int largeur() {
@@ -126,6 +125,22 @@ public class Jeu extends Observable {
 		return result;
 	}
 
+	//pingou placement,pingou deplacement,pingou bloque,quand le caise est bloque,
+	public void InitPingou(){
+		for (Joueur j : joueurs){
+			for(int i=0;i<4;i++){
+				j.placement();
+			}
+		}
+	}
+	public void GameLoop(){
+		InitPingou();
+		int jouerC=0;
+		while(enCours()){
+			this.joueurs[jouerC].jeu();
+			jouerC=(jouerC+1)%this.joueurs.length;
+		}
+	}
 	public ArrayList<int[]> hex_accessible(int x,int y){
 		ArrayList<int[]>res=new ArrayList<>();
 		res.addAll(acc_ligne_inf(x,y-1));
@@ -174,34 +189,7 @@ public class Jeu extends Observable {
 	/*
 	* Manger la gaufre à partir de la coordonnée
 	*/
-	public void manger(int l, int c) {
-		if (enCours) {
-			// sauvegarder le plateau
-			int[][] nouv_plateau = new int[plateau.length][];
-			for (int i = 0; i < plateau.length; i++) {
-				nouv_plateau[i] = plateau[i].clone();
-			}
 
-			// actualiser le plateau
-			for (int i=l; i<hauteur(); i++){
-				for(int j=c; j<largeur(); j++){
-					plateau[i][j]=1;
-				}
-			}
-			// partie n'est pas finie s'il reste de la gaufre
-			boolean flag=false;
-			for (int i=0;i<hauteur();i++){
-				for (int j=0;j<largeur()&& !flag;j++){
-					if (plateau[i][j]==0){
-						flag=true;
-					}
-				}
-			}
-			enCours=flag;
-			// diffuser le changement d'état aux observateurs
-			metAJour();
-		}
-	}
 
 	private void initPlateau(){
 		List<Integer> list =new ArrayList<>(Collections.nCopies(30, 1));
@@ -305,6 +293,6 @@ public class Jeu extends Observable {
 
 	@Override
 	protected Object clone(){
-		return new Jeu(this.enCours,this.plateau,this.largeur,this.hauteur);
+		return new Jeu(this.plateau,this.largeur,this.hauteur);
 	}
 }
