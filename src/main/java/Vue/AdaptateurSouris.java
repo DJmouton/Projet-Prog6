@@ -38,6 +38,56 @@ public class AdaptateurSouris extends MouseAdapter {
 		control = c;
 	}
 
+	private float [] axial_to_cube(float [] hex) {
+		float q = hex[0];
+		float r = hex[1];
+		float s = -q-r;
+		float [] cube = new float[3];
+		cube[0] = q;
+		cube[1] = r;
+		cube[2] = s;
+		return cube;
+	}
+
+	private float [] cube_to_axial(float [] cube) {
+		float q = cube[0];
+		float r = cube[1];
+		float[] hex = new float[2];
+		hex[0] = q;
+		hex[1] = r;
+		return hex;
+	}
+
+	private float [] cube_round(float [] frac) {
+		float qf = frac[0];
+		float rf = frac[1];
+		float sf = frac[2];
+
+		float [] cube = new float[3];
+		float q = Math.round(qf);
+		float r = Math.round(rf);
+		float s = Math.round(sf);
+
+		float q_diff = Math.abs(q - qf);
+		float r_diff = Math.abs(r - rf);
+		float s_diff = Math.abs(s - sf);
+
+		if (q_diff > r_diff && q_diff > s_diff)
+			q = -r-s;
+		else if (r_diff > s_diff)
+			r = -q-s;
+        else
+			s = -q-r;
+
+		cube[0] = q;
+		cube[1] = r;
+		cube[2] = s;
+		return cube;
+	}
+
+	private float [] axial_round(float [] hex) {
+		return cube_to_axial(cube_round(axial_to_cube(hex)));
+	}
 	/*
 	* Clic reçu. On calcule la case du plateau cliqué et on envoie un évènement
 	*/
@@ -46,8 +96,16 @@ public class AdaptateurSouris extends MouseAdapter {
 		int x = e.getX();
 		int y = e.getY();
 		int size = niv.hauteurCase / 2;
-		int q = (int)((Math.sqrt(3)/3 * x) - ((-1.0)/3.0 * y) / size);
-		int r = (int)((2.0/3.0 * y) / size);
-		control.clicSouris(q, r);
+
+		float q = (float)((Math.sqrt(3)/3 * x) - ((1.0)/3.0 * y) / size);
+		float r = (float)((2.0/3.0 * y) / size);
+		float[] hex = new float[2];
+		hex[0] = q;
+		hex[1] = r;
+		float[] res;
+		res = axial_round(hex);
+		int c = (int)res[0];
+		int l = (int)res[1];
+		control.clicSouris(c, l);
 	}
 }

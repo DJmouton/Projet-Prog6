@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.*;
 import javax.swing.*;
-import java.util.Random;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -81,8 +80,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		largeurCase = largeur() / colonnes;
 		hauteurCase = hauteur() / lignes;
 
-		//g.clearRect(0, 0, largeur() + largeurCase, hauteur() + hauteurCase);
-
 		// Rectangle d'océan (bleu) en fond
 		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
 
@@ -97,7 +94,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Grille
 		float height;
 		// Formule pour calculer la distance entre 2 hexagons
-		height = (float)3/4 * (float)hauteurCase;
+		height = (float) 3 / 4 * (float) hauteurCase;
 		int hauteur;
 		for (int i = 0; i < (lignes); i++) {
 			hauteur = (int) ((float) i * (height));
@@ -105,25 +102,12 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				if (jeu.valeur(i, j) == 0) continue;
 				if (i % 2 == 1)
 					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
-								largeurCase, hauteurCase, this);
+							largeurCase, hauteurCase, this);
 				else
 					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
-								largeurCase, hauteurCase, this);
+							largeurCase, hauteurCase, this);
 			}
 		}
-
-		// Coups / Placement des Pingouins
-        for (int i=0; i<lignes; i++)
-            for (int j=0; j<colonnes; j++)
-                switch (jeu.valeur(i, j)) {
-                    case 0:
-						//g.drawImage(iceTile, j * largeurCase, i * hauteurCase, largeurCase, hauteurCase, this);
-                        break;
-
-	                case 1:
-
-						break;
-                }
 	}
 
 	int largeur() {

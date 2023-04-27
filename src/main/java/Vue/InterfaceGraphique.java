@@ -74,9 +74,11 @@ public class InterfaceGraphique implements Runnable {
 
 		ComposantMenuPartie menuLateral = new ComposantMenuPartie(BoxLayout.Y_AXIS, control);
 		ComposantBarreHaute barreHaute = new ComposantBarreHaute(BoxLayout.X_AXIS, control, menuLateral);
+		ComposantJoueurs EtatJoueur = new ComposantJoueurs(BoxLayout.Y_AXIS, control);
 
 		frame.add(barreHaute, BorderLayout.PAGE_START);
 		frame.add(menuLateral, BorderLayout.LINE_END);
+		frame.add(EtatJoueur, BorderLayout.LINE_START);
 
 		Timer chrono = new Timer( 16, new AdaptateurTemps(control));
 		chrono.start();
