@@ -4,20 +4,33 @@ import Patterns.Commande;
 
 public class Coup implements Commande
 {
-	int l, c;
+	int sourcel, sourcec;
+	int destl, destc;
 	Jeu jeu;
 
-	Coup(Jeu jeu, int ligne, int colonne)
-	{
-		l = ligne;
-		c = colonne;
+	public Coup(Jeu jeu, int sourcel, int sourcec, int destl, int destc) {
+		this.sourcel = sourcel;
+		this.sourcec = sourcec;
+		this.destl = destl;
+		this.destc = destc;
+		this.jeu = jeu;
+	}
+
+	public void setJeu(Jeu jeu) {
 		this.jeu = jeu;
 	}
 
 	public void execute()
 	{
-		if (jeu.libre(l, c))
-			jeu.manger(l, c);
+		int numJ=this.jeu.plateau[sourcel][sourcec];
+		this.jeu.plateau[sourcel][sourcec]=0;
+		this.jeu.joueurs[numJ-4].score=this.jeu.plateau[destl][destc];
+		this.jeu.plateau[destl][destc]=numJ;
+		if (jeu.hex_accessible(destl,destc).isEmpty()){
+			this.jeu.plateau[destl][destc]=0;
+			this.jeu.nombreP--;
+		}
+
 	}
 
 	public void desexecute()
@@ -25,8 +38,14 @@ public class Coup implements Commande
 		jeu.annuler();
 	}
 
-	public String toString()
-	{
-		return "Coup\n"+l+" "+c ;
+	@Override
+	public String toString() {
+		return "Coup{" +
+				"sourcel=" + sourcel +
+				", sourcec=" + sourcec +
+				", destl=" + destl +
+				", destc=" + destc +
+				", jeu=" + jeu +
+				'}';
 	}
 }
