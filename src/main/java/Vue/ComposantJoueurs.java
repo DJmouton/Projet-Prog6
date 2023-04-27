@@ -22,9 +22,17 @@ public class ComposantJoueurs extends Box {
 		JLabel j2 = new JLabel(new ImageIcon(perso));
 		JLabel j3 = new JLabel(new ImageIcon(perso));
 		JLabel j4 = new JLabel(new ImageIcon(perso));
-		add(j1, BorderLayout.NORTH);
-		add(j2, BorderLayout.SOUTH);
+		JButton joueur1 = new JButton("Joueur 1");
+		add(joueur1);
+		add(j1);
+		JButton joueur2 = new JButton("Joueur 2");
+		add(joueur2);
+		add(j2);
+		JButton joueur3 = new JButton("Joueur 3");
+		add(joueur3);
 		add(j3);
+		JButton joueur4 = new JButton("Joueur 4");
+		add(joueur4);
 		add(j4);
 	}
 }
