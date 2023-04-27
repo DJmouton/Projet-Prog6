@@ -55,22 +55,22 @@ public class InterfaceGraphique implements Runnable {
 	*/
 	@Override
 	public void run() {
-  
-    // Nom de la fenêtre
-		JFrame frame = new JFrame("Gaufre Empoisonnée");
-    
-    // Change l'icone de la fenetre principale
+
+		// Nom de la fenetre
+		JFrame frame = new JFrame("Hey, that's my fish !");
+
+		// Jeu principal
+		NiveauGraphique niv = new NiveauGraphique(j);
+		niv.addMouseListener(new AdaptateurSouris(niv, control));
+		frame.add(niv);
+
+		// Change l'icone de la fenetre principale
 		try {
-			frame.setIconImage(ImageIO.read(new File("src/main/resources/assets/gaufre.png")));
+			frame.setIconImage(ImageIO.read(new File("resources/assets/penguin.png")));
 		}
 		catch(IOException exc) {
 			System.out.println("Erreur de chargement de l'icone");
 		}
-    
-    // Jeu principal
-		NiveauGraphique niv = new NiveauGraphique(j);
-		niv.addMouseListener(new AdaptateurSouris(niv, control));
-		frame.add(niv);
 
 		ComposantMenuPartie menuLateral = new ComposantMenuPartie(BoxLayout.Y_AXIS, control);
 		ComposantBarreHaute barreHaute = new ComposantBarreHaute(BoxLayout.X_AXIS, control, menuLateral);

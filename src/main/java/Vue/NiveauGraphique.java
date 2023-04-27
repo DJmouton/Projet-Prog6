@@ -33,8 +33,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.*;
 import javax.swing.*;
+import java.util.Random;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -45,61 +47,74 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		jeu.ajouteObservateur(this);
 	}
 
-	/* Load assets */
-	BufferedImage gaufre = null;
-	BufferedImage poison = null;
-
 	/*
 	* Peindre le plateau de jeu
 	*/
 	@Override
 	public void paintComponent(Graphics g) {
-		try
-		{
-			gaufre = ImageIO.read(new File("src/main/resources/assets/gaufre.png"));
-			poison = ImageIO.read(new File("src/main/resources/assets/poison.png"));
-		}
-
-		catch(IOException exc)
-		{
-			System.out.println("Erreur de chargement des assets");
-		}
 
 		Graphics2D drawable = (Graphics2D) g;
 
-        int lignes = jeu.hauteur();
-        int colonnes = jeu.largeur();
-        largeurCase = largeur() / colonnes;
-        hauteurCase = hauteur() / lignes;
+		/* Load Assets */
+		BufferedImage[] assetsPlateau = new BufferedImage[8];
+		BufferedImage waterBG = null;
 
-		// Rectangle clair en fond
-        g.clearRect(0, 0, largeur(), hauteur());
+
+		try {
+			waterBG = ImageIO.read(new File("resources/assets/waterTile.png"));
+			assetsPlateau[0] = ImageIO.read(new File("resources/assets/water.png"));
+			assetsPlateau[1] = ImageIO.read(new File("resources/assets/poisson1.png"));
+			assetsPlateau[2] = ImageIO.read(new File("resources/assets/poisson2.png"));
+			assetsPlateau[3] = ImageIO.read(new File("resources/assets/poisson3.png"));
+			assetsPlateau[4] = ImageIO.read(new File("resources/assets/penguinBleu.png"));
+			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
+			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
+			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+
+
+		} catch (IOException exc) {
+			System.out.println("Erreur dans le chargement des images");
+		}
+
+		int lignes = jeu.hauteur();
+		int colonnes = jeu.largeur();
+		largeurCase = largeur() / colonnes;
+		hauteurCase = hauteur() / lignes;
+
+		// Rectangle d'océan (bleu) en fond
+		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
 
 		// Fin de la partie
-    	if (!jeu.enCours()) {
+		if (!jeu.enCours()) {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
-        }
+		}
 
-		// Case de poison
-		g.drawImage(poison, 0, 0, largeurCase, hauteurCase, this);
 		// Grille
+		float height;
+		height = (float)3/4 * (float)hauteurCase;
+		int hauteur;
+		for (int i = 0; i < (lignes); i++) {
+			hauteur = (int) ((float) i * (height));
+			for (int j = 0; j < (colonnes); j++) {
+				if (i % 2 == 1)
+					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
+							largeurCase, hauteurCase, this);
+				else
+					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
+							largeurCase, hauteurCase, this);
+			}
+		}
 
-		// Coups
+		// Coups / Placement des Pingouins
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
                     case 0:
-                        // Case de gaufre
-						g.drawImage(gaufre, j*largeurCase, i*hauteurCase, largeurCase, hauteurCase, this);
+						//g.drawImage(iceTile, j * largeurCase, i * hauteurCase, largeurCase, hauteurCase, this);
                         break;
-                    case 1:
-						if(!(i == 0 && j == 0)) {
-							// Croix rouge sur les cases mangées.
-							g.setColor(Color.RED);
-							g.drawLine(j * largeurCase, i * hauteurCase, (j + 1) * largeurCase, (i + 1) * hauteurCase);
-							g.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
-							g.setColor(Color.BLACK);
-						}
+
+	                case 1:
+
 						break;
                 }
 	}
