@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.*;
 import javax.swing.*;
+import java.util.Random;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -46,8 +47,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		jeu.ajouteObservateur(this);
 	}
 
-	/* Load assets */
-
 	/*
 	* Peindre le plateau de jeu
 	*/
@@ -57,14 +56,28 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		Graphics2D drawable = (Graphics2D) g;
 
 		/* Load Assets */
-		BufferedImage iceTile = null;
-		BufferedImage waterTile = null;
-		BufferedImage penguin = null;
+		BufferedImage water = null;
+		BufferedImage waterBG = null;
+		BufferedImage penguinB = null;
+		BufferedImage penguinV = null;
+		BufferedImage penguinR = null;
+		BufferedImage penguinJ = null;
+		BufferedImage poisson1 = null;
+		BufferedImage poisson2 = null;
+		BufferedImage poisson3 = null;
+
 
 		try {
-			iceTile = ImageIO.read(new File("resources/assets/tileSnow_full.png"));
-			waterTile = ImageIO.read(new File("resources/assets/waterTile.png"));
-			penguin = ImageIO.read(new File("resources/assets/penguin.png"));
+			water = ImageIO.read(new File("resources/assets/water.png"));
+			waterBG = ImageIO.read(new File("resources/assets/waterTile.png"));
+			penguinB = ImageIO.read(new File("resources/assets/penguinBleu.png"));
+			penguinV = ImageIO.read(new File("resources/assets/penguinVert.png"));
+			penguinR = ImageIO.read(new File("resources/assets/penguinRouge.png"));
+			penguinJ = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+			poisson1 = ImageIO.read(new File("resources/assets/poisson1.png"));
+			poisson2 = ImageIO.read(new File("resources/assets/poisson2.png"));
+			poisson3 = ImageIO.read(new File("resources/assets/poisson3.png"));
+
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
 		}
@@ -75,35 +88,109 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		hauteurCase = hauteur() / lignes;
 
 		// Rectangle d'océan (bleu) en fond
-		g.drawImage(waterTile, 0, 0, largeur(), hauteur(), this);
+		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
 
 		// Fin de la partie
 		if (!jeu.enCours()) {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() - 5);
 		}
 
+		// Grille
 		float height;
 		height = (float)3/4 * (float)hauteurCase;
 		int hauteur;
-		int largeur = largeurCase;
-		int test = (int)1.5;
-		// Grille
-		for (double i = 2; i < (lignes); i++) {
-			hauteur = (int)((float)i * (height));
+		for (double i = 0; i < (lignes); i++) {
+			hauteur = (int) ((float) i * (height));
 			if (i % 2 == 1) {
-					for (double j = 1.5; j < (colonnes - 2); j++) {
-							g.drawImage(iceTile, (int)(j) * largeurCase + largeurCase / 2, hauteur,
+				for (double j = 0; j < (colonnes - 3); j++) {
+					switch (jeu.plateau[i][j]) {
+						case 0:
+							g.drawImage(water, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
 									largeurCase, hauteurCase, this);
-						}
-					} else {
-				for (double j = 0.5; j < (colonnes - 2); j++) {
-						g.drawImage(iceTile, (int)(j + 1) * largeurCase, hauteur,
-								largeurCase, hauteurCase, this);
+							break;
+						case 1:
+							g.drawImage(poisson1, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+						case 2:
+							g.drawImage(poisson2, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+						case 3:
+							g.drawImage(poisson3, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 4:
+							g.drawImage(penguinV, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 5:
+							g.drawImage(penguinR, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 6:
+							g.drawImage(penguinB, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 7:
+							g.drawImage(penguinJ, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+					}
+					g.drawImage(poisson3, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
+							largeurCase, hauteurCase, this);
+				}
+			} else {
+				for (double j = 0; j < (colonnes - 2); j++) {
+					g.drawImage(poisson3, (int) (j + 1) * largeurCase, hauteur,
+							largeurCase, hauteurCase, this);
+					switch (jeu.plateau[i][j]) {
+						case 0:
+							g.drawImage(water, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+						case 1:
+							g.drawImage(poisson1, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+						case 2:
+							g.drawImage(poisson2, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+						case 3:
+							g.drawImage(poisson3, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 4:
+							g.drawImage(penguinV, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 5:
+							g.drawImage(penguinR, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 6:
+							g.drawImage(penguinB, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
+
+						case 7:
+							g.drawImage(penguinJ, (int) (j + 1) * largeurCase, hauteur,
+									largeurCase, hauteurCase, this);
+							break;
 					}
 				}
 			}
+		}
 
-		// Coups
+		// Coups / Placement des Pingouins
         for (int i=0; i<lignes; i++)
             for (int j=0; j<colonnes; j++)
                 switch (jeu.valeur(i, j)) {
@@ -111,11 +198,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 						//g.drawImage(iceTile, j * largeurCase, i * hauteurCase, largeurCase, hauteurCase, this);
                         break;
 
-                    case 1:
-						g.drawImage(waterTile, j * largeurCase, i * hauteurCase,
-								(j + 1) * largeurCase, (i + 1) * hauteurCase, this);
-						g.drawImage(waterTile, j * largeurCase, (i + 1) * hauteurCase,
-								(j + 1) * largeurCase, i * hauteurCase, this);
+	                case 1:
+
 						break;
                 }
 	}
