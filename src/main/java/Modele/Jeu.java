@@ -137,6 +137,7 @@ public class Jeu extends Observable {
 		InitPingou();
 		int jouerC=0;
 		while(enCours()){
+			System.out.println("tour de joeur: "+jouerC+" score de: "+joueurs[jouerC].score);
 			this.joueurs[jouerC].jeu();
 			jouerC=(jouerC+1)%this.joueurs.length;
 		}
