@@ -35,16 +35,15 @@ import java.io.FileNotFoundException;
 
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
-	Joueur[] joueurs;
 	int joueurCourant;
 	final int lenteurAttente = 50;
 	int decompte;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		joueurs = new Joueur[2];
-		for (int i = 0; i < joueurs.length; i++) {
-			joueurs[i] = new JoueurHumain(i, jeu);
+		this.jeu.joueurs = new Joueur[2];
+		for (int i = 0; i < this.jeu.joueurs.length; i++) {
+			this.jeu.joueurs[i] = new JoueurHumain(i, jeu);
 		}
 	}
 
@@ -66,7 +65,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	void changeJoueur() {
-		joueurCourant = (joueurCourant + 1) % joueurs.length;
+		joueurCourant = (joueurCourant + 1) % this.jeu.joueurs.length;
 		decompte = lenteurAttente;
 	}
 

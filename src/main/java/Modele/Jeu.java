@@ -10,11 +10,19 @@ import java.io.PrintStream;
 public class Jeu extends Observable {
 	boolean enCours;
 	int[][] plateau;
+	public Joueur[] joueurs;
 	int largeur=8;
 	int hauteur=8;
 
 	public Jeu() {
 		reset();
+	}
+
+	public Jeu(boolean enCours, int[][] plateau, int largeur, int hauteur) {
+		this.enCours = enCours;
+		this.largeur = largeur;
+		this.hauteur = hauteur;
+		this.plateau = plateau.clone();
 	}
 
 	public void reset() {
@@ -39,7 +47,7 @@ public class Jeu extends Observable {
 				case "Coup":
 					l=scanner.nextInt();
 					c=scanner.nextInt();
-					coup=new Coup(this,l,c);
+					//coup=new Coup(this,l,c);
 
 			}
 			s=scanner.nextLine();
@@ -49,7 +57,7 @@ public class Jeu extends Observable {
 				case "Coup":
 					l=scanner.nextInt();
 					c=scanner.nextInt();
-					coup=new Coup(this,l,c);
+//					coup=new Coup(this,l,c);
 
 			}
 			s=scanner.nextLine();
@@ -73,7 +81,7 @@ public class Jeu extends Observable {
 	*/
 	public void jouer(int l, int c) {
 		Coup coup;
-		coup = new Coup(this, l, c);
+		//coup = new Coup(this, l, c);
 	}
 
 	/*
@@ -104,6 +112,18 @@ public class Jeu extends Observable {
 
 	public int valeur(int i, int j) {
 		return plateau[i][j];
+	}
+
+	public ArrayList<int[]> getPingouins(int num){
+		ArrayList<int[]> result = new ArrayList<>();
+		for(int i = 0; i < largeur; i++){
+			for(int j = 0 ; j < hauteur; j++){
+				if(plateau[i][j]==num){
+					result.add(new int[]{i,j});
+				}
+			}
+		}
+		return result;
 	}
 
 	public ArrayList<int[]> hex_accessible(int x,int y){
@@ -281,5 +301,10 @@ public class Jeu extends Observable {
 			res.addAll(acc_diagonal2_sup(x+1, y));
 		}
 		return res;
+	}
+
+	@Override
+	protected Object clone(){
+		return new Jeu(this.enCours,this.plateau,this.largeur,this.hauteur);
 	}
 }
