@@ -56,27 +56,21 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		Graphics2D drawable = (Graphics2D) g;
 
 		/* Load Assets */
-		BufferedImage water = null;
+		BufferedImage[] assetsPlateau = new BufferedImage[8];
 		BufferedImage waterBG = null;
-		BufferedImage penguinB = null;
-		BufferedImage penguinV = null;
-		BufferedImage penguinR = null;
-		BufferedImage penguinJ = null;
-		BufferedImage poisson1 = null;
-		BufferedImage poisson2 = null;
-		BufferedImage poisson3 = null;
 
 
 		try {
-			water = ImageIO.read(new File("resources/assets/water.png"));
 			waterBG = ImageIO.read(new File("resources/assets/waterTile.png"));
-			penguinB = ImageIO.read(new File("resources/assets/penguinBleu.png"));
-			penguinV = ImageIO.read(new File("resources/assets/penguinVert.png"));
-			penguinR = ImageIO.read(new File("resources/assets/penguinRouge.png"));
-			penguinJ = ImageIO.read(new File("resources/assets/penguinJaune.png"));
-			poisson1 = ImageIO.read(new File("resources/assets/poisson1.png"));
-			poisson2 = ImageIO.read(new File("resources/assets/poisson2.png"));
-			poisson3 = ImageIO.read(new File("resources/assets/poisson3.png"));
+			assetsPlateau[0] = ImageIO.read(new File("resources/assets/water.png"));
+			assetsPlateau[1] = ImageIO.read(new File("resources/assets/poisson1.png"));
+			assetsPlateau[2] = ImageIO.read(new File("resources/assets/poisson2.png"));
+			assetsPlateau[3] = ImageIO.read(new File("resources/assets/poisson3.png"));
+			assetsPlateau[4] = ImageIO.read(new File("resources/assets/penguinBleu.png"));
+			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
+			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
+			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+
 
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
@@ -101,88 +95,13 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		int hauteur;
 		for (int i = 0; i < (lignes); i++) {
 			hauteur = (int) ((float) i * (height));
-			if (i % 2 == 1) {
-				for (int j = 0; j < (colonnes); j++) {
-					switch (jeu.valeur(i, j)) {
-						case 0:
-							g.drawImage(water, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-						case 1:
-							g.drawImage(poisson1, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-						case 2:
-							g.drawImage(poisson2, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-						case 3:
-							g.drawImage(poisson3, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 4:
-							g.drawImage(penguinV, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 5:
-							g.drawImage(penguinR, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 6:
-							g.drawImage(penguinB, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 7:
-							g.drawImage(penguinJ, (int) (j + 1) * largeurCase + largeurCase / 2, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-					}
-				}
-			} else {
-				for (int j = 0; j < (colonnes); j++) {
-					switch (jeu.valeur(i, j)) {
-						case 0:
-							g.drawImage(water, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-						case 1:
-							g.drawImage(poisson1, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-						case 2:
-							g.drawImage(poisson2, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-						case 3:
-							g.drawImage(poisson3, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 4:
-							g.drawImage(penguinV, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 5:
-							g.drawImage(penguinR, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 6:
-							g.drawImage(penguinB, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-
-						case 7:
-							g.drawImage(penguinJ, (int) (j + 1) * largeurCase, hauteur,
-									largeurCase, hauteurCase, this);
-							break;
-					}
-				}
+			for (int j = 0; j < (colonnes); j++) {
+				if (i % 2 == 1)
+					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
+							largeurCase, hauteurCase, this);
+				else
+					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
+							largeurCase, hauteurCase, this);
 			}
 		}
 
