@@ -2,65 +2,41 @@ package Modele;
 
 import org.junit.Before;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class JeuTest {
     Jeu jeu;
 
     @org.junit.jupiter.api.Test
-    void jouerInfDroit() {
-        jeu=new Jeu(8, 8);
-        int l=7, c=7;
-        jeu.jouer(l, c);
-        for (int i = 0; i < jeu.hauteur(); i++) {
-            for (int j = 0; j < jeu.largeur(); j++) {
-                if (i == l && j == c)
-                    assertEquals(1, jeu.plateau[i][j]);
-                else
-                    assertEquals(0, jeu.plateau[i][j]);
-            }
-        }
+    void accessibleCoinSupGauche()
+    {
+        jeu = new Jeu();
+        ArrayList<int[]> res = jeu.hex_accessible(0, 1);
+
+        assertFalse(res.isEmpty());
+        assertEquals(0, res.get(0)[0]);
+        assertTrue(equalstab(new int[]{0, 1}, res));
     }
 
-    @org.junit.jupiter.api.Test
-    void jouerMilieu() {
-        jeu=new Jeu(8, 8);
-        int l=4, c=4;
-        jeu.jouer(l, c);
-        for (int i = 0; i < jeu.hauteur(); i++) {
-            for (int j = 0; j < jeu.largeur(); j++) {
-                if (i >= l && j >= c)
-                    assertEquals(1, jeu.plateau[i][j]);
-                else
-                    assertEquals(0, jeu.plateau[i][j]);
+
+    boolean equalstab(int[] valeur, ArrayList<int[]> list){
+        boolean res = false;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).length == valeur.length) {
+                res = true;
+                for (int j = 0; j < valeur.length; j++) {
+                    if (list.get(i)[j] != valeur[j]) {
+                            res = false;
+                            break;
+                    }
+                }
+
+                if (res) return res;
             }
         }
-    }
 
-    @org.junit.jupiter.api.Test
-    void jouerSupGauche() {
-        jeu=new Jeu(8, 8);
-        int l=0, c=0;
-        jeu.jouer(l, c);
-        for (int i = 0; i < jeu.hauteur(); i++)
-            for (int j = 0; j < jeu.largeur(); j++)
-                assertEquals(1, jeu.plateau[i][j]);
-    }
-
-    @org.junit.jupiter.api.Test
-    void jouerInvalide() {
-        jeu=new Jeu(8, 8);
-        int l=3, c=6;
-        jeu.jouer(l, c);
-        int l2=4, c2=7;
-        jeu.jouer(l2, c2);
-        for (int i = 0; i < jeu.hauteur(); i++) {
-            for (int j = 0; j < jeu.largeur(); j++) {
-                if (i >= l && j >= c)
-                    assertEquals(1, jeu.plateau[i][j]);
-                else
-                    assertEquals(0, jeu.plateau[i][j]);
-            }
-        }
+        return res;
     }
 }

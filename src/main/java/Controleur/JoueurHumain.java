@@ -11,21 +11,19 @@ public class JoueurHumain extends Joueur
 	}
 
 	@Override
-	public Coup jeu() {
-		/*
+	public void placement() {
+
+	}
+
+	@Override
+	public void jeu() {
 		// A adapter selon le jeu,
 		// Un coup peut être constitué de plusieurs passages par cette fonction, ex :
 		// - selection d'un pièce + surlignage des coups possibles
 		// - selection de la destination
 		// Autrement dit une machine à état peut aussi être gérée par un objet de cette
 		// classe. Dans le cas du morpion, un clic suffit.
-		if (plateau.libre(i, j)) {
-			plateau.jouer(i, j);
-			return true;
-		} else {
-			return false;
-		}
-		*/
-		return null;
+
+		// selection -> deplacement (en boucle)
 	}
 }

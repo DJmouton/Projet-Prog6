@@ -35,20 +35,16 @@ import java.io.FileNotFoundException;
 
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
-	Joueur[][] joueurs;
-	int [] typeJoueur;
+	Joueur[] joueurs;
 	int joueurCourant;
 	final int lenteurAttente = 50;
 	int decompte;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		joueurs = new Joueur[2][2];
-		typeJoueur = new int[2];
+		joueurs = new Joueur[2];
 		for (int i = 0; i < joueurs.length; i++) {
-			joueurs[i][0] = new JoueurHumain(i, jeu);
-			joueurs[i][1] = new JoueurHumain(i, jeu);
-			typeJoueur[i] = 0;
+			joueurs[i] = new JoueurHumain(i, jeu);
 		}
 	}
 
@@ -60,6 +56,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu())
 			changeJoueur();
 		*/
+	}
+
+	public void annuler(){
+
+	}
+	public void refaire(){
+
 	}
 
 	void changeJoueur() {
@@ -108,20 +111,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 	@Override
 	public void changeTaille(int x, int y) {
 		System.out.println("Nouvelle taille: " + x + ", " + y);
-		jeu.reset(x, y);
+		jeu.reset();
 	}
 
-	@Override
-	public void annuler(){
-		if (jeu.peutAnnuler())
-			jeu.annule();
-	}
 
-	@Override
-	public void refaire(){
-		if (jeu.peutRefaire())
-			jeu.refais();
-	}
 
 	public void sauver(String fichier){
 		try {
