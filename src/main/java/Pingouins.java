@@ -9,5 +9,6 @@ public class Pingouins
 		Jeu j = new Jeu();
 		CollecteurEvenements control = new ControleurMediateur(j);
 		InterfaceGraphique.demarrer(j, control);
+		j.GameLoop();
 	}
 }

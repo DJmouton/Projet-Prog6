@@ -22,8 +22,15 @@ public class Coup implements Commande
 
 	public void execute()
 	{
-//		if (jeu.libre(l, c))
-//			jeu.manger(l, c);
+		int numJ=this.jeu.plateau[sourcel][sourcec];
+		this.jeu.plateau[sourcel][sourcec]=0;
+		this.jeu.joueurs[numJ-4].score=this.jeu.plateau[destl][destc];
+		this.jeu.plateau[destl][destc]=numJ;
+		if (jeu.hex_accessible(destl,destc).isEmpty()){
+			this.jeu.plateau[destl][destc]=0;
+			this.jeu.nombreP--;
+		}
+
 	}
 
 	public void desexecute()
