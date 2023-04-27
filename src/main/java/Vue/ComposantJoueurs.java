@@ -18,21 +18,27 @@ public class ComposantJoueurs extends Box {
 				IOException exc) {
 			System.out.println("Erreur de chargement de l'icone Joueurs");
 		}
-		JLabel j1 = new JLabel(new ImageIcon(perso));
-		JLabel j2 = new JLabel(new ImageIcon(perso));
-		JLabel j3 = new JLabel(new ImageIcon(perso));
-		JLabel j4 = new JLabel(new ImageIcon(perso));
+		ImageIcon img = new ImageIcon("resources/assets/personnage.png");
+		Image image = img.getImage();
+		Image newimg = image.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		img = new ImageIcon(newimg);
+		JLabel j1 = new JLabel(img);
+		JLabel j2 = new JLabel(img);
+		//JLabel j3 = new JLabel(img);
+		//JLabel j4 = new JLabel(img);
 		JButton joueur1 = new JButton("Joueur 1");
 		add(joueur1);
 		add(j1);
 		JButton joueur2 = new JButton("Joueur 2");
 		add(joueur2);
 		add(j2);
+		/*
 		JButton joueur3 = new JButton("Joueur 3");
 		add(joueur3);
 		add(j3);
 		JButton joueur4 = new JButton("Joueur 4");
 		add(joueur4);
 		add(j4);
+		*/
 	}
 }
