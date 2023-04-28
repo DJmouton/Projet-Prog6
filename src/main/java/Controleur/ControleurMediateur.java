@@ -42,8 +42,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
 		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new JoueurHumain(4, jeu);
-		this.jeu.joueurs[1] = new JoueurHumain(5, jeu);
+		this.jeu.joueurs[0] = new Joueur(4, jeu);
+		this.jeu.joueurs[1] = new Joueur(5, jeu);
 
 	}
 
@@ -56,6 +56,24 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu())
 			changeJoueur();
 		*/
+		if (jeu.joueurs[jeu.joueurCourant].estIA)
+			return;
+
+		switch (jeu.getEtat())
+		{
+			case Initialisation:
+				jeu.InitPingou(l, c);
+				break;
+
+			case Selection:
+				jeu.SelectPingou(l, c);
+				break;
+
+			case Deplacement:
+				jeu.DeplacePingou(l, c);
+				break;
+		}
+		jeu.metAJour();
 	}
 
 	public void annuler(){

@@ -12,11 +12,13 @@ public class IA extends Joueur{
     public IA(int n, Jeu p) {
         super(n, p);
         this.random = new Random();
+        this.estIA = true;
     }
 
     @Override
     public void placement() {
         //placer pingouin aléatoirement
+
     }
 
     @Override
