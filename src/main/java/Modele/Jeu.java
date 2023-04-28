@@ -18,11 +18,10 @@ public class Jeu extends Observable {
 	int nombreP=0;
 
 	public void InitPingou(int l, int c){
-		if (plateau[l][c] == 1)
-		{
+		if (plateau[l][c] == 1) {
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 2)
+			if (nombreP == 8)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
@@ -32,8 +31,7 @@ public class Jeu extends Observable {
 	}
 
 	public void SelectPingou(int l, int c){
-		if (plateau[l][c] == joueurCourant + 4)
-		{
+		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
 			etat = Etats.Deplacement;
 		}
@@ -49,8 +47,7 @@ public class Jeu extends Observable {
 		if (y%2==0){
 			transformtableau(res,x-1,y-1);
 			transformtableau(res,x+1,y-1);
-		}
-		else {
+		} else {
 			transformtableau(res,x+1,y+1);
 			transformtableau(res,x-1,y+1);
 		}
@@ -67,8 +64,8 @@ public class Jeu extends Observable {
 		ArrayList<int[]> cotes = getCotes(l, c);
 		for (int[] cote : cotes) {
 			if (plateau[cote[0]][cote[1]] > 3 && hex_accessible(cote[0], cote[1]).isEmpty()){
-					plateau[cote[0]][cote[1]] = 0;
-					nombreP--;
+				plateau[cote[0]][cote[1]] = 0;
+				nombreP--;
 			}
 		}
 	}
@@ -79,17 +76,15 @@ public class Jeu extends Observable {
 			coup.destc = c;
 			coup.execute();
 			EnlevePingou(l, c);
-			etat = Etats.Selection;
 			prochainJoueur();
+			etat = Etats.Selection;
 			System.out.println("passe par la");
-		}
-		else {
+		} else {
 			SelectPingou(l,c);
 		}
 	}
 
-	public void prochainJoueur()
-	{
+	public void prochainJoueur() {
 		if (nombreP == 0) {
 			System.out.println("Partie terminée");
 			return;
@@ -98,10 +93,13 @@ public class Jeu extends Observable {
 		joueurCourant=(joueurCourant+1)%this.joueurs.length;
 		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
-
 		System.out.println("Au tour du joueur "+joueurCourant+" score = "+joueurs[joueurCourant].getScore()+" etat = "+getEtat());
 		if (joueurs[joueurCourant].estIA){
-			joueurs[joueurCourant].jeu();
+			if (etat == Etats.Initialisation){
+				joueurs[joueurCourant].placement();
+			}else{
+				joueurs[joueurCourant].jeu();
+			}
 		}
 	}
 
@@ -126,11 +124,6 @@ public class Jeu extends Observable {
     }
 
 
-
-
-
-
-
 	public Jeu() {
 		reset();
 	}
@@ -142,8 +135,7 @@ public class Jeu extends Observable {
 		this.plateau = plateau.clone();
 	}
 
-	public Etats getEtat()
-	{
+	public Etats getEtat() {
 		return etat;
 	}
 
@@ -151,6 +143,7 @@ public class Jeu extends Observable {
 		initPlateau();
 		metAJour();
 	}
+
 	public void reset(String fichier) throws FileNotFoundException {
 		FileInputStream in = new FileInputStream(fichier);
 		Scanner scanner = new Scanner(in);
@@ -238,7 +231,7 @@ public class Jeu extends Observable {
 		ArrayList<int[]> result = new ArrayList<>();
 		for(int i = 0; i < largeur; i++){
 			for(int j = 0 ; j < hauteur; j++){
-				if(plateau[i][j]==num+4){
+				if(plateau[i][j]==num){
 					result.add(new int[]{i,j});
 				}
 			}
@@ -256,8 +249,7 @@ public class Jeu extends Observable {
 			res.addAll(acc_diagonal1_sup(x+1,y));
 			res.addAll(acc_diagonal2_inf(x-1,y));
 			res.addAll(acc_diagonal2_sup(x+1,y-1));
-		}
-		else {
+		} else {
 			res.addAll(acc_diagonal1_inf(x-1,y));
 			res.addAll(acc_diagonal1_sup(x+1,y+1));
 			res.addAll(acc_diagonal2_inf(x-1,y+1));
@@ -344,8 +336,7 @@ public class Jeu extends Observable {
 		res.add(new int[]{x,y});
 		if (x%2==0){
 			res.addAll(acc_diagonal1_inf(x-1,y-1));
-		}
-		else{
+		} else{
 			res.addAll(acc_diagonal1_inf(x-1, y));
 		}
 		return res;
@@ -359,8 +350,7 @@ public class Jeu extends Observable {
 		res.add(new int[]{x,y});
 		if (x%2==0){
 			res.addAll(acc_diagonal1_sup(x+1,y));
-		}
-		else{
+		} else{
 			res.addAll(acc_diagonal1_sup(x+1, y+1));
 		}
 		return res;
@@ -374,8 +364,7 @@ public class Jeu extends Observable {
 		res.add(new int[]{x,y});
 		if (x%2==0){
 			res.addAll(acc_diagonal2_inf(x-1,y));
-		}
-		else{
+		} else{
 			res.addAll(acc_diagonal2_inf(x-1, y+1));
 		}
 		return res;
@@ -389,8 +378,7 @@ public class Jeu extends Observable {
 		res.add(new int[]{x,y});
 		if (x%2==0){
 			res.addAll(acc_diagonal2_sup(x+1,y-1));
-		}
-		else{
+		} else{
 			res.addAll(acc_diagonal2_sup(x+1, y));
 		}
 		return res;

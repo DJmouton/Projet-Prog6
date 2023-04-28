@@ -18,6 +18,7 @@ public class IA extends Joueur{
     @Override
     public void placement() {
         //placer pingouin aléatoirement
+
     }
 
     @Override
