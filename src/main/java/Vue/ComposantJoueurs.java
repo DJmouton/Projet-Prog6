@@ -24,14 +24,20 @@ public class ComposantJoueurs extends Box {
 		img = new ImageIcon(newimg);
 		JLabel j1 = new JLabel(img);
 		JLabel j2 = new JLabel(img);
-		//JLabel j3 = new JLabel(img);
-		//JLabel j4 = new JLabel(img);
-		JButton joueur1 = new JButton("Joueur 1");
-		add(joueur1);
-		add(j1);
-		JButton joueur2 = new JButton("Joueur 2");
-		add(joueur2);
-		add(j2);
+		// JLabel j3 = new JLabel(img);
+		// JLabel j4 = new JLabel(img);
+
+		if (control.joueurCourant() == 0) {
+			JButton joueur1 = new JButton("Au tour du Joueur 1");
+			add(joueur1);
+			add(j1);
+		}
+		else if (control.joueurCourant() == 1) {
+			JButton joueur2 = new JButton("Au tour du Joueur 2");
+			add(joueur2);
+			add(j2);
+		}
+
 		/*
 		JButton joueur3 = new JButton("Joueur 3");
 		add(joueur3);
