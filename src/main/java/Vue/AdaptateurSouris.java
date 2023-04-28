@@ -54,6 +54,6 @@ public class AdaptateurSouris extends MouseAdapter {
 		}
 		int c = (int)x;
 		int l = (int)y;
-		control.clicSouris(c, l);
+		control.clicSouris(l, c);
 	}
 }

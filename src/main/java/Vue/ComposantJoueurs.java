@@ -8,23 +8,31 @@ public class ComposantJoueurs extends Box implements Observateur {
 
 	ComposantJoueurs(int axis, CollecteurEvenements control) {
 		super(axis);
+		paintComponent(control);
+	}
 
+	public void paintComponent(CollecteurEvenements control) {
 		ImageIcon pb = new ImageIcon("resources/assets/penguin.png");
 		ImageIcon pv = new ImageIcon("resources/assets/penguin_vert.png");
 		ImageIcon pr = new ImageIcon("resources/assets/penguin_rouge.png");
 		ImageIcon pj = new ImageIcon("resources/assets/penguin_jaune.png");
+
 		Image image = pb.getImage();
 		Image newimg = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		pb = new ImageIcon(newimg);
+
 		Image image2 = pv.getImage();
 		Image newimg2 = image2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		pv = new ImageIcon(newimg2);
+
 		Image image3 = pr.getImage();
 		Image newimg3 = image3.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		pr = new ImageIcon(newimg3);
+
 		Image image4 = pj.getImage();
 		Image newimg4 = image4.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		pj = new ImageIcon(newimg4);
+
 		JLabel j1 = new JLabel(pb);
 		JLabel j2 = new JLabel(pv);
 		JLabel j3 = new JLabel(pr);
