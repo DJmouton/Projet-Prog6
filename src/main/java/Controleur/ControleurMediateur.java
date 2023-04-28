@@ -114,8 +114,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		jeu.reset();
 	}
 
-
-
 	public void sauver(String fichier){
 		try {
 			jeu.sauver(fichier);
@@ -134,5 +132,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 			System.err.println("Impossible de charger depuis " + fichier);
 		}
 		System.out.println("Partie chargée");
+	}
+
+	public int joueurCourant() {
+		return this.joueurCourant;
 	}
 }
