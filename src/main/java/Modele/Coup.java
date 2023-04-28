@@ -16,21 +16,24 @@ public class Coup implements Commande
 		this.jeu = jeu;
 	}
 
+	public Coup(int sourcel, int sourcec, Jeu jeu)
+	{
+		this.sourcel = sourcel;
+		this.sourcec = sourcec;
+		this.destl = -1;
+		this.destc = -1;
+		this.jeu = jeu;
+	}
+
 	public void setJeu(Jeu jeu) {
 		this.jeu = jeu;
 	}
 
 	public void execute()
 	{
-		int numJ=this.jeu.plateau[sourcel][sourcec];
-		this.jeu.plateau[sourcel][sourcec]=0;
-		this.jeu.joueurs[numJ-4].score=this.jeu.plateau[destl][destc];
-		this.jeu.plateau[destl][destc]=numJ;
-		if (jeu.hex_accessible(destl,destc).isEmpty()){
-			this.jeu.plateau[destl][destc]=0;
-			this.jeu.nombreP--;
-		}
-
+		jeu.joueurs[jeu.joueurCourant].addScore(jeu.plateau[destl][destc]);
+		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
+		jeu.plateau[sourcel][sourcec] = 0;
 	}
 
 	public void desexecute()
