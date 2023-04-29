@@ -68,6 +68,11 @@ public class Jeu extends Observable {
 				nombreP--;
 			}
 		}
+/* IL FAUT VERIFIER SI LE PINGOUIN DEPLACE SE RETROUVE BLOQUE, SINON IL NE SERA JAMAIS ENLEVE
+		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()){
+			plateau[l][c] = 0;
+			nombreP--;
+		}*/
 	}
 
 	public void DeplacePingou(int l, int c){
@@ -78,7 +83,6 @@ public class Jeu extends Observable {
 			EnlevePingou(l, c);
 			prochainJoueur();
 			etat = Etats.Selection;
-			System.out.println("passe par la");
 		} else {
 			SelectPingou(l,c);
 		}
