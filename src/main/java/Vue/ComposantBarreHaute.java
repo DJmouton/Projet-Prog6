@@ -1,11 +1,15 @@
 package Vue;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class ComposantBarreHaute extends Box{
+public class ComposantBarreHaute extends Box {
 
-    ComposantBarreHaute(int axis, CollecteurEvenements control, Box menu){
+    ComposantBarreHaute(int axis, CollecteurEvenements control, Box menu) {
         super(axis);
         add(Box.createGlue());
         add(new ComposantJouerCoup(axis, control));
