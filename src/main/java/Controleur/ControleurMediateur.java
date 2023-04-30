@@ -89,7 +89,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void tictac() {
-		if (jeu.enCours()) {/*
+		if (jeu.enCours()) {
+			/*
 			if (decompte == 0) {
 				int type = typeJoueur[joueurCourant];
 				// Lorsque le temps est écoulé on le transmet au joueur courant.
@@ -153,6 +154,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		return this.joueurCourant;
+		return jeu.joueurCourant;
 	}
 }

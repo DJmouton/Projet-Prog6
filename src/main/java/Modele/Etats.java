@@ -1,6 +1,5 @@
 package Modele;
 
-public enum Etats
-{
+public enum Etats {
 	Initialisation, Selection, Deplacement;
 }

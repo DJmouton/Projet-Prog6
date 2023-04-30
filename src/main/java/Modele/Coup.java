@@ -2,8 +2,7 @@ package Modele;
 
 import Patterns.Commande;
 
-public class Coup implements Commande
-{
+public class Coup implements Commande {
 	int sourcel, sourcec;
 	int destl, destc;
 	Jeu jeu;
@@ -16,8 +15,7 @@ public class Coup implements Commande
 		this.jeu = jeu;
 	}
 
-	public Coup(int sourcel, int sourcec, Jeu jeu)
-	{
+	public Coup(int sourcel, int sourcec, Jeu jeu) {
 		this.sourcel = sourcel;
 		this.sourcec = sourcec;
 		this.destl = -1;
@@ -29,15 +27,13 @@ public class Coup implements Commande
 		this.jeu = jeu;
 	}
 
-	public void execute()
-	{
+	public void execute() {
 		jeu.joueurs[jeu.joueurCourant].addScore(jeu.plateau[destl][destc]);
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
 		jeu.plateau[sourcel][sourcec] = 0;
 	}
 
-	public void desexecute()
-	{
+	public void desexecute() {
 		jeu.annuler();
 	}
 

@@ -5,14 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AdaptateurRefaire implements ActionListener {
-    CollecteurEvenements control;
+	CollecteurEvenements control;
 
-    AdaptateurRefaire(CollecteurEvenements c) {
-        control = c;
-    }
+	AdaptateurRefaire(CollecteurEvenements c) {
+		control = c;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        control.refaire();
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		control.refaire();
+	}
 }

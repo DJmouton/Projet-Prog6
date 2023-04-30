@@ -36,23 +36,25 @@ import Modele.Jeu;
 // - provoquer une temporisation (utilisé dans une IA)
 // - tenir compte d'une temporisation écoulée (utilisé dans une IA)
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
+
 public class Joueur {
 	Jeu plateau;
 	int num;
 	int score;
 	public boolean estIA;
 
-	// Le joueur connait son numéro, cela lui permet d'inspecter le plateau en
-	// sachant
-	// repérer ses pions et évaluer où il en est
+	/*
+	le joueur connait son numéro,
+	cela lui permet d'inspecter le plateau
+	en sachant repérer ses pions et évaluer où il en est
+	*/
 	public Joueur(int n, Jeu p) {
 		num = n;
 		estIA = false;
 		plateau = p;
 	}
 
-	public int getScore()
-	{
+	public int getScore() {
 		return score;
 	}
 
@@ -60,15 +62,16 @@ public class Joueur {
 		return num;
 	}
 
-	public void addScore(int val)
-	{
+	public void addScore(int val) {
 		score += val;
 	}
 
 	// Placement initial d'un pingouin par le joueur
-	public void placement() {}
+	public void placement() {
+	}
 
 	// Méthode appelée pour tous les joueurs lors d'un clic sur le plateau
 	// Si un joueur n'est pas concerné, il lui suffit de l'ignorer
-	public void jeu() {}
+	public void jeu() {
+	}
 }

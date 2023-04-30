@@ -31,6 +31,7 @@ package Patterns;
  * Ce pattern existe déjà dans la bibliothèque standard de Java sous une forme
  * légèrement différente. Il est réimplémenté ici à des fins pédagogiques
  */
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

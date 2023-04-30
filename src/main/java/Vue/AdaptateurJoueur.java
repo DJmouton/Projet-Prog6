@@ -42,8 +42,8 @@ public class AdaptateurJoueur implements ActionListener {
 	}
 
 	/*
-	* Le bouton IA a été cliqué. On bascule le joueur de type.
-	*/
+	 * Le bouton IA a été cliqué. On bascule le joueur de type.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (toggle.isSelected())

@@ -1,7 +1,7 @@
 package Patterns;
 
-public interface Commande
-{
+public interface Commande {
 	void execute();
+
 	void desexecute();
 }
