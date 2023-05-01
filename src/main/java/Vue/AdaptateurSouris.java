@@ -39,21 +39,26 @@ public class AdaptateurSouris extends MouseAdapter {
 	}
 
 	/*
-	* Clic reçu. On calcule la case du plateau cliqué et on envoie un évènement
-	*/
+	 * Clic reçu. On calcule la case du plateau cliqué et on envoie un évènement
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		float y = (float)e.getY() / (niv.hauteurCase() * (float)1.3);
-		y *= (float)1.3;
+		int l;
+		int c;
+		float y = (float) e.getY() / (niv.hauteurCase() * (float) 1.3);
+		y *= (float) 1.3;
 		float x;
-		if((int)y % 2 == 1) {
-			x = ((e.getX() - (niv.largeurCase()*(float)0.9/2))/ niv.largeurCase()*(float)1.1);
+		if ((int) y % 2 == 1) {
+			x = ((e.getX() - (niv.largeurCase() * (float) 0.9 / 2)) / niv.largeurCase() * (float) 1.1);
+		} else {
+			x = (float) e.getX() / niv.largeurCase() * (float) 1.1;
 		}
-		else {
-			x = (float)e.getX() / niv.largeurCase()*(float)1.1;
+		if ((int) x > 7 || (int) y > 7) {
+			return;
+		} else {
+			l = (int) x;
+			c = (int) y;
 		}
-		int c = (int)x;
-		int l = (int)y;
-		control.clicSouris(l, c);
+		control.clicSouris(c, l);
 	}
 }
