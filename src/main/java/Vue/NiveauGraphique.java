@@ -29,13 +29,12 @@ package Vue;
 import Modele.Jeu;
 import Patterns.Observateur;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import javax.imageio.*;
-import javax.swing.*;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -47,13 +46,14 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	}
 
 	/*
-	* Peindre le plateau de jeu
-	*/
+	 * Peindre le plateau de jeu
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 
 		Graphics2D drawable = (Graphics2D) g;
 
+		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
 		BufferedImage[] assetsPlateau = new BufferedImage[8];
 		BufferedImage waterBG = null;
@@ -75,6 +75,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			System.out.println("Erreur dans le chargement des images");
 		}
 
+		// Fin de la partie
+		if (!jeu.enCours()) {
+			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
+		}
+
 		int lignes = jeu.hauteur();
 		int colonnes = jeu.largeur();
 		largeurCase = largeur() / colonnes;
@@ -83,13 +88,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Rectangle d'océan (bleu) en fond
 		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
 
-		// DIMINUE LA TAILLE DES IMAGES
+		// DIMINUE LA TAILLE DES IMAGES IMPORTANT A PRENDRE EN COMPTE POUR LE CALCUL DES POSITIONS
 		((Graphics2D) g).scale(0.9, 1.3);
-
-		// Fin de la partie
-		if (!jeu.enCours()) {
-			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
-		}
 
 		// Grille
 		float height;
