@@ -33,6 +33,8 @@ public class Jeu extends Observable {
 	public void SelectPingou(int l, int c){
 		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
+			System.out.println("Pingouin (" + l + ',' + c + ") selectionné");
+			System.out.println("Déplace ce pingouin, ou sélectionne un nouveau pingouin");
 			etat = Etats.Deplacement;
 		}
 	}
@@ -81,9 +83,12 @@ public class Jeu extends Observable {
 			coup.destc = c;
 			coup.execute();
 			EnlevePingou(l, c);
-			prochainJoueur();
+			System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
 			etat = Etats.Selection;
+			prochainJoueur();
 		} else {
+			if (plateau[l][c] != joueurCourant + 4)
+				System.out.println("Le pingouin ne peut pas se déplacer ici");
 			SelectPingou(l,c);
 		}
 	}
@@ -97,7 +102,17 @@ public class Jeu extends Observable {
 		joueurCourant=(joueurCourant+1)%this.joueurs.length;
 		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
-		System.out.println("Au tour du joueur "+joueurCourant+" score = "+joueurs[joueurCourant].getScore()+" etat = "+getEtat());
+
+		System.out.println("------------------------------------------------------------------");
+		System.out.println("Au tour du joueur " + joueurCourant + " !");
+		System.out.println("Score : " + joueurs[joueurCourant].score);
+		if (etat == Etats.Initialisation)
+			System.out.println("Place le prochain pingouin sur une case 1 poisson");
+		else if (etat == Etats.Selection)
+			System.out.println("Sélectionne un pingouin");
+		else
+			System.err.println("ERREUR : Le joueur commence son tour dans un mauvais état");
+
 		if (joueurs[joueurCourant].estIA){
 			if (etat == Etats.Initialisation){
 				joueurs[joueurCourant].placement();

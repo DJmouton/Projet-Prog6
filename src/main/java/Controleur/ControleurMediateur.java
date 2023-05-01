@@ -49,13 +49,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	@Override
 	public void clicSouris(int l, int c) {
-		System.out.println("jouer: " + l + ", " + c);
-		/*
-		// Lors d'un clic, on le transmet au joueur courant.
-		// Si un coup a effectivement été joué (humain, coup valide), on change de joueur.
-		if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu())
-			changeJoueur();
-		*/
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
@@ -81,11 +74,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 	public void refaire(){
 
-	}
-
-	void changeJoueur() {
-		joueurCourant = (joueurCourant + 1) % this.jeu.joueurs.length;
-		decompte = lenteurAttente;
 	}
 
 	public void tictac() {
