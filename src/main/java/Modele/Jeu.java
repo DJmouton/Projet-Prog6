@@ -117,11 +117,11 @@ public class Jeu extends Observable {
 				nombreP--;
 			}
 		}
-/* IL FAUT VERIFIER SI LE PINGOUIN DEPLACE SE RETROUVE BLOQUE, SINON IL NE SERA JAMAIS ENLEVE
+
 		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()){
 			plateau[l][c] = 0;
 			nombreP--;
-		}*/
+		}
 	}
 
 	/******************************************************************
@@ -132,7 +132,7 @@ public class Jeu extends Observable {
 		res.addAll(acc_ligne_inf(x,y-1));
 		res.addAll(acc_ligne_sup(x,y+1));
 
-		if (y%2==0){
+		if (x%2==0){
 			res.addAll(acc_diagonal1_inf(x-1,y-1));
 			res.addAll(acc_diagonal1_sup(x+1,y));
 			res.addAll(acc_diagonal2_inf(x-1,y));
@@ -221,7 +221,7 @@ public class Jeu extends Observable {
 		transformtableau(res,x+1,y);
 		transformtableau(res,x-1,y);
 
-		if (y%2==0){
+		if (x%2==0){
 			transformtableau(res,x-1,y-1);
 			transformtableau(res,x+1,y-1);
 		} else {
