@@ -52,7 +52,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
-		switch (jeu.getEtat())
+		switch (jeu.etatCourant())
 		{
 			case Initialisation:
 				jeu.InitPingou(l, c);
