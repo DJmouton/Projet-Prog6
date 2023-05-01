@@ -187,7 +187,10 @@ public class Jeu extends Observable {
 
 	private void prochainJoueur() {
 		if (!enCours()) {
-			System.out.println("Partie terminée");
+Affich			System.out.println("------------------------------------------------------------------");
+			System.out.println("Partie terminée !");
+			for (int i = 0; i < joueurs.length; i++)
+				System.out.println("Joueur " + i + " : " + joueurs[i].score + " poissons");
 			return;
 		}
 
