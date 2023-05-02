@@ -17,11 +17,29 @@ public class Jeu extends Observable {
 	public int joueurCourant;
 	int nombreP=0;
 
+	public Jeu() {
+		reset();
+	}
+
+	public Jeu( int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant) {
+		this.joueurs = joueurs.clone();
+		this.etat = etat;
+		this.joueurCourant= joueurCourant;
+		this.largeur = largeur;
+		this.hauteur = hauteur;
+		this.plateau = new int[largeur][hauteur];
+		for(int i =0; i< largeur; i++){
+			for(int j = 0 ;j < hauteur; j++){
+				this.plateau[i][j]=plateau[i][j];
+			}
+		}
+	}
+
 	public void InitPingou(int l, int c){
 		if (plateau[l][c] == 1) {
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 8)
+			if (nombreP == 2)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
@@ -94,6 +112,7 @@ public class Jeu extends Observable {
 		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 		System.out.println("Au tour du joueur "+joueurCourant+" score = "+joueurs[joueurCourant].getScore()+" etat = "+getEtat());
+		metAJour();
 		if (joueurs[joueurCourant].estIA){
 			if (etat == Etats.Initialisation){
 				joueurs[joueurCourant].placement();
@@ -124,16 +143,7 @@ public class Jeu extends Observable {
     }
 
 
-	public Jeu() {
-		reset();
-	}
 
-	public Jeu( int[][] plateau, int largeur, int hauteur) {
-
-		this.largeur = largeur;
-		this.hauteur = hauteur;
-		this.plateau = plateau.clone();
-	}
 
 	public Etats getEtat() {
 		return etat;
@@ -386,6 +396,10 @@ public class Jeu extends Observable {
 
 	@Override
 	protected Object clone(){
-		return new Jeu(this.plateau,this.largeur,this.hauteur);
+		Jeu j =  new Jeu(this.plateau,this.joueurs,this.largeur,this.hauteur,this.etat,this.joueurCourant);
+		/*for(Joueur joueur : j.joueurs){
+			joueur.jeu = j;
+		}*/
+		return j;
 	}
 }

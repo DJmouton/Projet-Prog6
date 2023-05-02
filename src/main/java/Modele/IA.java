@@ -1,8 +1,5 @@
 package Modele;
 
-import Structure.Tree;
-
-import javax.xml.transform.TransformerException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,29 +15,49 @@ public class IA extends Joueur{
     @Override
     public void placement() {
         //placer pingouin aléatoirement
+        int l;
+        int c =0;
+        boolean tmp = false;
+        for(l= 0; l < jeu.largeur; l++){
+            for(c= 0; c < jeu.hauteur; c++){
+                if(jeu.plateau[l][c]==1){
+                    tmp = true;
+                    break;
+                }
+            }
+            if(tmp){
+                break;
+            }
+        }
+        jeu.InitPingou(l, c);
+
 
     }
 
     @Override
     public void jeu() {
-        int profondeur = 3;
-        ArrayList<Coup> coups = getCoups(this.plateau, this.num);
+        System.out.println("jeu");
+        int profondeur = 1;
+        ArrayList<Coup> coups = getCoups(this.jeu, this.num);
         int value = Integer.MIN_VALUE;
         Coup coup = null;
         for(Coup c : coups){
-            Jeu j = (Jeu) plateau.clone();
+            Jeu j = jeu;//(Jeu) jeu.clone();
             c.setJeu(j);
             c.execute();
-            int i = MinMaxJoueur(j, profondeur, new int[]{this.plateau.joueurs[0].num,this.plateau.joueurs[1].num},false);
+            int i = MinMaxJoueur(j, profondeur, new int[]{this.jeu.joueurs[0].num,this.jeu.joueurs[1].num},false);
             if(i > value){
                 value = i;
                 coup = c;
             }
+            break;
         }
         if(coup != null) {
-            coup.setJeu(plateau);
             coup.execute();
+            jeu.SelectPingou(coup.sourcel,coup.sourcec);
+            jeu.DeplacePingou(coup.destl,coup.destc);
         }
+        System.out.println("fin jeu");
     }
 
     public ArrayList<Coup> getCoups(Jeu jeu, int num){
@@ -80,7 +97,7 @@ public class IA extends Joueur{
             }
 
             int advscore = 0;
-            for(Joueur joueur : this.plateau.joueurs){
+            for(Joueur joueur : this.jeu.joueurs){
                 if(joueur.num != this.num){
                     advscore = joueur.score;
                 }
@@ -110,7 +127,7 @@ public class IA extends Joueur{
                 coups = getCoups(jeu, nums[1]);
             }
             for(Coup c : coups){
-                Jeu j = (Jeu) jeu.clone();
+                Jeu j = jeu;//(Jeu) jeu.clone();
                 c.setJeu(j);
                 c.execute();
                 if(A) {
@@ -118,6 +135,7 @@ public class IA extends Joueur{
                 }else{
                     valeur = Math.min(MinMaxJoueur(j, profondeur-1, nums, true), valeur);
                 }
+                break;
             }
             return valeur;
         }

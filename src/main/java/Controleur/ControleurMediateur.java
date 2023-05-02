@@ -27,6 +27,7 @@ package Controleur;
  *          38401 Saint Martin d'Hères
  */
 
+import Modele.IA;
 import Modele.Jeu;
 import Modele.Joueur;
 import Vue.CollecteurEvenements;
@@ -50,7 +51,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	@Override
 	public void clicSouris(int l, int c) {
 		System.out.println("jouer: " + l + ", " + c);
-		/*
+        /*
 		// Lors d'un clic, on le transmet au joueur courant.
 		// Si un coup a effectivement été joué (humain, coup valide), on change de joueur.
 		if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu())
@@ -59,8 +60,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
-		switch (jeu.getEtat())
-		{
+		switch (jeu.getEtat()) {
 			case Initialisation:
 				jeu.InitPingou(l, c);
 				break;
@@ -79,6 +79,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void annuler(){
 
 	}
+
 	public void refaire(){
 
 	}
@@ -109,7 +110,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	@Override
 	public void changeJoueur(int j, int t) {
-		/*
+        /*
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
 		if(t == 0) {
 			joueurs[j][0] = new JoueurHumain(j, jeu);
@@ -135,8 +136,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void sauver(String fichier){
 		try {
 			jeu.sauver(fichier);
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de sauvegarder dans " + fichier);
 		}
 		System.out.println("Partie sauvegardée");
@@ -145,8 +145,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void charger(String fichier){
 		try {
 			jeu.reset(fichier);
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de charger depuis " + fichier);
 		}
 		System.out.println("Partie chargée");
