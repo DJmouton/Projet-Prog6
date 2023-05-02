@@ -35,12 +35,6 @@ public class Jeu extends Observable {
 		}
 	}
 
-	public Jeu(int[][] plateau, int largeur, int hauteur) {
-		this.largeur = largeur;
-		this.hauteur = hauteur;
-		this.plateau = plateau.clone();
-	}
-
 	public void reset() {
 		initPlateau();
 		metAJour();
@@ -72,13 +66,13 @@ public class Jeu extends Observable {
 	}
 
 	/************************************************************************
-	* Place un pingouin du joueur courant sur le plateau et change de joueur
-	*************************************************************************/
+	 * Place un pingouin du joueur courant sur le plateau et change de joueur
+	 *************************************************************************/
 	public void InitPingou(int l, int c){
 		if (plateau[l][c] == 1) {
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 2)
+			if (nombreP == 8)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
@@ -88,8 +82,8 @@ public class Jeu extends Observable {
 	}
 
 	/*******************************************
-	* Sélectionne un pingouin du joueur courant
-	********************************************/
+	 * Sélectionne un pingouin du joueur courant
+	 ********************************************/
 	public void SelectPingou(int l, int c){
 		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
@@ -100,8 +94,8 @@ public class Jeu extends Observable {
 	}
 
 	/**************************************************************************************************************
-	* Déplace le pingouin selectionné si la destination est valide, enlève les pingouins bloqués, change de joueur
-	***************************************************************************************************************/
+	 * Déplace le pingouin selectionné si la destination est valide, enlève les pingouins bloqués, change de joueur
+	 ***************************************************************************************************************/
 	public void DeplacePingou(int l, int c){
 		if (contains(new int[]{l, c}, hex_accessible(coup.sourcel, coup.sourcec))){
 			// destination valide
@@ -120,89 +114,9 @@ public class Jeu extends Observable {
 		}
 	}
 
-	public void prochainJoueur() {
-		if (nombreP == 0) {
-			System.out.println("Partie terminée");
-			return;
-		}
-
-		joueurCourant=(joueurCourant+1)%this.joueurs.length;
-		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
-			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
-		System.out.println("Au tour du joueur "+joueurCourant+" score = "+joueurs[joueurCourant].getScore()+" etat = "+getEtat());
-		metAJour();
-		if (joueurs[joueurCourant].estIA){
-			if (etat == Etats.Initialisation){
-				joueurs[joueurCourant].placement();
-			}else{
-				joueurs[joueurCourant].jeu();
-			}
-		}
-	}
-
-
-	boolean contains(int[] valeur, ArrayList<int[]> list){
-        boolean res = false;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).length == valeur.length) {
-                res = true;
-                for (int j = 0; j < valeur.length; j++) {
-                    if (list.get(i)[j] != valeur[j]) {
-                            res = false;
-                            break;
-                    }
-                }
-
-                if (res) return res;
-            }
-        }
-
-        return res;
-    }
-
-
-
-
-	public Etats getEtat() {
-		return etat;
-	}
-
-	public void reset() {
-		initPlateau();
-		metAJour();
-	}
-
-	public void reset(String fichier) throws FileNotFoundException {
-		FileInputStream in = new FileInputStream(fichier);
-		Scanner scanner = new Scanner(in);
-		int nbLignes = scanner.nextInt();
-		int nbColonnes = scanner.nextInt();
-		String s;
-		Coup coup;
-		int l,c;
-		plateau = new int[nbLignes][nbColonnes];
-		plateau[0][0] = 1;
-		s=scanner.nextLine(); // Coup 2 4
-		while (!s.equals("fin")){
-			switch (s){
-				case "Coup":
-					l=scanner.nextInt();
-					c=scanner.nextInt();
-					//coup=new Coup(this,l,c);
-
-			}
-			s=scanner.nextLine();
-		}
-		while (scanner.hasNextLine()){
-			switch (s){
-				case "Coup":
-					l=scanner.nextInt();
-					c=scanner.nextInt();
-//					coup=new Coup(this,l,c);
-
 	/***************************************************
-	* Enlève tous les nouveaux pingouins bloqués du jeu
-	****************************************************/
+	 * Enlève tous les nouveaux pingouins bloqués du jeu
+	 ****************************************************/
 	public void EnlevePingou(int l, int c){
 		ArrayList<int[]> cotes = getCotes(l, c);
 		for (int[] cote : cotes) {
@@ -219,8 +133,8 @@ public class Jeu extends Observable {
 	}
 
 	/******************************************************************
-	* Renvoie la liste des cases accessibles à partir d'une coordonnée
-	*******************************************************************/
+	 * Renvoie la liste des cases accessibles à partir d'une coordonnée
+	 *******************************************************************/
 	public ArrayList<int[]> hex_accessible(int x,int y){
 		ArrayList<int[]>res=new ArrayList<>();
 		res.addAll(acc_ligne_inf(x,y-1));
@@ -241,8 +155,8 @@ public class Jeu extends Observable {
 	}
 
 	/**************************************************
-	* Renvoie la liste des pingouins portant le numéro
-	***************************************************/
+	 * Renvoie la liste des pingouins portant le numéro
+	 ***************************************************/
 	public ArrayList<int[]> getPingouins(int num){
 		ArrayList<int[]> result = new ArrayList<>();
 		for(int i = 0; i < largeur; i++){
@@ -335,23 +249,23 @@ public class Jeu extends Observable {
 	}
 
 	private boolean contains(int[] valeur, ArrayList<int[]> list){
-        boolean res = false;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).length == valeur.length) {
-                res = true;
-                for (int j = 0; j < valeur.length; j++) {
-                    if (list.get(i)[j] != valeur[j]) {
-                            res = false;
-                            break;
-                    }
-                }
+		boolean res = false;
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).length == valeur.length) {
+				res = true;
+				for (int j = 0; j < valeur.length; j++) {
+					if (list.get(i)[j] != valeur[j]) {
+						res = false;
+						break;
+					}
+				}
 
-                if (res) return res;
-            }
-        }
+				if (res) return res;
+			}
+		}
 
-        return res;
-    }
+		return res;
+	}
 
 	private ArrayList<int[]>acc_ligne_inf(int x,int y){
 		ArrayList<int[]>res=new ArrayList<>();
@@ -490,8 +404,8 @@ public class Jeu extends Observable {
 	}
 
 	/*
-	* Annuler un coup
-	*/
+	 * Annuler un coup
+	 */
 	public void annuler(){
 
 	}
