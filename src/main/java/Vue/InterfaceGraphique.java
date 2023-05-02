@@ -51,8 +51,8 @@ public class InterfaceGraphique implements Runnable {
 	}
 
 	/*
-	* Définition des composants graphiques et de leurs évènements associés
-	*/
+	 * Définition des composants graphiques et de leurs évènements associés
+	 */
 	@Override
 	public void run() {
 
@@ -68,7 +68,7 @@ public class InterfaceGraphique implements Runnable {
 		try {
 			frame.setIconImage(ImageIO.read(new File("resources/assets/penguin.png")));
 		}
-		catch(IOException exc) {
+		catch (IOException exc) {
 			System.out.println("Erreur de chargement de l'icone");
 		}
 
@@ -81,7 +81,7 @@ public class InterfaceGraphique implements Runnable {
 		frame.add(barreHaute, BorderLayout.PAGE_START);
 		frame.add(menuLateral, BorderLayout.LINE_END);
 
-		Timer chrono = new Timer( 16, new AdaptateurTemps(control));
+		Timer chrono = new Timer(16, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 500);

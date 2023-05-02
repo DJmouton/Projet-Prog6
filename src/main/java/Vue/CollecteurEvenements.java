@@ -27,16 +27,24 @@
 package Vue;
 
 /*
-* Tous les évènements à gérer lors de l'éxecution du programme
-*/
+ * Tous les évènements à gérer lors de l'éxecution du programme
+ */
 public interface CollecteurEvenements {
 	void clicSouris(int l, int c);
+
 	void tictac();
+
 	void changeJoueur(int j, int t);
+
 	void changeTaille(int x, int y);
+
 	void sauver(String fichier);
+
 	void charger(String fichier);
+
 	void annuler();
+
 	void refaire();
+
 	int joueurCourant();
 }

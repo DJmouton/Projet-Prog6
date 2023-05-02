@@ -4,6 +4,7 @@ import Patterns.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
+
 public class ComposantJoueurs extends Box implements Observateur {
 
 	ComposantJoueurs(int axis, CollecteurEvenements control) {
@@ -42,23 +43,19 @@ public class ComposantJoueurs extends Box implements Observateur {
 			JButton joueur1 = new JButton("Au tour du Joueur 1");
 			add(joueur1);
 			add(j1);
-		}
-		else if (control.joueurCourant() == 1) {
+		} else if (control.joueurCourant() == 1) {
 			JButton joueur2 = new JButton("Au tour du Joueur 2");
 			add(joueur2);
 			add(j2);
-		}
-		else if (control.joueurCourant() == 2) {
+		} else if (control.joueurCourant() == 2) {
 			JButton joueur3 = new JButton("Au tour du Joueur 3");
 			add(joueur3);
 			add(j3);
-		}
-		else if (control.joueurCourant() == 3) {
+		} else if (control.joueurCourant() == 3) {
 			JButton joueur4 = new JButton("Au tour du Joueur 4");
 			add(joueur4);
 			add(j4);
-		}
-		else {
+		} else {
 
 		}
 	}
