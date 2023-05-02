@@ -169,6 +169,28 @@ public class Jeu extends Observable {
 		return result;
 	}
 
+	/********************************************
+	* Renvoie si la liste contient la coordonnée
+	*********************************************/
+	public boolean contains(int[] valeur, ArrayList<int[]> list){
+		boolean res = false;
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).length == valeur.length) {
+				res = true;
+				for (int j = 0; j < valeur.length; j++) {
+					if (list.get(i)[j] != valeur[j]) {
+						res = false;
+						break;
+					}
+				}
+
+				if (res) return res;
+			}
+		}
+
+		return res;
+	}
+
 //
 //-----------------------------------------------------------------------------------------
 //
@@ -246,25 +268,6 @@ public class Jeu extends Observable {
 		if(x >= 0 && y >= 0 && x < hauteur && y < largeur){
 			tab.add(new int[]{x,y});
 		}
-	}
-
-	private boolean contains(int[] valeur, ArrayList<int[]> list){
-		boolean res = false;
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).length == valeur.length) {
-				res = true;
-				for (int j = 0; j < valeur.length; j++) {
-					if (list.get(i)[j] != valeur[j]) {
-						res = false;
-						break;
-					}
-				}
-
-				if (res) return res;
-			}
-		}
-
-		return res;
 	}
 
 	private ArrayList<int[]>acc_ligne_inf(int x,int y){
