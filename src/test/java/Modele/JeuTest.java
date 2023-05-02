@@ -15,6 +15,43 @@ class JeuTest {
     //
 
     @org.junit.jupiter.api.Test
+    void EnlevePingouTest() {
+        jeu = new Jeu();
+
+        // pingouin se bloque lui-même
+        jeu.plateau[7][1] = 0;
+        jeu.plateau[7][0] = 4;
+        jeu.plateau[6][1] = 0;
+        jeu.EnlevePingou(7, 0);
+        assertEquals(0, jeu.plateau[7][0]);
+
+        // pingouin bloque un autre pingouin
+        jeu.plateau[0][7] = 0;
+        jeu.plateau[1][6] = 0;
+        jeu.plateau[1][7] = 5;
+        jeu.plateau[2][7] = 4;
+        jeu.EnlevePingou(2, 7);
+        assertEquals(0, jeu.plateau[1][7]);
+        assertEquals(4, jeu.plateau[2][7]);
+
+        // pingouin bloque trois autres pingouins et lui-même
+        jeu.plateau[0][1] = 4;
+        jeu.plateau[0][2] = 0;
+        jeu.plateau[1][0] = 5;
+        jeu.plateau[1][1] = 5;
+        jeu.plateau[1][2] = 0;
+        jeu.plateau[2][1] = 4;
+        jeu.plateau[2][2] = 0;
+        jeu.plateau[3][0] = 0;
+        jeu.plateau[3][1] = 5;
+        jeu.EnlevePingou(1, 1);
+        assertEquals(0, jeu.plateau[0][1]);
+        assertEquals(0, jeu.plateau[1][0]);
+        assertEquals(0, jeu.plateau[1][1]);
+        assertEquals(0, jeu.plateau[2][1]);
+    }
+
+    @org.junit.jupiter.api.Test
     void hex_accessible_test1() {
         jeu = new Jeu();
 
