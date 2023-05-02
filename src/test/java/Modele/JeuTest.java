@@ -7,6 +7,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class JeuTest {
     Jeu jeu;
 
+    //
+    // IDEES DE TESTS :
+    //
+    // - tester toutes les fonctions public séparément (même si pas grand chose à tester, faire un petit test)
+    // - simuler une partie casual en vérifiant tout l'état du jeu pour éviter d'en faire une à la main
+    //
+
     @org.junit.jupiter.api.Test
     void hex_accessible_test1() {
         jeu = new Jeu();
