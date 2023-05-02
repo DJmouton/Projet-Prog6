@@ -26,8 +26,6 @@ package Modele;
  *          38401 Saint Martin d'Hères
  */
 
-import Modele.Jeu;
-
 // Classe commune à tous les joueurs : IA ou humain
 // L'idée est que, en ayant la même interface, tous les joueurs sont traités de la même
 // manière par le moteur de jeu. C'est plus simple et permet toutes les combinaisons.
@@ -37,7 +35,7 @@ import Modele.Jeu;
 // - tenir compte d'une temporisation écoulée (utilisé dans une IA)
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
 public class Joueur {
-	Jeu plateau;
+	Jeu jeu;
 	int num;
 	int score;
 	public boolean estIA;
@@ -48,7 +46,14 @@ public class Joueur {
 	public Joueur(int n, Jeu p) {
 		num = n;
 		estIA = false;
-		plateau = p;
+		jeu = p;
+	}
+
+	public Joueur(Jeu jeu, int num, int score, boolean estIA) {
+		this.jeu = jeu;
+		this.num = num;
+		this.score = score;
+		this.estIA = estIA;
 	}
 
 	public int getScore()
@@ -71,4 +76,9 @@ public class Joueur {
 	// Méthode appelée pour tous les joueurs lors d'un clic sur le plateau
 	// Si un joueur n'est pas concerné, il lui suffit de l'ignorer
 	public void jeu() {}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return new Joueur(jeu, num, score, estIA);
+	}
 }

@@ -21,6 +21,20 @@ public class Jeu extends Observable {
 		reset();
 	}
 
+	public Jeu( int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant) {
+		this.joueurs = joueurs.clone();
+		this.etat = etat;
+		this.joueurCourant= joueurCourant;
+		this.largeur = largeur;
+		this.hauteur = hauteur;
+		this.plateau = new int[largeur][hauteur];
+		for(int i =0; i< largeur; i++){
+			for(int j = 0 ;j < hauteur; j++){
+				this.plateau[i][j]=plateau[i][j];
+			}
+		}
+	}
+
 	public Jeu(int[][] plateau, int largeur, int hauteur) {
 		this.largeur = largeur;
 		this.hauteur = hauteur;
@@ -64,7 +78,7 @@ public class Jeu extends Observable {
 		if (plateau[l][c] == 1) {
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 8)
+			if (nombreP == 2)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
@@ -105,6 +119,86 @@ public class Jeu extends Observable {
 			SelectPingou(l,c);
 		}
 	}
+
+	public void prochainJoueur() {
+		if (nombreP == 0) {
+			System.out.println("Partie terminée");
+			return;
+		}
+
+		joueurCourant=(joueurCourant+1)%this.joueurs.length;
+		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
+			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
+		System.out.println("Au tour du joueur "+joueurCourant+" score = "+joueurs[joueurCourant].getScore()+" etat = "+getEtat());
+		metAJour();
+		if (joueurs[joueurCourant].estIA){
+			if (etat == Etats.Initialisation){
+				joueurs[joueurCourant].placement();
+			}else{
+				joueurs[joueurCourant].jeu();
+			}
+		}
+	}
+
+
+	boolean contains(int[] valeur, ArrayList<int[]> list){
+        boolean res = false;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).length == valeur.length) {
+                res = true;
+                for (int j = 0; j < valeur.length; j++) {
+                    if (list.get(i)[j] != valeur[j]) {
+                            res = false;
+                            break;
+                    }
+                }
+
+                if (res) return res;
+            }
+        }
+
+        return res;
+    }
+
+
+
+
+	public Etats getEtat() {
+		return etat;
+	}
+
+	public void reset() {
+		initPlateau();
+		metAJour();
+	}
+
+	public void reset(String fichier) throws FileNotFoundException {
+		FileInputStream in = new FileInputStream(fichier);
+		Scanner scanner = new Scanner(in);
+		int nbLignes = scanner.nextInt();
+		int nbColonnes = scanner.nextInt();
+		String s;
+		Coup coup;
+		int l,c;
+		plateau = new int[nbLignes][nbColonnes];
+		plateau[0][0] = 1;
+		s=scanner.nextLine(); // Coup 2 4
+		while (!s.equals("fin")){
+			switch (s){
+				case "Coup":
+					l=scanner.nextInt();
+					c=scanner.nextInt();
+					//coup=new Coup(this,l,c);
+
+			}
+			s=scanner.nextLine();
+		}
+		while (scanner.hasNextLine()){
+			switch (s){
+				case "Coup":
+					l=scanner.nextInt();
+					c=scanner.nextInt();
+//					coup=new Coup(this,l,c);
 
 	/***************************************************
 	* Enlève tous les nouveaux pingouins bloqués du jeu
@@ -337,7 +431,11 @@ public class Jeu extends Observable {
 
 	@Override
 	protected Object clone(){
-		return new Jeu(this.plateau,this.largeur,this.hauteur);
+		Jeu j =  new Jeu(this.plateau,this.joueurs,this.largeur,this.hauteur,this.etat,this.joueurCourant);
+		/*for(Joueur joueur : j.joueurs){
+			joueur.jeu = j;
+		}*/
+		return j;
 	}
 
 //////////////////////////////////////////////////////////////////////////
