@@ -173,6 +173,8 @@ public class Jeu extends Observable {
 	* Renvoie si la liste contient la coordonnée
 	*********************************************/
 	public boolean contains(int[] valeur, ArrayList<int[]> list){
+		if (list.isEmpty())
+			return false;
 		boolean res = false;
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).length == valeur.length) {

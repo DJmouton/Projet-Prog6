@@ -118,4 +118,35 @@ class JeuTest {
             assertFalse(jeu.contains(new int[]{2,i},actual));
         }
     }
+
+    @org.junit.jupiter.api.Test
+    void containsTest() {
+        jeu = new Jeu();
+        ArrayList<int[]> list = new ArrayList<>();
+
+        assertFalse(jeu.contains(new int[]{0, 1}, list));
+        list.add(new int[]{0, 1});
+        assertTrue(jeu.contains(new int[]{0, 1}, list));
+        assertFalse(jeu.contains(new int[]{1, 0}, list));
+        list.add(new int[]{1, 0});
+        assertTrue(jeu.contains(new int[]{0, 1}, list));
+        assertTrue(jeu.contains(new int[]{1, 0}, list));
+        list.add(new int[]{7, 4});
+        list.add(new int[]{4, 2});
+        list.add(new int[]{3, 3});
+        assertTrue(jeu.contains(new int[]{3, 3}, list));
+        assertTrue(jeu.contains(new int[]{4, 2}, list));
+        assertTrue(jeu.contains(new int[]{7, 4}, list));
+        list.remove(0);
+        list.remove(0);
+        assertFalse(jeu.contains(new int[]{0, 1}, list));
+        assertFalse(jeu.contains(new int[]{1, 0}, list));
+        list.remove(0);
+        list.remove(0);
+        list.remove(0);
+        assertFalse(jeu.contains(new int[]{3, 3}, list));
+        assertFalse(jeu.contains(new int[]{4, 2}, list));
+        assertFalse(jeu.contains(new int[]{7, 4}, list));
+
+    }
 }
