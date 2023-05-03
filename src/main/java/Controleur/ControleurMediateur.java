@@ -27,6 +27,7 @@ package Controleur;
  *          38401 Saint Martin d'Hères
  */
 
+import Modele.IA;
 import Modele.Jeu;
 import Modele.Joueur;
 import Vue.CollecteurEvenements;
@@ -34,9 +35,9 @@ import Vue.CollecteurEvenements;
 import java.io.FileNotFoundException;
 
 public class ControleurMediateur implements CollecteurEvenements {
-	final int lenteurAttente = 50;
 	Jeu jeu;
 	int joueurCourant;
+	final int lenteurAttente = 50;
 	int decompte;
 
 	public ControleurMediateur(Jeu j) {
@@ -52,7 +53,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
-		switch (jeu.etatCourant()) {
+		switch (jeu.etatCourant())
+		{
 			case Initialisation:
 				jeu.InitPingou(l, c);
 				break;
@@ -68,11 +70,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 		jeu.metAJour();
 	}
 
-	public void annuler() {
+	public void annuler(){
 
 	}
 
-	public void refaire() {
+	public void refaire(){
 
 	}
 
@@ -120,7 +122,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		jeu.reset();
 	}
 
-	public void sauver(String fichier) {
+	public void sauver(String fichier){
 		try {
 			jeu.sauver(fichier);
 		} catch (FileNotFoundException e) {
@@ -129,17 +131,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 		System.out.println("Partie sauvegardée");
 	}
 
-	public void charger(String fichier) {
+	public void charger(String fichier){
 		try {
 			jeu.reset(fichier);
 		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de charger depuis " + fichier);
 		}
 		System.out.println("Partie chargée");
-	}
-
-	public void reset() {
-		jeu.reset();
 	}
 
 	public int joueurCourant() {
