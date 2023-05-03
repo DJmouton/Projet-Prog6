@@ -29,6 +29,7 @@ public class Coup implements Commande
 	}
 
 	public void execute() {
+		jeu.joueurs[jeu.joueurCourant].addIlots();
 		jeu.joueurs[jeu.joueurCourant].addScore(jeu.plateau[destl][destc]);
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
 		jeu.plateau[sourcel][sourcec] = 0;
