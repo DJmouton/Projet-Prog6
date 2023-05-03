@@ -38,6 +38,7 @@ public class Joueur {
 	Jeu jeu;
 	int num;
 	int score;
+	int ilots;
 	public boolean estIA;
 
 	// Le joueur connait son numéro, cela lui permet d'inspecter le plateau en
@@ -60,6 +61,7 @@ public class Joueur {
 	{
 		return score;
 	}
+	public int getIlots(){return ilots;}
 
 	public int num() {
 		return num;
@@ -68,6 +70,10 @@ public class Joueur {
 	public void addScore(int val)
 	{
 		score += val;
+	}
+	public void addIlots()
+	{
+		ilots ++;
 	}
 
 	// Placement initial d'un pingouin par le joueur
