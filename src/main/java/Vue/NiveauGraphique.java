@@ -35,6 +35,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -126,6 +127,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		return hauteurCase;
 	}
 
+	public ArrayList<int[]> hexAccessible(int x, int y) {
+		return jeu.hex_accessible(x, y);
+	}
+	
 	@Override
 	public void miseAJour() {
 		repaint();
