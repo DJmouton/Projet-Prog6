@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
+    public static int profondeur = 3;
 
     public IA(int n, Jeu p) {
         super(n, p);
@@ -37,14 +38,14 @@ public class IA extends Joueur{
     @Override
     public void jeu() {
         System.out.println("jeu");
-        int profondeur = 3;
         ArrayList<Coup> coups = getCoups(this.jeu, this.num);
         int value = Integer.MIN_VALUE;
         Coup coup = null;
         for(Coup c : coups){
             Jeu j = (Jeu) jeu.clone();
             c.setJeu(j);
-            c.execute();
+            jouerCoup(c);
+            prochainJoueur(j);
             int i = MinMaxJoueur(j, profondeur);
             if(i > value){
                 value = i;
@@ -129,7 +130,7 @@ public class IA extends Joueur{
                 jouerCoup(c);
                 j.prochainJoueur();
                 if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
-                    valeur = Math.max(MinMaxJoueur(j, profondeur-1), valeur);
+                    valeur = Math.max(MinMaxJoueur(j, profondeur - 1), valeur);
                 }else{
                     valeur = Math.min(MinMaxJoueur(j, profondeur - 1), valeur);
 
