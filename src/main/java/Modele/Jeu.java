@@ -70,6 +70,7 @@ public class Jeu extends Observable {
 	 *************************************************************************/
 	public void InitPingou(int l, int c){
 		if (plateau[l][c] == 1) {
+			joueurs[joueurCourant].addIlots();
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
 			if (nombreP == 8)
