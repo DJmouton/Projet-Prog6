@@ -56,7 +56,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
-		BufferedImage[] assetsPlateau = new BufferedImage[8];
+		BufferedImage[] assetsPlateau = new BufferedImage[15];
 		BufferedImage waterBG = null;
 
 
@@ -70,6 +70,13 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+			assetsPlateau[8] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
+			assetsPlateau[9] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
+			assetsPlateau[10] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
+			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
+			assetsPlateau[12] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
+			assetsPlateau[13] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
+			assetsPlateau[14] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
 
 
 		} catch (IOException exc) {
@@ -94,6 +101,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		// Grille
 		float height;
+		ArrayList<int[]> acces;
 		// Formule pour calculer la distance entre 2 hexagons
 		height = (float) 3 / 4 * (float) hauteurCase;
 		int hauteur;
@@ -102,10 +110,20 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			for (int j = 0; j < (colonnes); j++) {
 				if (jeu.valeur(i, j) == 0) continue;
 				if (i % 2 == 1)
-					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
-							largeurCase, hauteurCase, this);
+					if (!pingouinSel(i, j)) {
+						g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
+								largeurCase, hauteurCase, this);
+					} else {
+						acces = hexAccessible(i, j);
+						g.drawImage(assetsPlateau[jeu.valeur(i, j) + 4], j * largeurCase + largeurCase / 2, hauteur,
+								largeurCase, hauteurCase, this);
+						}
 				else
-					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
+					if (pingouinSel(i, j))
+						g.drawImage(assetsPlateau[jeu.valeur(i, j) + 4], j * largeurCase, hauteur,
+							largeurCase, hauteurCase, this);
+					else
+						g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
 							largeurCase, hauteurCase, this);
 			}
 		}
@@ -130,7 +148,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	public ArrayList<int[]> hexAccessible(int x, int y) {
 		return jeu.hex_accessible(x, y);
 	}
-	
+
+	public boolean pingouinSel(int x, int y) {
+		return jeu.plateau[x][y] == jeu.joueurCourant + 4;
+	}
+
 	@Override
 	public void miseAJour() {
 		repaint();
