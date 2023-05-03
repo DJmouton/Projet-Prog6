@@ -1,37 +1,39 @@
 package Modele;
-import java.util.*;
 
 import Patterns.Observable;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class Jeu extends Observable {
-	int[][] plateau;
 	public Joueur[] joueurs;
-	int largeur=8;
-	int hauteur=8;
+	public int joueurCourant;
+	int[][] plateau;
+	int largeur = 8;
+	int hauteur = 8;
 	Etats etat = Etats.Initialisation;
 	Coup coup;
-	public int joueurCourant;
-	int nombreP=0;
+	int nombreP = 0;
 
 	public Jeu() {
 		reset();
 	}
 
-	public Jeu( int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant) {
+	public Jeu(int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant) {
 		this.joueurs = joueurs.clone();
 		this.etat = etat;
-		this.joueurCourant= joueurCourant;
+		this.joueurCourant = joueurCourant;
 		this.largeur = largeur;
 		this.hauteur = hauteur;
 		this.plateau = new int[largeur][hauteur];
-		for(int i =0; i< largeur; i++){
-			for(int j = 0 ;j < hauteur; j++){
-				this.plateau[i][j]=plateau[i][j];
-			}
+		for (int i = 0; i < largeur; i++) {
+			System.arraycopy(plateau[i], 0, this.plateau[i], 0, hauteur);
 		}
 	}
 
@@ -41,7 +43,7 @@ public class Jeu extends Observable {
 	}
 
 	public boolean enCours() {
-		return nombreP!=0;
+		return nombreP != 0;
 	}
 
 	public int largeur() {
@@ -68,7 +70,7 @@ public class Jeu extends Observable {
 	/************************************************************************
 	 * Place un pingouin du joueur courant sur le plateau et change de joueur
 	 *************************************************************************/
-	public void InitPingou(int l, int c){
+	public void InitPingou(int l, int c) {
 		if (plateau[l][c] == 1) {
 			joueurs[joueurCourant].addIlots();
 			joueurs[joueurCourant].addScore(1);
@@ -85,7 +87,7 @@ public class Jeu extends Observable {
 	/*******************************************
 	 * Sélectionne un pingouin du joueur courant
 	 ********************************************/
-	public void SelectPingou(int l, int c){
+	public void SelectPingou(int l, int c) {
 		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
 			System.out.println("Pingouin (" + l + ',' + c + ") selectionné");
@@ -97,8 +99,8 @@ public class Jeu extends Observable {
 	/**************************************************************************************************************
 	 * Déplace le pingouin selectionné si la destination est valide, enlève les pingouins bloqués, change de joueur
 	 ***************************************************************************************************************/
-	public void DeplacePingou(int l, int c){
-		if (contains(new int[]{l, c}, hex_accessible(coup.sourcel, coup.sourcec))){
+	public void DeplacePingou(int l, int c) {
+		if (contains(new int[]{l, c}, hex_accessible(coup.sourcel, coup.sourcec))) {
 			// destination valide
 			coup.destl = l;
 			coup.destc = c;
@@ -111,23 +113,23 @@ public class Jeu extends Observable {
 			// destination invalide, peut aussi être une nouvelle sélection de pingouin
 			if (plateau[l][c] != joueurCourant + 4)
 				System.out.println("Le pingouin ne peut pas se déplacer ici");
-			SelectPingou(l,c);
+			SelectPingou(l, c);
 		}
 	}
 
 	/***************************************************
 	 * Enlève tous les nouveaux pingouins bloqués du jeu
 	 ****************************************************/
-	public void EnlevePingou(int l, int c){
+	public void EnlevePingou(int l, int c) {
 		ArrayList<int[]> cotes = getCotes(l, c);
 		for (int[] cote : cotes) {
-			if (plateau[cote[0]][cote[1]] > 3 && hex_accessible(cote[0], cote[1]).isEmpty()){
+			if (plateau[cote[0]][cote[1]] > 3 && hex_accessible(cote[0], cote[1]).isEmpty()) {
 				plateau[cote[0]][cote[1]] = 0;
 				nombreP--;
 			}
 		}
 
-		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()){
+		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()) {
 			plateau[l][c] = 0;
 			nombreP--;
 		}
@@ -136,21 +138,21 @@ public class Jeu extends Observable {
 	/******************************************************************
 	 * Renvoie la liste des cases accessibles à partir d'une coordonnée
 	 *******************************************************************/
-	public ArrayList<int[]> hex_accessible(int x,int y){
-		ArrayList<int[]>res=new ArrayList<>();
-		res.addAll(acc_ligne_inf(x,y-1));
-		res.addAll(acc_ligne_sup(x,y+1));
+	public ArrayList<int[]> hex_accessible(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		res.addAll(acc_ligne_inf(x, y - 1));
+		res.addAll(acc_ligne_sup(x, y + 1));
 
-		if (x%2==0){
-			res.addAll(acc_diagonal1_inf(x-1,y-1));
-			res.addAll(acc_diagonal1_sup(x+1,y));
-			res.addAll(acc_diagonal2_inf(x-1,y));
-			res.addAll(acc_diagonal2_sup(x+1,y-1));
+		if (x % 2 == 0) {
+			res.addAll(acc_diagonal1_inf(x - 1, y - 1));
+			res.addAll(acc_diagonal1_sup(x + 1, y));
+			res.addAll(acc_diagonal2_inf(x - 1, y));
+			res.addAll(acc_diagonal2_sup(x + 1, y - 1));
 		} else {
-			res.addAll(acc_diagonal1_inf(x-1,y));
-			res.addAll(acc_diagonal1_sup(x+1,y+1));
-			res.addAll(acc_diagonal2_inf(x-1,y+1));
-			res.addAll(acc_diagonal2_sup(x+1,y));
+			res.addAll(acc_diagonal1_inf(x - 1, y));
+			res.addAll(acc_diagonal1_sup(x + 1, y + 1));
+			res.addAll(acc_diagonal2_inf(x - 1, y + 1));
+			res.addAll(acc_diagonal2_sup(x + 1, y));
 		}
 		return res;
 	}
@@ -158,12 +160,12 @@ public class Jeu extends Observable {
 	/**************************************************
 	 * Renvoie la liste des pingouins portant le numéro
 	 ***************************************************/
-	public ArrayList<int[]> getPingouins(int num){
+	public ArrayList<int[]> getPingouins(int num) {
 		ArrayList<int[]> result = new ArrayList<>();
-		for(int i = 0; i < largeur; i++){
-			for(int j = 0 ; j < hauteur; j++){
-				if(plateau[i][j]==num){
-					result.add(new int[]{i,j});
+		for (int i = 0; i < largeur; i++) {
+			for (int j = 0; j < hauteur; j++) {
+				if (plateau[i][j] == num) {
+					result.add(new int[]{i, j});
 				}
 			}
 		}
@@ -171,9 +173,9 @@ public class Jeu extends Observable {
 	}
 
 	/********************************************
-	* Renvoie si la liste contient la coordonnée
-	*********************************************/
-	public boolean contains(int[] valeur, ArrayList<int[]> list){
+	 * Renvoie si la liste contient la coordonnée
+	 *********************************************/
+	public boolean contains(int[] valeur, ArrayList<int[]> list) {
 		boolean res = false;
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).length == valeur.length) {
@@ -196,18 +198,18 @@ public class Jeu extends Observable {
 //-----------------------------------------------------------------------------------------
 //
 
-	private void initPlateau(){
-		List<Integer> list =new ArrayList<>(Collections.nCopies(30, 1));
+	private void initPlateau() {
+		List<Integer> list = new ArrayList<>(Collections.nCopies(30, 1));
 		list.addAll(Collections.nCopies(20, 2));
 		list.addAll(Collections.nCopies(10, 3));
 		Collections.shuffle(list);
 
-		int x=0;
-		plateau=new int[hauteur][largeur];
-		for (int i=0;i<hauteur;i++){
-			for (int j=0;j<largeur;j++){
-				if(i%2==0 && j==0){
-					plateau[i][0]=0;
+		int x = 0;
+		plateau = new int[hauteur][largeur];
+		for (int i = 0; i < hauteur; i++) {
+			for (int j = 0; j < largeur; j++) {
+				if (i % 2 == 0 && j == 0) {
+					plateau[i][0] = 0;
 				} else {
 					plateau[i][j] = list.get(x);
 					x++;
@@ -225,7 +227,7 @@ public class Jeu extends Observable {
 			return;
 		}
 
-		joueurCourant=(joueurCourant+1)%this.joueurs.length;
+		joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 
@@ -239,117 +241,117 @@ public class Jeu extends Observable {
 		else
 			System.err.println("ERREUR : Le joueur commence son tour dans un mauvais état");
 
-		if (joueurs[joueurCourant].estIA){
-			if (etat == Etats.Initialisation){
+		if (joueurs[joueurCourant].estIA) {
+			if (etat == Etats.Initialisation) {
 				joueurs[joueurCourant].placement();
-			}else{
+			} else {
 				joueurs[joueurCourant].jeu();
 			}
 		}
 	}
 
-	private ArrayList<int[]> getCotes(int x, int y){
-		ArrayList<int[]>res=new ArrayList<>();
-		transformtableau(res,x,y-1);
-		transformtableau(res,x,y+1);
-		transformtableau(res,x+1,y);
-		transformtableau(res,x-1,y);
+	private ArrayList<int[]> getCotes(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		transformtableau(res, x, y - 1);
+		transformtableau(res, x, y + 1);
+		transformtableau(res, x + 1, y);
+		transformtableau(res, x - 1, y);
 
-		if (x%2==0){
-			transformtableau(res,x-1,y-1);
-			transformtableau(res,x+1,y-1);
+		if (x % 2 == 0) {
+			transformtableau(res, x - 1, y - 1);
+			transformtableau(res, x + 1, y - 1);
 		} else {
-			transformtableau(res,x+1,y+1);
-			transformtableau(res,x-1,y+1);
+			transformtableau(res, x + 1, y + 1);
+			transformtableau(res, x - 1, y + 1);
 		}
 		return res;
 	}
 
-	private void transformtableau(ArrayList<int[]> tab, int x, int y){
-		if(x >= 0 && y >= 0 && x < hauteur && y < largeur){
-			tab.add(new int[]{x,y});
+	private void transformtableau(ArrayList<int[]> tab, int x, int y) {
+		if (x >= 0 && y >= 0 && x < hauteur && y < largeur) {
+			tab.add(new int[]{x, y});
 		}
 	}
 
-	private ArrayList<int[]>acc_ligne_inf(int x,int y){
-		ArrayList<int[]>res=new ArrayList<>();
-		if(y<0||plateau[x][y]==0||plateau[x][y]>3){
+	private ArrayList<int[]> acc_ligne_inf(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		if (y < 0 || plateau[x][y] == 0 || plateau[x][y] > 3) {
 			return res;
 		}
-		res.add(new int[]{x,y});
-		res.addAll(acc_ligne_inf(x,y-1));
+		res.add(new int[]{x, y});
+		res.addAll(acc_ligne_inf(x, y - 1));
 		return res;
 	}
 
-	private ArrayList<int[]>acc_ligne_sup(int x,int y){
-		ArrayList<int[]>res=new ArrayList<>();
-		if(y>=largeur||plateau[x][y]==0||plateau[x][y]>3){
+	private ArrayList<int[]> acc_ligne_sup(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		if (y >= largeur || plateau[x][y] == 0 || plateau[x][y] > 3) {
 			return res;
 		}
-		res.add(new int[]{x,y});
-		res.addAll(acc_ligne_sup(x,y+1));
+		res.add(new int[]{x, y});
+		res.addAll(acc_ligne_sup(x, y + 1));
 		return res;
 	}
 
-	private ArrayList<int[]> acc_diagonal1_inf(int x, int y){
-		ArrayList<int[]> res=new ArrayList<>();
-		if(x<0 || y<0 ||plateau[x][y]==0||plateau[x][y]>3){
+	private ArrayList<int[]> acc_diagonal1_inf(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		if (x < 0 || y < 0 || plateau[x][y] == 0 || plateau[x][y] > 3) {
 			return res;
 		}
-		res.add(new int[]{x,y});
-		if (x%2==0){
-			res.addAll(acc_diagonal1_inf(x-1,y-1));
-		} else{
-			res.addAll(acc_diagonal1_inf(x-1, y));
-		}
-		return res;
-	}
-
-	private ArrayList<int[]> acc_diagonal1_sup(int x, int y){
-		ArrayList<int[]> res=new ArrayList<>();
-		if(x>=hauteur || y>=largeur ||plateau[x][y]==0||plateau[x][y]>3){
-			return res;
-		}
-		res.add(new int[]{x,y});
-		if (x%2==0){
-			res.addAll(acc_diagonal1_sup(x+1,y));
-		} else{
-			res.addAll(acc_diagonal1_sup(x+1, y+1));
+		res.add(new int[]{x, y});
+		if (x % 2 == 0) {
+			res.addAll(acc_diagonal1_inf(x - 1, y - 1));
+		} else {
+			res.addAll(acc_diagonal1_inf(x - 1, y));
 		}
 		return res;
 	}
 
-	private ArrayList<int[]> acc_diagonal2_inf(int x, int y){
-		ArrayList<int[]> res=new ArrayList<>();
-		if(x<0 || y>=largeur ||plateau[x][y]==0||plateau[x][y]>3){
+	private ArrayList<int[]> acc_diagonal1_sup(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		if (x >= hauteur || y >= largeur || plateau[x][y] == 0 || plateau[x][y] > 3) {
 			return res;
 		}
-		res.add(new int[]{x,y});
-		if (x%2==0){
-			res.addAll(acc_diagonal2_inf(x-1,y));
-		} else{
-			res.addAll(acc_diagonal2_inf(x-1, y+1));
+		res.add(new int[]{x, y});
+		if (x % 2 == 0) {
+			res.addAll(acc_diagonal1_sup(x + 1, y));
+		} else {
+			res.addAll(acc_diagonal1_sup(x + 1, y + 1));
 		}
 		return res;
 	}
 
-	private ArrayList<int[]> acc_diagonal2_sup(int x, int y){
-		ArrayList<int[]> res=new ArrayList<>();
-		if(x>=hauteur || y<0 ||plateau[x][y]==0||plateau[x][y]>3){
+	private ArrayList<int[]> acc_diagonal2_inf(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		if (x < 0 || y >= largeur || plateau[x][y] == 0 || plateau[x][y] > 3) {
 			return res;
 		}
-		res.add(new int[]{x,y});
-		if (x%2==0){
-			res.addAll(acc_diagonal2_sup(x+1,y-1));
-		} else{
-			res.addAll(acc_diagonal2_sup(x+1, y));
+		res.add(new int[]{x, y});
+		if (x % 2 == 0) {
+			res.addAll(acc_diagonal2_inf(x - 1, y));
+		} else {
+			res.addAll(acc_diagonal2_inf(x - 1, y + 1));
+		}
+		return res;
+	}
+
+	private ArrayList<int[]> acc_diagonal2_sup(int x, int y) {
+		ArrayList<int[]> res = new ArrayList<>();
+		if (x >= hauteur || y < 0 || plateau[x][y] == 0 || plateau[x][y] > 3) {
+			return res;
+		}
+		res.add(new int[]{x, y});
+		if (x % 2 == 0) {
+			res.addAll(acc_diagonal2_sup(x + 1, y - 1));
+		} else {
+			res.addAll(acc_diagonal2_sup(x + 1, y));
 		}
 		return res;
 	}
 
 	@Override
-	protected Object clone(){
-		Jeu j =  new Jeu(this.plateau,this.joueurs,this.largeur,this.hauteur,this.etat,this.joueurCourant);
+	protected Object clone() {
+		Jeu j = new Jeu(this.plateau, this.joueurs, this.largeur, this.hauteur, this.etat, this.joueurCourant);
 		/*for(Joueur joueur : j.joueurs){
 			joueur.jeu = j;
 		}*/
@@ -369,29 +371,25 @@ public class Jeu extends Observable {
 		int nbColonnes = scanner.nextInt();
 		String s;
 		Coup coup;
-		int l,c;
+		int l, c;
 		plateau = new int[nbLignes][nbColonnes];
 		plateau[0][0] = 1;
-		s=scanner.nextLine(); // Coup 2 4
-		while (!s.equals("fin")){
-			switch (s){
-				case "Coup":
-					l=scanner.nextInt();
-					c=scanner.nextInt();
-					//coup=new Coup(this,l,c);
-
+		s = scanner.nextLine(); // Coup 2 4
+		while (!s.equals("fin")) {
+			if (s.equals("Coup")) {
+				l = scanner.nextInt();
+				c = scanner.nextInt();
+				//coup=new Coup(this,l,c);
 			}
-			s=scanner.nextLine();
+			s = scanner.nextLine();
 		}
-		while (scanner.hasNextLine()){
-			switch (s){
-				case "Coup":
-					l=scanner.nextInt();
-					c=scanner.nextInt();
-					//coup=new Coup(this,l,c);
-
+		while (scanner.hasNextLine()) {
+			if (s.equals("Coup")) {
+				l = scanner.nextInt();
+				c = scanner.nextInt();
+				//coup=new Coup(this,l,c);
 			}
-			s=scanner.nextLine();
+			s = scanner.nextLine();
 		}
 	}
 
@@ -410,7 +408,7 @@ public class Jeu extends Observable {
 	/*
 	 * Annuler un coup
 	 */
-	public void annuler(){
+	public void annuler() {
 
 	}
 }
