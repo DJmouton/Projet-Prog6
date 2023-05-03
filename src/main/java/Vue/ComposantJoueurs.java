@@ -41,20 +41,28 @@ public class ComposantJoueurs extends Box implements Observateur {
 
 		if (control.joueurCourant() == 0) {
 			JButton joueur1 = new JButton("Au tour du Joueur 1");
+			JLabel score = new JLabel("Score J1 : ");
 			add(joueur1);
 			add(j1);
+			add(score);
 		} else if (control.joueurCourant() == 1) {
 			JButton joueur2 = new JButton("Au tour du Joueur 2");
+			JLabel score = new JLabel("Score J2 : ");
 			add(joueur2);
 			add(j2);
+			add(score);
 		} else if (control.joueurCourant() == 2) {
 			JButton joueur3 = new JButton("Au tour du Joueur 3");
+			JLabel score = new JLabel("Score J3 : ");
 			add(joueur3);
 			add(j3);
+			add(score);
 		} else if (control.joueurCourant() == 3) {
 			JButton joueur4 = new JButton("Au tour du Joueur 4");
+			JLabel score = new JLabel("Score J4 : ");
 			add(joueur4);
 			add(j4);
+			add(score);
 		} else {
 
 		}
