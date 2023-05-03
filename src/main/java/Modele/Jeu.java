@@ -79,7 +79,6 @@ public class Jeu extends Observable {
 
 			plateau[l][c] = joueurCourant + 4;
 			e=EnlevePingou(l,c);
-			System.out.println("e= "+e);
 			prochainJoueur();
 		}
 	}
@@ -115,8 +114,6 @@ public class Jeu extends Observable {
 				System.out.println("Le pingouin ne peut pas se déplacer ici");
 			SelectPingou(l,c);
 		}
-		System.out.println("nombreP= "+nombreP);
-
 	}
 
 	/***************************************************
