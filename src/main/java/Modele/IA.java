@@ -1,11 +1,14 @@
 package Modele;
 
+import org.javatuples.Tuple;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 3;
+    public static int profondeur = 5;
+    private Coup c;
 
     public IA(int n, Jeu p) {
         super(n, p);
@@ -41,17 +44,20 @@ public class IA extends Joueur{
         ArrayList<Coup> coups = getCoups(this.jeu, this.num);
         int value = Integer.MIN_VALUE;
         Coup coup = null;
-        for(Coup c : coups){
+//        prochainJoueur(jeu);
+        int i = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
+        System.out.println("valeur: "+i);
+        /*for(Coup c : coups){
             Jeu j = (Jeu) jeu.clone();
             c.setJeu(j);
             jouerCoup(c);
             prochainJoueur(j);
-            int i = MinMaxJoueur(j, profondeur);
+            int i = MinMaxJoueur(j, profondeur,Integer.MAX_VALUE);
             if(i > value){
                 value = i;
                 coup = c;
             }
-        }
+        }*/
         if(coup != null) {
             System.out.println("Jouer Coup");
             coup.setJeu(jeu);
@@ -109,9 +115,18 @@ public class IA extends Joueur{
 
     }
 
-    public int MinMaxJoueur(Jeu jeu, int profondeur){
+
+    public int MinMaxJoueur(Jeu jeu, int profondeur, int valP){
+        System.out.println("MINMAX");
         if(!jeu.enCours() || profondeur == 0){
-            return Evaluation(jeu);
+//            return Evaluation(jeu);
+            if(jeu.joueurs[jeu.joueurCourant].num != this.num){
+                prochainJoueur(jeu);
+            }
+            int scoreIA = jeu.joueurs[jeu.joueurCourant].score;
+            prochainJoueur(jeu);
+            int scoreADV = jeu.joueurs[jeu.joueurCourant].score;
+            return scoreIA-scoreADV;
         }else{
 
             int valeur;
@@ -123,18 +138,27 @@ public class IA extends Joueur{
             ArrayList<Coup> coups;
 
             coups = getCoups(jeu, jeu.joueurs[jeu.joueurCourant].num);
-            System.out.println("test");
             for(Coup c : coups){
                 Jeu j = (Jeu) jeu.clone();
                 c.setJeu(j);
                 jouerCoup(c);
-                j.prochainJoueur();
-                if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
-                    valeur = Math.max(MinMaxJoueur(j, profondeur - 1), valeur);
+                prochainJoueur(j);
+
+                if(j.joueurs[j.joueurCourant].num!=this.num) {
+                    valeur = Math.max(MinMaxJoueur(j, profondeur - 1,valeur), valeur);
+                    if(valeur >= valP){
+                        System.out.println("COUPURE");
+                        break;
+                    }
                 }else{
-                    valeur = Math.min(MinMaxJoueur(j, profondeur - 1), valeur);
+                    valeur = Math.min(MinMaxJoueur(j, profondeur - 1,valeur), valeur);
+                    if(valeur <= valP){
+                        System.out.println("COUPURE");
+                        break;
+                    }
 
                 }
+
             }
             return valeur;
         }
