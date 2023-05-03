@@ -37,27 +37,33 @@ public class IA extends Joueur{
     @Override
     public void jeu() {
         System.out.println("jeu");
-        int profondeur = 1;
+        int profondeur = 3;
         ArrayList<Coup> coups = getCoups(this.jeu, this.num);
         int value = Integer.MIN_VALUE;
         Coup coup = null;
         for(Coup c : coups){
-            Jeu j = jeu;//(Jeu) jeu.clone();
+            Jeu j = (Jeu) jeu.clone();
             c.setJeu(j);
             c.execute();
-            int i = MinMaxJoueur(j, profondeur, new int[]{this.jeu.joueurs[0].num,this.jeu.joueurs[1].num},false);
+            int i = MinMaxJoueur(j, profondeur);
             if(i > value){
                 value = i;
                 coup = c;
             }
-            break;
         }
         if(coup != null) {
-            coup.execute();
-            jeu.SelectPingou(coup.sourcel,coup.sourcec);
-            jeu.DeplacePingou(coup.destl,coup.destc);
+            System.out.println("Jouer Coup");
+            coup.setJeu(jeu);
+            jouerCoup(coup);
+            jeu.prochainJoueur();
         }
+        System.out.println("TAILLE: "+jeu.getPingouins(this.num).size());
         System.out.println("fin jeu");
+    }
+
+    private void jouerCoup(Coup coup){
+        coup.execute();
+        coup.jeu.EnlevePingou(coup.destl, coup.destc);
     }
 
     public ArrayList<Coup> getCoups(Jeu jeu, int num){
@@ -72,70 +78,62 @@ public class IA extends Joueur{
     }
 
 
-    private int Evaluation(Jeu jeu, int nums[], boolean A){
-        return MonteCarlo(jeu, 100, nums, A);
+    private int Evaluation(Jeu jeu){
+        return MonteCarlo(jeu, 10);
     }
 
-    private int MonteCarlo(Jeu jeu, int taille, int nums[], boolean A){
+    private void prochainJoueur(Jeu jeu){
+        jeu.joueurCourant = (jeu.joueurCourant + 1) % jeu.joueurs.length;
+        while (jeu.etat != Etats.Initialisation && jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num).isEmpty() && jeu.enCours())
+            jeu.joueurCourant = (jeu.joueurCourant + 1) % jeu.joueurs.length;
+    }
+
+    private int MonteCarlo(Jeu jeu, int taille){
+        System.out.println("Monte Carlo");
         int somme = 0;
         for(int i = 0; i< taille; i++){
             Jeu j = (Jeu) jeu.clone();
-            int num;
-            if(A){
-                num=nums[0];
-            }else{
-                num=nums[1];
-            }
             while(j.enCours()){
-                ArrayList<Coup> coups = getCoups(j, num);
-                coups.get(random.nextInt(coups.size())).execute();
-                if(num == nums[0]){
-                    num = nums[1];
-                }else{
-                    num = nums[0];
-                }
+                ArrayList<Coup> coups = getCoups(j, j.joueurs[j.joueurCourant].num);
+                if(coups.size()>0)
+                    jouerCoup(coups.get(random.nextInt(coups.size())));
+                prochainJoueur(j);
             }
-
-            int advscore = 0;
-            for(Joueur joueur : this.jeu.joueurs){
-                if(joueur.num != this.num){
-                    advscore = joueur.score;
-                }
-            }
-            somme+=this.score-advscore;
+            int scoreIA = j.joueurs[j.joueurCourant].score;
+            prochainJoueur(j);
+            int scoreADV = j.joueurs[j.joueurCourant].score;
+            somme+=scoreIA-scoreADV;
         }
         return somme / taille;
 
     }
 
-    public int MinMaxJoueur(Jeu jeu, int profondeur, int[] nums, boolean A){
+    public int MinMaxJoueur(Jeu jeu, int profondeur){
         if(!jeu.enCours() || profondeur == 0){
-            return Evaluation(jeu, nums, A);
+            return Evaluation(jeu);
         }else{
 
             int valeur;
-            if(A) {
+            if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
                 valeur = Integer.MIN_VALUE;
             }else{
                 valeur = Integer.MAX_VALUE;
             }
             ArrayList<Coup> coups;
 
-            if(A){
-                coups = getCoups(jeu, nums[0]);
-            }else{
-                coups = getCoups(jeu, nums[1]);
-            }
+            coups = getCoups(jeu, jeu.joueurs[jeu.joueurCourant].num);
+            System.out.println("test");
             for(Coup c : coups){
-                Jeu j = jeu;//(Jeu) jeu.clone();
+                Jeu j = (Jeu) jeu.clone();
                 c.setJeu(j);
-                c.execute();
-                if(A) {
-                    valeur = Math.max(MinMaxJoueur(j, profondeur - 1, nums, false), valeur);
+                jouerCoup(c);
+                j.prochainJoueur();
+                if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
+                    valeur = Math.max(MinMaxJoueur(j, profondeur-1), valeur);
                 }else{
-                    valeur = Math.min(MinMaxJoueur(j, profondeur-1, nums, true), valeur);
+                    valeur = Math.min(MinMaxJoueur(j, profondeur - 1), valeur);
+
                 }
-                break;
             }
             return valeur;
         }
