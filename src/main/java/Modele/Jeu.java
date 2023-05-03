@@ -16,6 +16,7 @@ public class Jeu extends Observable {
 	Coup coup;
 	public int joueurCourant;
 	int nombreP=0;
+	int e=0;
 
 	public Jeu() {
 		reset();
@@ -73,11 +74,12 @@ public class Jeu extends Observable {
 			joueurs[joueurCourant].addIlots();
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 8)
+			if (nombreP == 8-e)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
-
+			e=EnlevePingou(l,c);
+			System.out.println("e= "+e);
 			prochainJoueur();
 		}
 	}
@@ -113,24 +115,29 @@ public class Jeu extends Observable {
 				System.out.println("Le pingouin ne peut pas se déplacer ici");
 			SelectPingou(l,c);
 		}
+		System.out.println("nombreP= "+nombreP);
+
 	}
 
 	/***************************************************
 	 * Enlève tous les nouveaux pingouins bloqués du jeu
 	 ****************************************************/
-	public void EnlevePingou(int l, int c){
+	public int EnlevePingou(int l, int c){
 		ArrayList<int[]> cotes = getCotes(l, c);
 		for (int[] cote : cotes) {
 			if (plateau[cote[0]][cote[1]] > 3 && hex_accessible(cote[0], cote[1]).isEmpty()){
 				plateau[cote[0]][cote[1]] = 0;
 				nombreP--;
+				e++;
 			}
 		}
 
 		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()){
 			plateau[l][c] = 0;
 			nombreP--;
+			e++;
 		}
+		return e;
 	}
 
 	/******************************************************************
