@@ -1,5 +1,6 @@
 package Vue;
 
+import Modele.Etats;
 import Modele.Jeu;
 import Patterns.Observateur;
 
@@ -82,6 +83,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Formule pour calculer la distance entre 2 hexagons
 		height = (3f / 4f) * (float) hauteurCase;
 		int hauteur, largeur;
+
 		for (int i = 0; i < (lignes); i++) {
 			hauteur = Math.round((float) i * height);
 			for (int j = 0; j < (colonnes); j++) {
@@ -102,20 +104,21 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		int h = 0;
 		int l = 0;
 		try {
-			for (int [] access : jeu.hexAccess ) {
-				x = access[0];
-				y = access[1];
-				h = Math.round((float) x * height);
-				if (x % 2 == 1) {
-					l = y * largeurCase + largeurCase / 2;
-				}
-				else {
-					l = y * largeurCase;
-				}
-				if(jeu.valeur(x, y) == 0) continue;
-				else
-					g.drawImage(assetsPlateau[jeu.valeur(x, y) + 7], l, h,
-							largeurCase, hauteurCase, this);
+			if (jeu.etatCourant() == Etats.Deplacement)
+				for (int [] access : jeu.hexAccess ) {
+					x = access[0];
+					y = access[1];
+					h = Math.round((float) x * height);
+					if (x % 2 == 1) {
+						l = y * largeurCase + largeurCase / 2;
+					}
+					else {
+						l = y * largeurCase;
+					}
+					if(jeu.valeur(x, y) == 0) continue;
+					else
+						g.drawImage(assetsPlateau[jeu.valeur(x, y) + 7], l, h,
+								largeurCase, hauteurCase, this);
 			}
 		}
 		catch(NullPointerException e) {
