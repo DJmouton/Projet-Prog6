@@ -126,6 +126,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		}
 
+
 		g.setFont(new Font("Arial", Font.PLAIN,  largeurCase / 10));
 		score = jeu.joueurs[jeu.joueurCourant].getScore();
 		String s1 = " : " + score;
