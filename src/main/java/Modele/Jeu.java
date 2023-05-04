@@ -41,16 +41,6 @@ public class Jeu extends Observable {
 
 	public void reset() {
 		initPlateau();
-		/*this.plateau = new int[][]{
-				{0,0,1,1,1,0,0,0},
-				{0,0,1,1,1,0,0,0},
-				{0,0,1,1,1,0,0,0},
-				{0,0,1,0,1,0,0,0},
-				{0,0,3,0,3,0,0,0},
-				{0,0,0,0,0,0,0,0},
-				{0,0,0,0,0,0,0,0},
-				{0,0,0,0,0,0,0,0}
-		};*/
 		metAJour();
 	}
 
@@ -191,7 +181,7 @@ public class Jeu extends Observable {
 		List<Integer> list =new ArrayList<>(Collections.nCopies(30, 1));
 		list.addAll(Collections.nCopies(20, 2));
 		list.addAll(Collections.nCopies(10, 3));
-		Collections.shuffle(list);
+		Collections.shuffle(list, new Random());
 
 		int x=0;
 		plateau=new int[hauteur][largeur];
@@ -217,8 +207,9 @@ public class Jeu extends Observable {
 		}
 
 		joueurCourant=(joueurCourant+1)%this.joueurs.length;
-		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
-			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
+		System.out.println("Joueur courant"+joueurCourant);
+//		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
+//			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 
 		System.out.println("------------------------------------------------------------------");
 		System.out.println("Au tour du joueur " + joueurCourant + " !");

@@ -1,14 +1,13 @@
 package Modele;
 
-import org.javatuples.Tuple;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 5;
-    private Coup c;
+    public static int profondeur = 3;
 
     public IA(int n, Jeu p) {
         super(n, p);
@@ -40,32 +39,12 @@ public class IA extends Joueur{
 
     @Override
     public void jeu() {
-        System.out.println("jeu");
-        ArrayList<Coup> coups = getCoups(this.jeu, this.num);
-        int value = Integer.MIN_VALUE;
-        Coup coup = null;
-//        prochainJoueur(jeu);
-        int i = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
-        System.out.println("valeur: "+i);
-        /*for(Coup c : coups){
-            Jeu j = (Jeu) jeu.clone();
-            c.setJeu(j);
-            jouerCoup(c);
-            prochainJoueur(j);
-            int i = MinMaxJoueur(j, profondeur,Integer.MAX_VALUE);
-            if(i > value){
-                value = i;
-                coup = c;
-            }
-        }*/
-        if(coup != null) {
-            System.out.println("Jouer Coup");
-            coup.setJeu(jeu);
-            jouerCoup(coup);
+        Pair<Integer, Coup> result = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
+        if(result.getValue1() != null) {
+            result.getValue1().setJeu(jeu);
+            jouerCoup(result.getValue1());
             jeu.prochainJoueur();
         }
-        System.out.println("TAILLE: "+jeu.getPingouins(this.num).size());
-        System.out.println("fin jeu");
     }
 
     private void jouerCoup(Coup coup){
@@ -85,7 +64,7 @@ public class IA extends Joueur{
     }
 
 
-    private int Evaluation(Jeu jeu){
+    private int Evaluation(Jeu j){
         return MonteCarlo(jeu, 10);
     }
 
@@ -96,7 +75,6 @@ public class IA extends Joueur{
     }
 
     private int MonteCarlo(Jeu jeu, int taille){
-        System.out.println("Monte Carlo");
         int somme = 0;
         for(int i = 0; i< taille; i++){
             Jeu j = (Jeu) jeu.clone();
@@ -104,6 +82,9 @@ public class IA extends Joueur{
                 ArrayList<Coup> coups = getCoups(j, j.joueurs[j.joueurCourant].num);
                 if(coups.size()>0)
                     jouerCoup(coups.get(random.nextInt(coups.size())));
+                prochainJoueur(j);
+            }
+            if(j.joueurs[j.joueurCourant].num != this.num){
                 prochainJoueur(j);
             }
             int scoreIA = j.joueurs[j.joueurCourant].score;
@@ -116,20 +97,13 @@ public class IA extends Joueur{
     }
 
 
-    public int MinMaxJoueur(Jeu jeu, int profondeur, int valP){
-        System.out.println("MINMAX");
+    public Pair<Integer, Coup> MinMaxJoueur(Jeu jeu, int profondeur, int valP){
         if(!jeu.enCours() || profondeur == 0){
-//            return Evaluation(jeu);
-            if(jeu.joueurs[jeu.joueurCourant].num != this.num){
-                prochainJoueur(jeu);
-            }
-            int scoreIA = jeu.joueurs[jeu.joueurCourant].score;
-            prochainJoueur(jeu);
-            int scoreADV = jeu.joueurs[jeu.joueurCourant].score;
-            return scoreIA-scoreADV;
+            return Pair.with(Evaluation(jeu),null);
         }else{
 
-            int valeur;
+            int valeur, v2;
+            Coup coup = null;
             if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
                 valeur = Integer.MIN_VALUE;
             }else{
@@ -143,24 +117,28 @@ public class IA extends Joueur{
                 c.setJeu(j);
                 jouerCoup(c);
                 prochainJoueur(j);
-
-                if(j.joueurs[j.joueurCourant].num!=this.num) {
-                    valeur = Math.max(MinMaxJoueur(j, profondeur - 1,valeur), valeur);
+                v2 = MinMaxJoueur(j, profondeur - 1,valeur).getValue0();
+                if(jeu.joueurs[jeu.joueurCourant].num==this.num) {//max
+                    if(v2 > valeur){
+                        valeur = v2;
+                        coup = c;
+                    }
                     if(valeur >= valP){
-                        System.out.println("COUPURE");
                         break;
                     }
                 }else{
-                    valeur = Math.min(MinMaxJoueur(j, profondeur - 1,valeur), valeur);
+                    if(v2 < valeur){
+                        valeur = v2;
+                        coup = c;
+                    }
                     if(valeur <= valP){
-                        System.out.println("COUPURE");
                         break;
                     }
 
                 }
 
             }
-            return valeur;
+            return Pair.with(valeur,coup);
         }
     }
 
