@@ -1,71 +1,72 @@
 package Controleur;
 
-/*
- * Morpion pédagogique
-
- * Copyright (C) 2016 Guillaume Huard
-
- * Ce programme est libre, vous pouvez le redistribuer et/ou le
- * modifier selon les termes de la Licence Publique Générale GNU publiée par la
- * Free Software Foundation (version 2 ou bien toute autre version ultérieure
- * choisie par vous).
-
- * Ce programme est distribué car potentiellement utile, mais SANS
- * AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
- * commercialisation ou d'adaptation dans un but spécifique. Reportez-vous à la
- * Licence Publique Générale GNU pour plus de détails.
-
- * Vous devez avoir reçu une copie de la Licence Publique Générale
- * GNU en même temps que ce programme ; si ce n'est pas le cas, écrivez à la Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,
- * États-Unis.
-
- * Contact: Guillaume.Huard@imag.fr
- *          Laboratoire LIG
- *          700 avenue centrale
- *          Domaine universitaire
- *          38401 Saint Martin d'Hères
- */
-
-import Modele.IA;
 import Modele.Jeu;
 import Modele.Joueur;
+import Modele.Coup;
+import Modele.Placement;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
 
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
-	int joueurCourant;
-	final int lenteurAttente = 50;
-	int decompte;
+	boolean EoT; // end of turn
+	Placement placement;
+	Coup coup;
+	int joueurCourant; // unused
 
-	public ControleurMediateur(Jeu j) {
+	public ControleurMediateur(Jeu j)
+	{
 		jeu = j;
+		EoT = false;
+		/////////////////////////////////////////
+		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
 		this.jeu.joueurs[1] = new Joueur(5, jeu);
-
+		/////////////////////////////////////////
+		partie();
 	}
-	public void reset(){
+
+	/***************************************************************************
+	* Traitement d'un clic sur le bouton reset, réinitialise et relance le jeu.
+	****************************************************************************/
+	public void reset()
+	{
 		jeu.reset();
+		EoT = false;
+		/////////////////////////////////////////
+		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
 		this.jeu.joueurs[1] = new Joueur(5, jeu);
+		/////////////////////////////////////////
+		partie();
+	}
 
-
+	/****************************************************************************************
+	* Traitement d'un clic sur le bouton IA, bascule le joueur de mode.
+	* L'IHM doit faire appel à ces fonctions peut importe le bouton IA cliqué.
+	* Il donneront en paramètre le numéro du joueur car ils savent quel bouton a été cliqué.
+	*****************************************************************************************/
+	public void basculeIA(int num)
+	{
+		jeu.changeModeJoueur(num);
 	}
 
 
-	@Override
-	public void clicSouris(int l, int c) {
+	/**************************************************************************************************
+	* Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
+	***************************************************************************************************/
+	public void clicSouris(int l, int c)
+	{
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
 		switch (jeu.etatCourant())
 		{
 			case Initialisation:
-				jeu.InitPingou(l, c);
+				EoT = jeu.InitPingou(l, c); // le tour d'un humain peut s'arreter ici
 				break;
 
 			case Selection:
@@ -73,11 +74,79 @@ public class ControleurMediateur implements CollecteurEvenements {
 				break;
 
 			case Deplacement:
-				jeu.DeplacePingou(l, c);
+				EoT = jeu.DeplacePingou(l, c); // le tour d'un humain peut s'arreter ici
 				break;
 		}
+
 		jeu.metAJour();
 	}
+
+	/*****************************************
+	* Passe au prochain joueur qui peut jouer
+	******************************************/
+	public void joueurSuivant()
+	{
+		jeu.prochainJoueur();
+	}
+
+	/**************************
+	* Déroulement d'un tour
+	***************************/
+	public void tour()
+	{
+		// affichage début tour
+
+		switch (jeu.joueurs[joueurCourant].estIA)
+		{
+			case false:
+				while (!EoT); // on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
+				EoT = false;
+				break;
+
+			case true:
+				// ajouter temporisation ici ?
+
+				switch (jeu.etatCourant())
+				{
+					case Initialisation:
+						placement = jeu.joueurs[joueurCourant].placement();
+						placement.execute();
+						// feedback
+						break;
+
+					case Selection:
+						coup = jeu.joueurs[joueurCourant].jeu();
+						coup.execute();
+						// feedback
+						break;
+
+					case Deplacement:
+						System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
+						break;
+				}
+				break;
+		}
+
+		joueurSuivant();
+	}
+
+	/**************************
+	* Déroulement d'une partie
+	***************************/
+	public void partie()
+	{
+		while (jeu.enCours())
+			tour();
+
+		// affichage des scores finals
+	}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// FONCTIONS A SUPPRIMER POUR LA PREMIERE VERSION
+//
+//////////////////////////////////////////////////////////////////////////
 
 	public void annuler(){
 
@@ -108,7 +177,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	@Override
 	public void changeJoueur(int j, int t) {
-        /*
+		/*
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
 		if(t == 0) {
 			joueurs[j][0] = new JoueurHumain(j, jeu);

@@ -201,6 +201,12 @@ public class Jeu extends Observable {
 		return res;
 	}
 
+	public void prochainJoueur() {
+		joueurCourant=(joueurCourant+1)%this.joueurs.length;
+		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty() && enCours())
+			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
+	}
+
 	public void changeModeJoueur(int num){
 		if(joueurs[num].estIA){
 			joueurs[num].estIA=false;
@@ -232,12 +238,6 @@ public class Jeu extends Observable {
 				}
 			}
 		}
-	}
-
-	private void prochainJoueur() {
-		joueurCourant=(joueurCourant+1)%this.joueurs.length;
-		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
-			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 	}
 
 	private ArrayList<int[]> getCotes(int x, int y){
