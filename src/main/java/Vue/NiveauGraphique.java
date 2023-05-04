@@ -56,7 +56,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
-		BufferedImage[] assetsPlateau = new BufferedImage[15];
+		BufferedImage[] assetsPlateau = new BufferedImage[19];
 		BufferedImage waterBG = null;
 
 
