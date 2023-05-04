@@ -9,7 +9,7 @@ import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
 
-public class ControleurMediateur implements CollecteurEvenements {
+public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	Jeu jeu;
 	boolean EoT; // end of turn
 	Placement placement;
@@ -26,7 +26,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
 		this.jeu.joueurs[1] = new IA(5, jeu);
 		/////////////////////////////////////////
-		partie();
+
 	}
 
 	/***************************************************************************
@@ -40,7 +40,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new Joueur(5, jeu);
+		this.jeu.joueurs[1] = new IA(5, jeu);
 		/////////////////////////////////////////
 		partie();
 	}
@@ -64,18 +64,26 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
+		boolean sel = false;
+
 		switch (jeu.etatCourant())
 		{
 			case Initialisation:
 				EoT = jeu.InitPingou(l, c); // le tour d'un humain peut s'arreter ici
+				if (EoT)
+					System.out.println("Pingouin placé en (" + l + "," + c + ")");
 				break;
 
 			case Selection:
-				jeu.SelectPingou(l, c);
+				sel = jeu.SelectPingou(l, c);
+				if (sel)
+					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 				break;
 
 			case Deplacement:
 				EoT = jeu.DeplacePingou(l, c); // le tour d'un humain peut s'arreter ici
+				if (EoT)
+					System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
 				break;
 		}
 
@@ -95,37 +103,34 @@ public class ControleurMediateur implements CollecteurEvenements {
 	***************************/
 	public void tour()
 	{
-		// affichage début tour
+		System.out.println("Au tour du joueur " + jeu.joueurCourant);
+		System.out.println("Score : " + jeu.joueurs[joueurCourant].getScore());
 
-		switch (jeu.joueurs[joueurCourant].estIA)
+		if (!(jeu.joueurs[joueurCourant].estIA))
 		{
-			case false:
-				while (!EoT); // on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
-				EoT = false;
-				break;
+			while (!EoT) ; // on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
+			EoT = false;
+		}
+		else
+		{// ajouter temporisation ici ?
+			switch (jeu.etatCourant())
+			{
+				case Initialisation:
+					placement = ((IA) jeu.joueurs[joueurCourant]).placement();
+					placement.execute();
+					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
+					break;
 
-			case true:
-				// ajouter temporisation ici ?
+				case Selection:
+					coup = ((IA) jeu.joueurs[joueurCourant]).jeu();
+					coup.execute();
+					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
+					break;
 
-				switch (jeu.etatCourant())
-				{
-					case Initialisation:
-						placement = jeu.joueurs[joueurCourant].placement();
-						placement.execute();
-						// feedback
-						break;
-
-					case Selection:
-						coup = jeu.joueurs[joueurCourant].jeu();
-						coup.execute();
-						// feedback
-						break;
-
-					case Deplacement:
-						System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
-						break;
-				}
-				break;
+				case Deplacement:
+					System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
+					break;
+			}
 		}
 
 		joueurSuivant();
@@ -140,6 +145,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			tour();
 
 		// affichage des scores finals
+		System.out.println("Partie terminée");
 	}
 
 
@@ -221,5 +227,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public int joueurCourant() {
 		return this.joueurCourant;
+	}
+
+	@Override
+	public void run()
+	{
+		partie();
 	}
 }

@@ -4,7 +4,8 @@ import Patterns.Commande;
 
 public class Placement implements Commande
 {
-	int destl, destc;
+	public int destl;
+	public int destc;
 	Jeu jeu;
 
 	public Placement(Jeu jeu, int destl, int destc) {

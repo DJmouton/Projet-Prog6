@@ -52,7 +52,10 @@ public class Jeu extends Observable {
 	}
 
 	public boolean enCours() {
-		return nombreP!=0;
+		if (etat == Etats.Initialisation)
+			return true;
+		else
+			return nombreP!=0;
 	}
 
 	public int largeur() {
@@ -98,11 +101,13 @@ public class Jeu extends Observable {
 	/*******************************************
 	 * Sélectionne un pingouin du joueur courant
 	 ********************************************/
-	public void SelectPingou(int l, int c){
+	public boolean SelectPingou(int l, int c){
 		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
 			etat = Etats.Deplacement;
+			return true;
 		}
+		return false;
 	}
 
 	/**************************************************************************************************************

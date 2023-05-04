@@ -4,8 +4,8 @@ import Patterns.Commande;
 
 public class Coup implements Commande
 {
-	int sourcel, sourcec;
-	int destl, destc;
+	public int sourcel, sourcec;
+	public int destl, destc;
 	Jeu jeu;
 
 	public Coup(Jeu jeu, int sourcel, int sourcec, int destl, int destc) {
