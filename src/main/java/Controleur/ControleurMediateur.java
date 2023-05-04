@@ -47,6 +47,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 		this.jeu.joueurs[1] = new IA(5, jeu);
 
 	}
+	public void reset(){
+		jeu.reset();
+		this.jeu.joueurs = new Joueur[2];
+		this.jeu.joueurs[0] = new Joueur(4, jeu);
+		this.jeu.joueurs[1] = new Joueur(5, jeu);
+
+
+	}
+
 
 	@Override
 	public void clicSouris(int l, int c) {

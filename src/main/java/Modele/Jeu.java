@@ -16,6 +16,7 @@ public class Jeu extends Observable {
 	Coup coup;
 	public int joueurCourant;
 	int nombreP=0;
+	int e=0;
 
 	public Jeu() {
 		reset();
@@ -40,6 +41,12 @@ public class Jeu extends Observable {
 	}
 
 	public void reset() {
+		largeur=8;
+		hauteur=8;
+		etat = Etats.Initialisation;
+		joueurCourant=0;
+		nombreP=0;
+		e=0;
 		initPlateau();
 		metAJour();
 	}
@@ -74,13 +81,14 @@ public class Jeu extends Observable {
 	 *************************************************************************/
 	public void InitPingou(int l, int c){
 		if (plateau[l][c] == 1) {
+			joueurs[joueurCourant].addIlots();
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 2)
+			if (nombreP == 8)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
-
+			e=EnlevePingou(l,c);
 			prochainJoueur();
 		}
 	}
@@ -121,19 +129,22 @@ public class Jeu extends Observable {
 	/***************************************************
 	 * Enlève tous les nouveaux pingouins bloqués du jeu
 	 ****************************************************/
-	public void EnlevePingou(int l, int c){
+	public int EnlevePingou(int l, int c){
 		ArrayList<int[]> cotes = getCotes(l, c);
 		for (int[] cote : cotes) {
 			if (plateau[cote[0]][cote[1]] > 3 && hex_accessible(cote[0], cote[1]).isEmpty()){
 				plateau[cote[0]][cote[1]] = 0;
 				nombreP--;
+				e++;
 			}
 		}
 
 		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()){
 			plateau[l][c] = 0;
 			nombreP--;
+			e++;
 		}
+		return e;
 	}
 
 	/******************************************************************
@@ -171,6 +182,28 @@ public class Jeu extends Observable {
 			}
 		}
 		return result;
+	}
+
+	/********************************************
+	* Renvoie si la liste contient la coordonnée
+	*********************************************/
+	public boolean contains(int[] valeur, ArrayList<int[]> list){
+		boolean res = false;
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).length == valeur.length) {
+				res = true;
+				for (int j = 0; j < valeur.length; j++) {
+					if (list.get(i)[j] != valeur[j]) {
+						res = false;
+						break;
+					}
+				}
+
+				if (res) return res;
+			}
+		}
+
+		return res;
 	}
 
 //
@@ -251,25 +284,6 @@ public class Jeu extends Observable {
 		if(x >= 0 && y >= 0 && x < hauteur && y < largeur){
 			tab.add(new int[]{x,y});
 		}
-	}
-
-	private boolean contains(int[] valeur, ArrayList<int[]> list){
-		boolean res = false;
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).length == valeur.length) {
-				res = true;
-				for (int j = 0; j < valeur.length; j++) {
-					if (list.get(i)[j] != valeur[j]) {
-						res = false;
-						break;
-					}
-				}
-
-				if (res) return res;
-			}
-		}
-
-		return res;
 	}
 
 	private ArrayList<int[]>acc_ligne_inf(int x,int y){

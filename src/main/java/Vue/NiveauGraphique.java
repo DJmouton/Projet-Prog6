@@ -86,7 +86,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		hauteurCase = hauteur() / lignes;
 
 		// Rectangle d'océan (bleu) en fond
-		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
+		g.drawImage(waterBG, 0, 0, getWidth(), getHeight(), this);
 
 		// DIMINUE LA TAILLE DES IMAGES IMPORTANT A PRENDRE EN COMPTE POUR LE CALCUL DES POSITIONS
 		((Graphics2D) g).scale(0.9, 1.3);
@@ -95,27 +95,36 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		float height;
 		// Formule pour calculer la distance entre 2 hexagons
 		height = (float) 3 / 4 * (float) hauteurCase;
-		int hauteur;
+		int hauteur, largeur;
 		for (int i = 0; i < (lignes); i++) {
 			hauteur = (int) ((float) i * (height));
 			for (int j = 0; j < (colonnes); j++) {
 				if (jeu.valeur(i, j) == 0) continue;
 				if (i % 2 == 1)
-					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
-							largeurCase, hauteurCase, this);
+					largeur = j * largeurCase + largeurCase / 2;
 				else
-					g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
+					largeur = j * largeurCase;
+				g.drawImage(assetsPlateau[jeu.valeur(i, j)], largeur, hauteur,
 							largeurCase, hauteurCase, this);
 			}
 		}
 	}
 
 	int largeur() {
-		return getWidth();
+		//return getWidth();
+		return taille();
 	}
 
 	int hauteur() {
-		return getHeight();
+		//return getHeight();
+		return taille();
+	}
+
+	int taille(){
+		if(getWidth() < getHeight())
+			return getWidth();
+		else
+			return getHeight();
 	}
 
 	public int largeurCase() {
