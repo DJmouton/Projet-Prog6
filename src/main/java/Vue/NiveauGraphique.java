@@ -77,7 +77,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[12] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
 			assetsPlateau[13] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
 			assetsPlateau[14] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
-
+			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguin.png"));
+			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguin_vert.png"));
+			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguin_rouge.png"));
+			assetsPlateau[18] = ImageIO.read(new File("resources/assets/penguin_jaune.png"));
 
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
@@ -99,31 +102,20 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// DIMINUE LA TAILLE DES IMAGES IMPORTANT A PRENDRE EN COMPTE POUR LE CALCUL DES POSITIONS
 		((Graphics2D) g).scale(0.9, 1.3);
 
-		// Grille
+				// Grille
 		float height;
-		ArrayList<int[]> acces;
 		// Formule pour calculer la distance entre 2 hexagons
 		height = (float) 3 / 4 * (float) hauteurCase;
-		int hauteur;
+		int hauteur, largeur;
 		for (int i = 0; i < (lignes); i++) {
 			hauteur = (int) ((float) i * (height));
 			for (int j = 0; j < (colonnes); j++) {
 				if (jeu.valeur(i, j) == 0) continue;
 				if (i % 2 == 1)
-					if (!pingouinSel(i, j)) {
-						g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase + largeurCase / 2, hauteur,
-								largeurCase, hauteurCase, this);
-					} else {
-						acces = hexAccessible(i, j);
-						g.drawImage(assetsPlateau[jeu.valeur(i, j) + 4], j * largeurCase + largeurCase / 2, hauteur,
-								largeurCase, hauteurCase, this);
-						}
+					largeur = j * largeurCase + largeurCase / 2;
 				else
-					if (pingouinSel(i, j))
-						g.drawImage(assetsPlateau[jeu.valeur(i, j) + 4], j * largeurCase, hauteur,
-							largeurCase, hauteurCase, this);
-					else
-						g.drawImage(assetsPlateau[jeu.valeur(i, j)], j * largeurCase, hauteur,
+					largeur = j * largeurCase;
+				g.drawImage(assetsPlateau[jeu.valeur(i, j)], largeur, hauteur,
 							largeurCase, hauteurCase, this);
 			}
 		}
