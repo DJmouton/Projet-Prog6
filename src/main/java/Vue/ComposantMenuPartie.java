@@ -16,5 +16,7 @@ public class ComposantMenuPartie extends Box {
 		add(Box.createGlue());
 		add(new ComposantSauverCharger(axis, control));
 		add(Box.createGlue());
+		add(new ComposantReset(axis, control));
+		add(Box.createGlue());
 	}
 }
