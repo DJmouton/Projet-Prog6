@@ -35,7 +35,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
@@ -70,13 +69,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
-			assetsPlateau[8] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
-			assetsPlateau[9] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
-			assetsPlateau[10] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
-			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
-			assetsPlateau[12] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
-			assetsPlateau[13] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
-			assetsPlateau[14] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
 			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguin.png"));
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguin_vert.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguin_rouge.png"));
@@ -91,18 +83,20 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
 		}
 
+		int score;
+		String s;
 		int lignes = jeu.hauteur();
 		int colonnes = jeu.largeur();
 		largeurCase = largeur() / colonnes;
 		hauteurCase = hauteur() / lignes;
 
 		// Rectangle d'océan (bleu) en fond
-		g.drawImage(waterBG, 0, 0, largeur(), hauteur(), this);
+		g.drawImage(waterBG, 0, 0, getWidth(), getHeight(), this);
 
 		// DIMINUE LA TAILLE DES IMAGES IMPORTANT A PRENDRE EN COMPTE POUR LE CALCUL DES POSITIONS
 		((Graphics2D) g).scale(0.9, 1.3);
 
-				// Grille
+		// Grille
 		float height;
 		// Formule pour calculer la distance entre 2 hexagons
 		height = (float) 3 / 4 * (float) hauteurCase;
@@ -119,8 +113,25 @@ public class NiveauGraphique extends JComponent implements Observateur {
 							largeurCase, hauteurCase, this);
 			}
 		}
-	}
+		// Tour des joueurs
+		if (jeu.joueurCourant == 0) {
+			g.drawImage(assetsPlateau[15], 0, 0, largeurCase / 2, hauteurCase / 2, this);
+		} else if (jeu.joueurCourant == 1) {
+			g.drawImage(assetsPlateau[16], 0, 30, largeurCase / 2, hauteurCase / 2, this);
+		} else if (jeu.joueurCourant == 2) {
+			g.drawImage(assetsPlateau[17], 0, 60, largeurCase / 2, hauteurCase / 2, this);
+		} else if (jeu.joueurCourant == 3) {
+			g.drawImage(assetsPlateau[18], 0, 90, largeurCase / 2, hauteurCase / 2, this);
+		} else {
 
+		}
+		
+		g.setFont(new Font("Arial", Font.PLAIN,  largeurCase / 10));
+		score = jeu.joueurs[jeu.joueurCourant].getScore();
+		String s1 = " : " + score;
+		s = "Score J" + (jeu.joueurCourant+1) + s1;
+		g.drawString(s, 0, hauteurCase);
+	}
 
 	int largeur() {
 		//return getWidth();
