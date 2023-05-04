@@ -37,6 +37,12 @@ public class Jeu extends Observable {
 	}
 
 	public void reset() {
+		largeur=8;
+		hauteur=8;
+		etat = Etats.Initialisation;
+		joueurCourant=0;
+		nombreP=0;
+		e=0;
 		initPlateau();
 		metAJour();
 	}
