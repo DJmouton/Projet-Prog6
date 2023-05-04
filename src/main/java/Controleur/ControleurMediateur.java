@@ -14,7 +14,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	boolean EoT; // end of turn
 	Placement placement;
 	Coup coup;
-	int joueurCourant; // unused
+	int a_supprimer; // unused
 
 	public ControleurMediateur(Jeu j)
 	{
@@ -104,9 +104,9 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	public void tour()
 	{
 		System.out.println("Au tour du joueur " + jeu.joueurCourant);
-		System.out.println("Score : " + jeu.joueurs[joueurCourant].getScore());
+		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 
-		if (!(jeu.joueurs[joueurCourant].estIA))
+		if (!(jeu.joueurs[jeu.joueurCourant].estIA))
 		{
 			while (!EoT) ; // on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
 			EoT = false;
@@ -116,13 +116,13 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 			switch (jeu.etatCourant())
 			{
 				case Initialisation:
-					placement = ((IA) jeu.joueurs[joueurCourant]).placement();
+					placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
 					placement.execute();
 					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
 					break;
 
 				case Selection:
-					coup = ((IA) jeu.joueurs[joueurCourant]).jeu();
+					coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
 					coup.execute();
 					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
 					break;
@@ -226,7 +226,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	}
 
 	public int joueurCourant() {
-		return this.joueurCourant;
+		return this.a_supprimer;
 	}
 
 	@Override
