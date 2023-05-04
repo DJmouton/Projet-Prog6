@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 public class Jeu extends Observable {
-	int[][] plateau;
+	public int[][] plateau;
 	public Joueur[] joueurs;
 	int largeur=8;
 	int hauteur=8;
