@@ -29,23 +29,15 @@ public class Jeu extends Observable {
 		reset();
 	}
 
-
-	public Jeu( int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant, int nombreP) {
-		this.joueurs = new Joueur[joueurs.length];
-		for(int i = 0; i < joueurs.length; i++){
-			this.joueurs[i] = (Joueur) joueurs[i].clone();
-		}
-    
+	public Jeu(int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant) {
+		this.joueurs = joueurs.clone();
 		this.etat = etat;
 		this.joueurCourant = joueurCourant;
 		this.largeur = largeur;
 		this.hauteur = hauteur;
 		this.plateau = new int[largeur][hauteur];
-		this.nombreP = nombreP;
-		for(int i =0; i< largeur; i++){
-			for(int j = 0 ;j < hauteur; j++){
-				this.plateau[i][j]=plateau[i][j];
-			}
+		for (int i = 0; i < largeur; i++) {
+			System.arraycopy(plateau[i], 0, this.plateau[i], 0, hauteur);
 		}
 	}
 
@@ -93,7 +85,7 @@ public class Jeu extends Observable {
 			joueurs[joueurCourant].addIlots();
 			joueurs[joueurCourant].addScore(1);
 			nombreP++;
-			if (nombreP == 8)
+			if (nombreP == 8 - e)
 				etat = Etats.Selection;
 
 			plateau[l][c] = joueurCourant + 4;
@@ -229,7 +221,7 @@ public class Jeu extends Observable {
 		List<Integer> list = new ArrayList<>(Collections.nCopies(30, 1));
 		list.addAll(Collections.nCopies(20, 2));
 		list.addAll(Collections.nCopies(10, 3));
-		Collections.shuffle(list, new Random());
+		Collections.shuffle(list);
 
 		int x = 0;
 		plateau = new int[hauteur][largeur];
@@ -245,7 +237,7 @@ public class Jeu extends Observable {
 		}
 	}
 
-	public void prochainJoueur() {
+	private void prochainJoueur() {
 		if (!enCours()) {
 			System.out.println("------------------------------------------------------------------");
 			System.out.println("Partie terminée !");
@@ -254,10 +246,9 @@ public class Jeu extends Observable {
 			return;
 		}
 
-		joueurCourant=(joueurCourant+1)%this.joueurs.length;
-		System.out.println("Joueur courant"+joueurCourant);
-//		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
-//			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
+		joueurCourant = (joueurCourant + 1) % this.joueurs.length;
+		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
+			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 
 		System.out.println("------------------------------------------------------------------");
 		System.out.println("Au tour du joueur " + joueurCourant + " !");
@@ -378,11 +369,11 @@ public class Jeu extends Observable {
 	}
 
 	@Override
-	protected Object clone(){
-		Jeu j =  new Jeu(this.plateau,this.joueurs,this.largeur,this.hauteur,this.etat,this.joueurCourant, this.nombreP);
-		for(Joueur joueur : j.joueurs){
+	protected Object clone() {
+		Jeu j = new Jeu(this.plateau, this.joueurs, this.largeur, this.hauteur, this.etat, this.joueurCourant);
+		/*for(Joueur joueur : j.joueurs){
 			joueur.jeu = j;
-		}
+		}*/
 		return j;
 	}
 

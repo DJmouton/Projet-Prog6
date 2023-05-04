@@ -1,13 +1,10 @@
 package Modele;
 
-import org.javatuples.Pair;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 3;
 
     public IA(int n, Jeu p) {
         super(n, p);
@@ -39,17 +36,28 @@ public class IA extends Joueur{
 
     @Override
     public void jeu() {
-        Pair<Integer, Coup> result = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
-        if(result.getValue1() != null) {
-            result.getValue1().setJeu(jeu);
-            jouerCoup(result.getValue1());
-            jeu.prochainJoueur();
+        System.out.println("jeu");
+        int profondeur = 1;
+        ArrayList<Coup> coups = getCoups(this.jeu, this.num);
+        int value = Integer.MIN_VALUE;
+        Coup coup = null;
+        for(Coup c : coups){
+            Jeu j = jeu;//(Jeu) jeu.clone();
+            c.setJeu(j);
+            c.execute();
+            int i = MinMaxJoueur(j, profondeur, new int[]{this.jeu.joueurs[0].num,this.jeu.joueurs[1].num},false);
+            if(i > value){
+                value = i;
+                coup = c;
+            }
+            break;
         }
-    }
-
-    private void jouerCoup(Coup coup){
-        coup.execute();
-        coup.jeu.EnlevePingou(coup.destl, coup.destc);
+        if(coup != null) {
+            coup.execute();
+            jeu.SelectPingou(coup.sourcel,coup.sourcec);
+            jeu.DeplacePingou(coup.destl,coup.destc);
+        }
+        System.out.println("fin jeu");
     }
 
     public ArrayList<Coup> getCoups(Jeu jeu, int num){
@@ -64,81 +72,72 @@ public class IA extends Joueur{
     }
 
 
-    private int Evaluation(Jeu j){
-        return MonteCarlo(jeu, 10);
+    private int Evaluation(Jeu jeu, int nums[], boolean A){
+        return MonteCarlo(jeu, 100, nums, A);
     }
 
-    private void prochainJoueur(Jeu jeu){
-        jeu.joueurCourant = (jeu.joueurCourant + 1) % jeu.joueurs.length;
-        while (jeu.etat != Etats.Initialisation && jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num).isEmpty() && jeu.enCours())
-            jeu.joueurCourant = (jeu.joueurCourant + 1) % jeu.joueurs.length;
-    }
-
-    private int MonteCarlo(Jeu jeu, int taille){
+    private int MonteCarlo(Jeu jeu, int taille, int nums[], boolean A){
         int somme = 0;
         for(int i = 0; i< taille; i++){
             Jeu j = (Jeu) jeu.clone();
+            int num;
+            if(A){
+                num=nums[0];
+            }else{
+                num=nums[1];
+            }
             while(j.enCours()){
-                ArrayList<Coup> coups = getCoups(j, j.joueurs[j.joueurCourant].num);
-                if(coups.size()>0)
-                    jouerCoup(coups.get(random.nextInt(coups.size())));
-                prochainJoueur(j);
+                ArrayList<Coup> coups = getCoups(j, num);
+                coups.get(random.nextInt(coups.size())).execute();
+                if(num == nums[0]){
+                    num = nums[1];
+                }else{
+                    num = nums[0];
+                }
             }
-            if(j.joueurs[j.joueurCourant].num != this.num){
-                prochainJoueur(j);
+
+            int advscore = 0;
+            for(Joueur joueur : this.jeu.joueurs){
+                if(joueur.num != this.num){
+                    advscore = joueur.score;
+                }
             }
-            int scoreIA = j.joueurs[j.joueurCourant].score;
-            prochainJoueur(j);
-            int scoreADV = j.joueurs[j.joueurCourant].score;
-            somme+=scoreIA-scoreADV;
+            somme+=this.score-advscore;
         }
         return somme / taille;
 
     }
 
-
-    public Pair<Integer, Coup> MinMaxJoueur(Jeu jeu, int profondeur, int valP){
+    public int MinMaxJoueur(Jeu jeu, int profondeur, int[] nums, boolean A){
         if(!jeu.enCours() || profondeur == 0){
-            return Pair.with(Evaluation(jeu),null);
+            return Evaluation(jeu, nums, A);
         }else{
 
-            int valeur, v2;
-            Coup coup = null;
-            if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
+            int valeur;
+            if(A) {
                 valeur = Integer.MIN_VALUE;
             }else{
                 valeur = Integer.MAX_VALUE;
             }
             ArrayList<Coup> coups;
 
-            coups = getCoups(jeu, jeu.joueurs[jeu.joueurCourant].num);
-            for(Coup c : coups){
-                Jeu j = (Jeu) jeu.clone();
-                c.setJeu(j);
-                jouerCoup(c);
-                prochainJoueur(j);
-                v2 = MinMaxJoueur(j, profondeur - 1,valeur).getValue0();
-                if(jeu.joueurs[jeu.joueurCourant].num==this.num) {//max
-                    if(v2 > valeur){
-                        valeur = v2;
-                        coup = c;
-                    }
-                    if(valeur >= valP){
-                        break;
-                    }
-                }else{
-                    if(v2 < valeur){
-                        valeur = v2;
-                        coup = c;
-                    }
-                    if(valeur <= valP){
-                        break;
-                    }
-
-                }
-
+            if(A){
+                coups = getCoups(jeu, nums[0]);
+            }else{
+                coups = getCoups(jeu, nums[1]);
             }
-            return Pair.with(valeur,coup);
+            for(Coup c : coups){
+                Jeu j = jeu;//(Jeu) jeu.clone();
+                c.setJeu(j);
+                c.execute();
+                if(A) {
+                    valeur = Math.max(MinMaxJoueur(j, profondeur - 1, nums, false), valeur);
+                }else{
+                    valeur = Math.min(MinMaxJoueur(j, profondeur-1, nums, true), valeur);
+                }
+                break;
+            }
+            return valeur;
         }
     }
 
