@@ -1,30 +1,4 @@
 package Vue;
-/*
- * Morpion pédagogique
-
- * Copyright (C) 2016 Guillaume Huard
-
- * Ce programme est libre, vous pouvez le redistribuer et/ou le
- * modifier selon les termes de la Licence Publique Générale GNU publiée par la
- * Free Software Foundation (version 2 ou bien toute autre version ultérieure
- * choisie par vous).
-
- * Ce programme est distribué car potentiellement utile, mais SANS
- * AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
- * commercialisation ou d'adaptation dans un but spécifique. Reportez-vous à la
- * Licence Publique Générale GNU pour plus de détails.
-
- * Vous devez avoir reçu une copie de la Licence Publique Générale
- * GNU en même temps que ce programme ; si ce n'est pas le cas, écrivez à la Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,
- * États-Unis.
-
- * Contact: Guillaume.Huard@imag.fr
- *          Laboratoire LIG
- *          700 avenue centrale
- *          Domaine universitaire
- *          38401 Saint Martin d'Hères
- */
 
 import Modele.Jeu;
 import Patterns.Observateur;
@@ -69,17 +43,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
-			assetsPlateau[8] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
-			assetsPlateau[9] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
-			assetsPlateau[10] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
-			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
-			assetsPlateau[12] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
-			assetsPlateau[13] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
-			assetsPlateau[14] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
 			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguin.png"));
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguin_vert.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguin_rouge.png"));
-			assetsPlateau[18] = ImageIO.read(new File("resources/assets/penguin_jaune.png"));	
+			assetsPlateau[18] = ImageIO.read(new File("resources/assets/penguin_jaune.png"));
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
 		}
@@ -89,8 +56,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
 		}
 
-		int score;
-		String s;
 		int lignes = jeu.hauteur();
 		int colonnes = jeu.largeur();
 		largeurCase = largeur() / colonnes;
@@ -131,12 +96,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		} else {
 
 		}
-
-
+		
 		g.setFont(new Font("Arial", Font.PLAIN,  largeurCase / 10));
-		score = jeu.joueurs[jeu.joueurCourant].getScore();
+		int score = jeu.joueurs[jeu.joueurCourant].getScore();
 		String s1 = " : " + score;
-		s = "Score J" + (jeu.joueurCourant+1) + s1;
+		String s = "Score J" + (jeu.joueurCourant+1) + s1;
 		g.drawString(s, 0, hauteurCase);
 	}
 
