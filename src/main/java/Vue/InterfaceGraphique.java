@@ -81,7 +81,7 @@ public class InterfaceGraphique implements Runnable {
 		frame.add(barreHaute, BorderLayout.PAGE_START);
 		frame.add(menuLateral, BorderLayout.LINE_END);
 		// frame.add(EtatJoueur, BorderLayout.LINE_START);
-
+		frame.repaint();
 		Timer chrono = new Timer(16, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

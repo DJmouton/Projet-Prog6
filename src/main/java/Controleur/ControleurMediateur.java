@@ -31,8 +31,10 @@ import Modele.IA;
 import Modele.Jeu;
 import Modele.Joueur;
 import Vue.CollecteurEvenements;
+import jdk.nashorn.api.tree.ArrayLiteralTree;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
@@ -151,5 +153,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public int joueurCourant() {
 		return this.joueurCourant;
+	}
+
+	public ArrayList<int[]> caseSelection() {
+		return this.jeu.hexAccess;
 	}
 }

@@ -9,10 +9,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
 	int largeurCase, hauteurCase;
+
+	int[] tabCases = new int[2];
 
 	public NiveauGraphique(Jeu j) {
 		jeu = j;
@@ -43,6 +46,13 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+			assetsPlateau[8] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
+			assetsPlateau[9] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
+			assetsPlateau[10] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
+			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
+			assetsPlateau[12] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
+			assetsPlateau[13] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
+			assetsPlateau[14] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
 			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguin.png"));
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguin_vert.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguin_rouge.png"));
@@ -70,10 +80,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Grille
 		float height;
 		// Formule pour calculer la distance entre 2 hexagons
-		height = (float) 3 / 4 * (float) hauteurCase;
+		height = (3f / 4f) * (float) hauteurCase;
 		int hauteur, largeur;
 		for (int i = 0; i < (lignes); i++) {
-			hauteur = (int) ((float) i * (height));
+			hauteur = Math.round((float) i * height);
 			for (int j = 0; j < (colonnes); j++) {
 				if (jeu.valeur(i, j) == 0) continue;
 				if (i % 2 == 1)
@@ -84,6 +94,35 @@ public class NiveauGraphique extends JComponent implements Observateur {
 							largeurCase, hauteurCase, this);
 			}
 		}
+
+		// Cases selectionnable (feedforward)
+		// ArrayList<int[]> hexAccess = jeu.hexAccess;
+		int x = 0;
+		int y = 0;
+		int h = 0;
+		int l = 0;
+		try {
+			for (int [] access : jeu.hexAccess ) {
+				x = access[0];
+				y = access[1];
+				h = Math.round((float) x * height);
+				if (x % 2 == 1) {
+					l = y * largeurCase + largeurCase / 2;
+				}
+				else {
+					l = y * largeurCase;
+				}
+				if(jeu.valeur(x, y) == 0) continue;
+				else
+					g.drawImage(assetsPlateau[jeu.valeur(x, y) + 7], l, h,
+							largeurCase, hauteurCase, this);
+			}
+		}
+		catch(NullPointerException e) {
+			System.out.println("Erreur d'initialisation de liste");
+		}
+
+
 		// Tour des joueurs
 		if (jeu.joueurCourant == 0) {
 			g.drawImage(assetsPlateau[15], 0, 0, largeurCase / 2, hauteurCase / 2, this);

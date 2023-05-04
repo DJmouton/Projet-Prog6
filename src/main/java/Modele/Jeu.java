@@ -1,4 +1,5 @@
 package Modele;
+import java.lang.reflect.Array;
 import java.util.*;
 
 import Patterns.Observable;
@@ -17,6 +18,8 @@ public class Jeu extends Observable {
 	public int joueurCourant;
 	int nombreP=0;
 	int e=0;
+
+	public ArrayList<int[]> hexAccess;
 
 	public Jeu() {
 		reset();
@@ -92,12 +95,18 @@ public class Jeu extends Observable {
 	/*******************************************
 	 * Sélectionne un pingouin du joueur courant
 	 ********************************************/
-	public void SelectPingou(int l, int c){
+	public void SelectPingou(int l, int c) {
 		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
 			System.out.println("Pingouin (" + l + ',' + c + ") selectionné");
 			System.out.println("Déplace ce pingouin, ou sélectionne un nouveau pingouin");
 			etat = Etats.Deplacement;
+			hexAccess = new ArrayList<>(hex_accessible(l, c));
+			int [] tab = new int[2];
+			tab[0] = l;
+			tab[1] = c;
+			hexAccess.add(tab);
+
 		}
 	}
 
