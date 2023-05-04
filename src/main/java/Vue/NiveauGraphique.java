@@ -69,6 +69,13 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+			
+			
+			
+			
+			
+			
+			
 			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguin.png"));
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguin_vert.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguin_rouge.png"));
