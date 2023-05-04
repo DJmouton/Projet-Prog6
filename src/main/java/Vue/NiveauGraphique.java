@@ -121,12 +121,22 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		}
 	}
 
+
 	int largeur() {
-		return getWidth();
+		//return getWidth();
+		return taille();
 	}
 
 	int hauteur() {
-		return getHeight();
+		//return getHeight();
+		return taille();
+	}
+
+	int taille(){
+		if(getWidth() < getHeight())
+			return getWidth();
+		else
+			return getHeight();
 	}
 
 	public int largeurCase() {
@@ -135,14 +145,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 	public int hauteurCase() {
 		return hauteurCase;
-	}
-
-	public ArrayList<int[]> hexAccessible(int x, int y) {
-		return jeu.hex_accessible(x, y);
-	}
-
-	public boolean pingouinSel(int x, int y) {
-		return jeu.plateau[x][y] == jeu.joueurCourant + 4;
 	}
 
 	@Override
