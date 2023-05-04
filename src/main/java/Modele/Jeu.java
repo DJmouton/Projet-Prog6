@@ -75,7 +75,7 @@ public class Jeu extends Observable {
 	/************************************************************************
 	 * Place un pingouin du joueur courant sur le plateau et change de joueur
 	 *************************************************************************/
-	public void InitPingou(int l, int c){
+	public boolean InitPingou(int l, int c){
 		if (plateau[l][c] == 1) {
 			joueurs[joueurCourant].addIlots();
 			joueurs[joueurCourant].addScore(1);
@@ -85,8 +85,10 @@ public class Jeu extends Observable {
 
 			plateau[l][c] = joueurCourant + 4;
 			e=EnlevePingou(l,c);
-			prochainJoueur();
+			return true;
+			//prochainJoueur();
 		}
+		return false;
 	}
 
 	/*******************************************
@@ -95,8 +97,6 @@ public class Jeu extends Observable {
 	public void SelectPingou(int l, int c){
 		if (plateau[l][c] == joueurCourant + 4) {
 			coup = new Coup(l, c, this);
-			System.out.println("Pingouin (" + l + ',' + c + ") selectionné");
-			System.out.println("Déplace ce pingouin, ou sélectionne un nouveau pingouin");
 			etat = Etats.Deplacement;
 		}
 	}
@@ -104,22 +104,21 @@ public class Jeu extends Observable {
 	/**************************************************************************************************************
 	 * Déplace le pingouin selectionné si la destination est valide, enlève les pingouins bloqués, change de joueur
 	 ***************************************************************************************************************/
-	public void DeplacePingou(int l, int c){
+	public boolean DeplacePingou(int l, int c){
 		if (contains(new int[]{l, c}, hex_accessible(coup.sourcel, coup.sourcec))){
 			// destination valide
 			coup.destl = l;
 			coup.destc = c;
 			coup.execute();
 			EnlevePingou(l, c);
-			System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
 			etat = Etats.Selection;
-			prochainJoueur();
+			return true;
+			//prochainJoueur();
 		} else {
 			// destination invalide, peut aussi être une nouvelle sélection de pingouin
-			if (plateau[l][c] != joueurCourant + 4)
-				System.out.println("Le pingouin ne peut pas se déplacer ici");
 			SelectPingou(l,c);
 		}
+		return false;
 	}
 
 	/***************************************************
@@ -202,6 +201,15 @@ public class Jeu extends Observable {
 		return res;
 	}
 
+	public void changeModeJoueur(int num){
+		if(joueurs[num].estIA){
+			joueurs[num].estIA=false;
+		}
+		else{
+			joueurs[num].estIA=true;
+		}
+	}
+
 //
 //-----------------------------------------------------------------------------------------
 //
@@ -227,35 +235,9 @@ public class Jeu extends Observable {
 	}
 
 	private void prochainJoueur() {
-		if (!enCours()) {
-			System.out.println("------------------------------------------------------------------");
-			System.out.println("Partie terminée !");
-			for (int i = 0; i < joueurs.length; i++)
-				System.out.println("Joueur " + i + " : " + joueurs[i].score + " poissons");
-			return;
-		}
-
 		joueurCourant=(joueurCourant+1)%this.joueurs.length;
 		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
-
-		System.out.println("------------------------------------------------------------------");
-		System.out.println("Au tour du joueur " + joueurCourant + " !");
-		System.out.println("Score : " + joueurs[joueurCourant].score);
-		if (etat == Etats.Initialisation)
-			System.out.println("Place le prochain pingouin sur une case 1 poisson");
-		else if (etat == Etats.Selection)
-			System.out.println("Sélectionne un pingouin");
-		else
-			System.err.println("ERREUR : Le joueur commence son tour dans un mauvais état");
-
-		if (joueurs[joueurCourant].estIA){
-			if (etat == Etats.Initialisation){
-				joueurs[joueurCourant].placement();
-			}else{
-				joueurs[joueurCourant].jeu();
-			}
-		}
 	}
 
 	private ArrayList<int[]> getCotes(int x, int y){
