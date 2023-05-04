@@ -46,5 +46,7 @@ public interface CollecteurEvenements {
 
 	void refaire();
 
+	void reset();
+
 	int joueurCourant();
 }
