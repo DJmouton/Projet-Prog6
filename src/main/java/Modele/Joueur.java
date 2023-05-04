@@ -84,7 +84,7 @@ public class Joueur {
 	public void jeu() {}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	protected Object clone() {
 		return new Joueur(jeu, num, score, estIA);
 	}
 }
