@@ -106,6 +106,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	 * Déroulement d'un tour
 	 ***************************/
 	public void tour() {
+		System.out.println("--------------------------------------------------");
 		System.out.println("Au tour du joueur " + jeu.joueurCourant);
 		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 
@@ -149,7 +150,10 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 			tour();
 
 		// affichage des scores finals
+		System.out.println("--------------------------------------------------");
 		System.out.println("Partie terminée");
+		System.out.println("Joueur 0 : " + jeu.joueurs[0].getScore() + " poissons");
+		System.out.println("Joueur 1 : " + jeu.joueurs[1].getScore() + " poissons");
 	}
 
 
