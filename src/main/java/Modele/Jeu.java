@@ -139,8 +139,8 @@ public class Jeu extends Observable {
 	}
 
 	/********************************************
-	* Renvoie si la liste contient la coordonnée
-	*********************************************/
+	 * Renvoie si la liste contient la coordonnée
+	 *********************************************/
 	public boolean contains(int[] valeur, ArrayList<int[]> list){
 		boolean res = false;
 		for (int i = 0; i < list.size(); i++) {
@@ -169,10 +169,35 @@ public class Jeu extends Observable {
 	public void changeModeJoueur(int num){
 		if(joueurs[num].estIA){
 			joueurs[num].estIA=false;
-		}
-		else{
+		} else{
 			joueurs[num].estIA=true;
 		}
+	}
+
+	/********************************************************************
+	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
+	 ********************************************************************/
+	public List<Joueur> Ranking(){
+		List<Joueur> joueur = new ArrayList<Joueur>();
+		for (int i = 0; i < joueurs.length; i++) {
+			joueur.add(new Joueur(joueurs[i].score,joueurs[i].num));
+		}
+		Collections.sort(joueur);
+		Collections.reverse(joueur);
+		for (int i=0;i<joueur.size();i++){
+			if(i+1<joueur.size()&&joueur.get(i).score==joueur.get(i+1).score){
+				if (joueurs[joueur.get(i).num-4].ilots<joueurs[joueur.get(i+1).num-4].ilots){
+					Joueur temp=joueur.get(i);
+					joueur.add(i,joueur.get(i+1));
+					joueur.add(i+1,temp);
+				}
+				else if(joueurs[joueur.get(i).num-4].ilots==joueurs[joueur.get(i+1).num-4].ilots){
+					System.out.println("EGALITE");
+				}
+			}
+			System.out.println("Joeur numero " +(joueur.get(i).num-4) + " avec le score " + joueur.get(i).score+ " et nombre d'ilots "+ joueurs[joueur.get(i).num-4].ilots);
+		}
+		return joueur;
 	}
 
 //

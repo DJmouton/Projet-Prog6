@@ -150,6 +150,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 
 		// affichage des scores finals
 		System.out.println("Partie terminée");
+		jeu.Ranking();
 	}
 
 
