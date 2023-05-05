@@ -119,26 +119,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
         } catch (NullPointerException e) {
             System.out.println("Erreur d'initialisation de liste");
         }
-
-
-        // Tour des joueurs
-        if (jeu.joueurCourant == 0) {
-            g.drawImage(assetsPlateau[15], 0, 0, largeurCase / 2, hauteurCase / 2, this);
-        } else if (jeu.joueurCourant == 1) {
-            g.drawImage(assetsPlateau[16], 0, 30, largeurCase / 2, hauteurCase / 2, this);
-        } else if (jeu.joueurCourant == 2) {
-            g.drawImage(assetsPlateau[17], 0, 60, largeurCase / 2, hauteurCase / 2, this);
-        } else if (jeu.joueurCourant == 3) {
-            g.drawImage(assetsPlateau[18], 0, 90, largeurCase / 2, hauteurCase / 2, this);
-        } else {
-
-        }
-
-        g.setFont(new Font("Arial", Font.PLAIN, largeurCase / 10));
-        int score = jeu.joueurs[jeu.joueurCourant].getScore();
-        String s1 = " : " + score;
-        String s = "Score J" + (jeu.joueurCourant + 1) + s1;
-        g.drawString(s, 0, hauteurCase);
     }
 
     int largeur() {
