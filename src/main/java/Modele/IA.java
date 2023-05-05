@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 3;
+    public static int profondeur = 1;
 
     public IA(int n, Jeu p) {
         super(n, p);
@@ -58,7 +58,7 @@ public class IA extends Joueur{
 
 
     private int Evaluation(Jeu j){
-        return MonteCarlo(jeu, 10);
+        return MonteCarlo(j, 10);
     }
 
     private void prochainJoueur(Jeu jeu){

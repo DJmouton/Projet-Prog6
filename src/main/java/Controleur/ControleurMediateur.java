@@ -1,10 +1,6 @@
 package Controleur;
 
-import Modele.IA;
-import Modele.Jeu;
-import Modele.Joueur;
-import Modele.Coup;
-import Modele.Placement;
+import Modele.*;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
@@ -12,78 +8,87 @@ import java.io.FileNotFoundException;
 public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	Jeu jeu;
 	boolean EoT; // end of turn
-	Placement placement;
 	Coup coup;
-	int a_supprimer; // unused
 
-	public ControleurMediateur(Jeu j)
-	{
+	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		EoT = false;
+		setEoT(false);
 		/////////////////////////////////////////
 		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new IA(5, jeu);
+		this.jeu.joueurs[1] = new Joueur(5, jeu);
 		/////////////////////////////////////////
 
 	}
 
 	/***************************************************************************
-	* Traitement d'un clic sur le bouton reset, réinitialise et relance le jeu.
-	****************************************************************************/
-	public void reset()
-	{
+	 * Traitement d'un clic sur le bouton reset, réinitialise et relance le jeu.
+	 ****************************************************************************/
+	public void reset() {
 		jeu.reset();
-		EoT = false;
+		setEoT(false);
 		/////////////////////////////////////////
 		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new IA(5, jeu);
+		this.jeu.joueurs[1] = new Joueur(5, jeu);
 		/////////////////////////////////////////
 		partie();
 	}
 
 	/****************************************************************************************
-	* Traitement d'un clic sur le bouton IA, bascule le joueur de mode.
-	* L'IHM doit faire appel à ces fonctions peut importe le bouton IA cliqué.
-	* Il donneront en paramètre le numéro du joueur car ils savent quel bouton a été cliqué.
-	*****************************************************************************************/
-	public void basculeIA(int num)
-	{
+	 * Traitement d'un clic sur le bouton IA, bascule le joueur de mode.
+	 * L'IHM doit faire appel à ces fonctions peut importe le bouton IA cliqué.
+	 * Il donneront en paramètre le numéro du joueur car ils savent quel bouton a été cliqué.
+	 *****************************************************************************************/
+	public void basculeIA(int num) {
 		jeu.changeModeJoueur(num);
 	}
 
 
 	/**************************************************************************************************
-	* Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
-	***************************************************************************************************/
-	public void clicSouris(int l, int c)
-	{
+	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
+	 ***************************************************************************************************/
+	public void clicSouris(int l, int c) {
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
-		boolean sel = false;
 
-		switch (jeu.etatCourant())
-		{
+		switch (jeu.etatCourant()) {
 			case Initialisation:
-				EoT = jeu.InitPingou(l, c); // le tour d'un humain peut s'arreter ici
-				if (EoT)
+				if (this.jeu.plateau[l][c] == 1) {
+					new Placement(jeu, l, c).execute();
+					setEoT(true); // le tour d'un humain peut s'arreter ici
 					System.out.println("Pingouin placé en (" + l + "," + c + ")");
+
+				}
 				break;
 
 			case Selection:
-				sel = jeu.SelectPingou(l, c);
-				if (sel)
+				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
+					coup = new Coup(l, c, this.jeu);
+					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+				}else{
+					System.out.println("Coup impossible");
+				}
 				break;
 
 			case Deplacement:
-				EoT = jeu.DeplacePingou(l, c); // le tour d'un humain peut s'arreter ici
-				if (EoT)
+				if (jeu.contains(new int[]{l, c}, jeu.hex_accessible(coup.sourcel, coup.sourcec))){
+					coup.destl = l;
+					coup.destc = c;
+					coup.execute();
+					jeu.setEtat(Etats.Selection);
 					System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
+					setEoT(true); // le tour d'un humain peut s'arreter ici
+				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
+					coup = new Coup(l, c, this.jeu);
+					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+				}else {
+					System.out.println("Coup impossible");
+				}
 				break;
 		}
 
@@ -91,32 +96,32 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	}
 
 	/*****************************************
-	* Passe au prochain joueur qui peut jouer
-	******************************************/
-	public void joueurSuivant()
-	{
+	 * Passe au prochain joueur qui peut jouer
+	 ******************************************/
+	public void joueurSuivant() {
 		jeu.prochainJoueur();
 	}
 
 	/**************************
-	* Déroulement d'un tour
-	***************************/
-	public void tour()
-	{
+	 * Déroulement d'un tour
+	 ***************************/
+	public void tour() {
 		System.out.println("Au tour du joueur " + jeu.joueurCourant);
 		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 
-		if (!(jeu.joueurs[jeu.joueurCourant].estIA))
-		{
-			while (!EoT) ; // on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
-			EoT = false;
-		}
-		else
-		{// ajouter temporisation ici ?
-			switch (jeu.etatCourant())
-			{
+		if (!(jeu.joueurs[jeu.joueurCourant].estIA)) {
+			while (!isEoT());// on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
+			setEoT(false);
+
+		} else {// ajouter temporisation ici ?
+			try { // TEMPORAIRE
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			switch (jeu.etatCourant()) {
 				case Initialisation:
-					placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
+					Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
 					placement.execute();
 					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
 					break;
@@ -132,15 +137,14 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 					break;
 			}
 		}
-
 		joueurSuivant();
+		jeu.metAJour();
 	}
 
 	/**************************
-	* Déroulement d'une partie
-	***************************/
-	public void partie()
-	{
+	 * Déroulement d'une partie
+	 ***************************/
+	public void partie() {
 		while (jeu.enCours())
 			tour();
 
@@ -184,7 +188,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 
 	@Override
 	public void changeJoueur(int j, int t) {
-		/*
+        /*
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
 		if(t == 0) {
 			joueurs[j][0] = new JoueurHumain(j, jeu);
@@ -226,12 +230,19 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	}
 
 	public int joueurCourant() {
-		return this.a_supprimer;
+		return jeu.joueurCourant;
+	}
+
+	public synchronized boolean isEoT() {
+		return EoT;
+	}
+
+	public synchronized void setEoT(boolean eoT) {
+		EoT = eoT;
 	}
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		partie();
 	}
 }

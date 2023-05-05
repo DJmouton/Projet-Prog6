@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 public class Jeu extends Observable {
-	int[][] plateau;
+	public int[][] plateau;
 	public Joueur[] joueurs;
 	int largeur=8;
 	int hauteur=8;
@@ -79,56 +79,6 @@ public class Jeu extends Observable {
 		return valeur(i, j) > 0 && valeur(i, j) < 4;
 	}
 
-	/************************************************************************
-	 * Place un pingouin du joueur courant sur le plateau et change de joueur
-	 *************************************************************************/
-	public boolean InitPingou(int l, int c){
-		if (plateau[l][c] == 1) {
-			joueurs[joueurCourant].addIlots();
-			joueurs[joueurCourant].addScore(1);
-			nombreP++;
-			if (nombreP == 8-e)
-				etat = Etats.Selection;
-
-			plateau[l][c] = joueurCourant + 4;
-			e=EnlevePingou(l,c);
-			return true;
-			//prochainJoueur();
-		}
-		return false;
-	}
-
-	/*******************************************
-	 * Sélectionne un pingouin du joueur courant
-	 ********************************************/
-	public boolean SelectPingou(int l, int c){
-		if (plateau[l][c] == joueurCourant + 4) {
-			coup = new Coup(l, c, this);
-			etat = Etats.Deplacement;
-			return true;
-		}
-		return false;
-	}
-
-	/**************************************************************************************************************
-	 * Déplace le pingouin selectionné si la destination est valide, enlève les pingouins bloqués, change de joueur
-	 ***************************************************************************************************************/
-	public boolean DeplacePingou(int l, int c){
-		if (contains(new int[]{l, c}, hex_accessible(coup.sourcel, coup.sourcec))){
-			// destination valide
-			coup.destl = l;
-			coup.destc = c;
-			coup.execute();
-			EnlevePingou(l, c);
-			etat = Etats.Selection;
-			return true;
-			//prochainJoueur();
-		} else {
-			// destination invalide, peut aussi être une nouvelle sélection de pingouin
-			SelectPingou(l,c);
-		}
-		return false;
-	}
 
 	/***************************************************
 	 * Enlève tous les nouveaux pingouins bloqués du jeu
@@ -413,5 +363,13 @@ public class Jeu extends Observable {
 	 */
 	public void annuler(){
 
+	}
+
+	public Etats getEtat() {
+		return etat;
+	}
+
+	public void setEtat(Etats etat) {
+		this.etat = etat;
 	}
 }
