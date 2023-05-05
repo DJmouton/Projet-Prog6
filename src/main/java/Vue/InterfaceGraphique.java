@@ -71,7 +71,7 @@ public class InterfaceGraphique implements Runnable {
 		ComposantJoueurs joueurs = new ComposantJoueurs(control);
 		j.ajouteObservateur(joueurs);
 		frame.add(joueurs, BorderLayout.LINE_START);
-
+    
 		NiveauGraphique niv = new NiveauGraphique(j);
 		niv.addMouseListener(new AdaptateurSouris(niv, control));
 		frame.add(niv);
