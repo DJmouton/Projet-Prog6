@@ -12,3 +12,5 @@
 # IntelliJ settings
 /.idea/
 *.xml
+# fichier GIMP
+*.xcf
