@@ -10,6 +10,7 @@ import java.io.PrintStream;
 public class Jeu extends Observable {
 	public int[][] plateau;
 	public Joueur[] joueurs;
+
 	int largeur=8;
 	int hauteur=8;
 	Etats etat = Etats.Initialisation;
@@ -17,6 +18,9 @@ public class Jeu extends Observable {
 	public int joueurCourant;
 	int nombreP=0;
 	int e=0;
+
+	// Liste des Cases accessibles par un pingouins
+	public ArrayList<int[]> hexAccess;
 
 	public Jeu() {
 		reset();
