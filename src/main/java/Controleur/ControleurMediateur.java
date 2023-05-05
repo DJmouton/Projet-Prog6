@@ -4,6 +4,7 @@ import Modele.*;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	Jeu jeu;
@@ -152,8 +153,22 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 		// affichage des scores finals
 		System.out.println("--------------------------------------------------");
 		System.out.println("Partie terminée");
-		System.out.println("Joueur 0 : " + jeu.joueurs[0].getScore() + " poissons");
-		System.out.println("Joueur 1 : " + jeu.joueurs[1].getScore() + " poissons");
+		afficheRanking(jeu.Ranking());
+	}
+	public void afficheRanking(List<Joueur> joueur){
+		for (int i=0;i<joueur.size();i++){
+			if(i+1<joueur.size() && joueur.get(i).getScore()==joueur.get(i+1).getScore()){
+				if (jeu.joueurs[joueur.get(i).getNum()-4].getIlots()<jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
+					Joueur temp=joueur.get(i);
+					joueur.add(i,joueur.get(i+1));
+					joueur.add(i+1,temp);
+				}
+				else if(jeu.joueurs[joueur.get(i).getNum()-4].getIlots()==jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
+					System.out.println("EGALITE");
+				}
+			}
+			System.out.println("Joeur numero " +(joueur.get(i).getNum()-4) + " avec le score " + joueur.get(i).getScore()+ " et nombre d'ilots "+ jeu.joueurs[joueur.get(i).getNum()-4].getIlots());
+		}
 	}
 
 

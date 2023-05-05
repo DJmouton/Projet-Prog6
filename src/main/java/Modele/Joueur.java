@@ -34,7 +34,7 @@ package Modele;
 // - provoquer une temporisation (utilisé dans une IA)
 // - tenir compte d'une temporisation écoulée (utilisé dans une IA)
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
-public class Joueur {
+public class Joueur implements Comparable<Joueur>{
 	Jeu jeu;
 	int num;
 	int score;
@@ -57,27 +57,37 @@ public class Joueur {
 		this.estIA = estIA;
 	}
 
-	public int getScore()
-	{
+	public Joueur(int score, int num) {
+		this.score = score;
+		this.num = num;
+
+	}
+
+	public int getScore() {
 		return score;
 	}
-	public int getIlots(){return ilots;}
-
-	public int num() {
+	public int getNum() {
 		return num;
 	}
 
-	public void addScore(int val)
-	{
+	public int getIlots(){return ilots;}
+
+
+	public void addScore(int val) {
 		score += val;
 	}
-	public void addIlots()
-	{
+
+	public void addIlots() {
 		ilots ++;
 	}
 
 	@Override
 	protected Object clone() {
 		return new Joueur(jeu, num, score, estIA);
+	}
+
+	@Override
+	public int compareTo(Joueur j) {
+		return this.score - j.score;
 	}
 }

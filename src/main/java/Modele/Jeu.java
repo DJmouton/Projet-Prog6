@@ -139,8 +139,8 @@ public class Jeu extends Observable {
 	}
 
 	/********************************************
-	* Renvoie si la liste contient la coordonnée
-	*********************************************/
+	 * Renvoie si la liste contient la coordonnée
+	 *********************************************/
 	public boolean contains(int[] valeur, ArrayList<int[]> list){
 		boolean res = false;
 		for (int i = 0; i < list.size(); i++) {
@@ -169,10 +169,22 @@ public class Jeu extends Observable {
 	public void changeModeJoueur(int num){
 		if(joueurs[num].estIA){
 			joueurs[num].estIA=false;
-		}
-		else{
+		} else{
 			joueurs[num].estIA=true;
 		}
+	}
+
+	/********************************************************************
+	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
+	 ********************************************************************/
+	public List<Joueur> Ranking(){
+		List<Joueur> joueur = new ArrayList<Joueur>();
+		for (int i = 0; i < joueurs.length; i++) {
+			joueur.add(new Joueur(joueurs[i].score,joueurs[i].num));
+		}
+		Collections.sort(joueur);
+		Collections.reverse(joueur);
+		return joueur;
 	}
 
 //
