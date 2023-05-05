@@ -17,7 +17,6 @@ public class IA extends Joueur{
     }
 
     public Placement placement() {
-        //placer pingouin aléatoirement
         Pair<Integer, Commande> result = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
         result.getValue1().setJeu(jeu);
         return (Placement) result.getValue1();
