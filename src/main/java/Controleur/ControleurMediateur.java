@@ -4,6 +4,7 @@ import Modele.*;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	Jeu jeu;
@@ -68,8 +69,11 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 			case Selection:
 				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
+					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+
+
 				}else{
 					System.out.println("Coup impossible");
 				}
@@ -85,6 +89,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 					setEoT(true); // le tour d'un humain peut s'arreter ici
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
+					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 				}else {
 					System.out.println("Coup impossible");
