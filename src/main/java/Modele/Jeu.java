@@ -36,8 +36,10 @@ public class Jeu extends Observable {
 		this.largeur = largeur;
 		this.hauteur = hauteur;
 		this.plateau = new int[largeur][hauteur];
-		for (int i = 0; i < largeur; i++) {
-			System.arraycopy(plateau[i], 0, this.plateau[i], 0, hauteur);
+		for(int i =0; i< largeur; i++){
+			for(int j = 0 ;j < hauteur; j++) {
+				this.plateau[i][j] = plateau[i][j];
+			}
 		}
 	}
 
