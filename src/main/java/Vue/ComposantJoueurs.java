@@ -7,69 +7,30 @@ import java.awt.*;
 
 public class ComposantJoueurs extends Box implements Observateur {
 
-	ComposantJoueurs(int axis, CollecteurEvenements control) {
-		super(axis);
-		paintComponent(control);
-	}
+	ComposantInfoJoueur[] joueurs;
+	CollecteurEvenements control;
 
-	public void paintComponent(CollecteurEvenements control) {
-		ImageIcon pb = new ImageIcon("resources/assets/penguin.png");
-		ImageIcon pv = new ImageIcon("resources/assets/penguin_vert.png");
-		ImageIcon pr = new ImageIcon("resources/assets/penguin_rouge.png");
-		ImageIcon pj = new ImageIcon("resources/assets/penguin_jaune.png");
-
-		Image image = pb.getImage();
-		Image newimg = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		pb = new ImageIcon(newimg);
-
-		Image image2 = pv.getImage();
-		Image newimg2 = image2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		pv = new ImageIcon(newimg2);
-
-		Image image3 = pr.getImage();
-		Image newimg3 = image3.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		pr = new ImageIcon(newimg3);
-
-		Image image4 = pj.getImage();
-		Image newimg4 = image4.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		pj = new ImageIcon(newimg4);
-
-		JLabel j1 = new JLabel(pb);
-		JLabel j2 = new JLabel(pv);
-		JLabel j3 = new JLabel(pr);
-		JLabel j4 = new JLabel(pj);
-
-		if (control.joueurCourant() == 0) {
-			JButton joueur1 = new JButton("Au tour du Joueur 1");
-			JLabel score = new JLabel("Score J1 : ");
-			add(joueur1);
-			add(j1);
-			add(score);
-		} else if (control.joueurCourant() == 1) {
-			JButton joueur2 = new JButton("Au tour du Joueur 2");
-			JLabel score = new JLabel("Score J2 : ");
-			add(joueur2);
-			add(j2);
-			add(score);
-		} else if (control.joueurCourant() == 2) {
-			JButton joueur3 = new JButton("Au tour du Joueur 3");
-			JLabel score = new JLabel("Score J3 : ");
-			add(joueur3);
-			add(j3);
-			add(score);
-		} else if (control.joueurCourant() == 3) {
-			JButton joueur4 = new JButton("Au tour du Joueur 4");
-			JLabel score = new JLabel("Score J4 : ");
-			add(joueur4);
-			add(j4);
-			add(score);
-		} else {
-
+	ComposantJoueurs(CollecteurEvenements c) {
+		super(BoxLayout.Y_AXIS);
+		control = c;
+		joueurs = new ComposantInfoJoueur[4];
+		joueurs[0] = new ComposantInfoJoueur(1, Color.blue);
+		joueurs[1] = new ComposantInfoJoueur(2, Color.green);
+		joueurs[2] = new ComposantInfoJoueur(3, Color.red);
+		joueurs[3] = new ComposantInfoJoueur(4, Color.yellow);
+		for (ComposantInfoJoueur joueur : joueurs) {
+			add(Box.createGlue());
+			add(joueur);
 		}
+		add(Box.createGlue());
+		joueurs[0].setCurrent(true);
 	}
 
 	@Override
 	public void miseAJour() {
-		repaint();
+		for (int i = 0; i < joueurs.length; i++) {
+			joueurs[i].setScore(control.scoreJoueur(i));
+			joueurs[i].setCurrent(control.joueurCourant() == i);
+		}
 	}
 }

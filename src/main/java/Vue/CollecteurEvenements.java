@@ -49,4 +49,6 @@ public interface CollecteurEvenements {
 	void reset();
 
 	int joueurCourant();
+
+	int scoreJoueur(int joueur);
 }
