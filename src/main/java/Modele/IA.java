@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 3;
+    public static int profondeur = 1;
 
     public IA(int n, Jeu p) {
         super(n, p);
@@ -15,8 +15,7 @@ public class IA extends Joueur{
         this.estIA = true;
     }
 
-    @Override
-    public void placement() {
+    public Placement placement() {
         //placer pingouin aléatoirement
         int l;
         int c =0;
@@ -32,19 +31,13 @@ public class IA extends Joueur{
                 break;
             }
         }
-        jeu.InitPingou(l, c);
-
-
+        return new Placement(jeu, l, c);
     }
 
-    @Override
-    public void jeu() {
+    public Coup jeu() {
         Pair<Integer, Coup> result = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
-        if(result.getValue1() != null) {
-            result.getValue1().setJeu(jeu);
-            jouerCoup(result.getValue1());
-            jeu.prochainJoueur();
-        }
+        result.getValue1().setJeu(jeu);
+        return result.getValue1();
     }
 
     private void jouerCoup(Coup coup){
@@ -65,7 +58,7 @@ public class IA extends Joueur{
 
 
     private int Evaluation(Jeu j){
-        return MonteCarlo(jeu, 10);
+        return MonteCarlo(j, 10);
     }
 
     private void prochainJoueur(Jeu jeu){

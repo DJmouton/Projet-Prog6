@@ -76,13 +76,6 @@ public class Joueur {
 		ilots ++;
 	}
 
-	// Placement initial d'un pingouin par le joueur
-	public void placement() {}
-
-	// Méthode appelée pour tous les joueurs lors d'un clic sur le plateau
-	// Si un joueur n'est pas concerné, il lui suffit de l'ignorer
-	public void jeu() {}
-
 	@Override
 	protected Object clone() {
 		return new Joueur(jeu, num, score, estIA);
