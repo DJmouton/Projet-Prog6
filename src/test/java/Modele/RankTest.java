@@ -20,6 +20,7 @@ public class RankTest {
         List<Joueur> j= jeu.Ranking();
         assertTrue(j.get(0).num==4);
         assertTrue(j.get(1).num==5);
+        control.afficheRanking(j);
 
 
 
@@ -37,6 +38,7 @@ public class RankTest {
         List<Joueur> j= jeu.Ranking();
         assertTrue(j.get(0).num==4);
         assertTrue(j.get(1).num==5);
+        control.afficheRanking(j);
 
 
 
@@ -53,6 +55,7 @@ public class RankTest {
         List<Joueur> j= jeu.Ranking();
         assertTrue(j.get(0).num==5);
         assertTrue(j.get(1).num==4);
+        control.afficheRanking(j);
 
 
 
@@ -71,6 +74,7 @@ public class RankTest {
         assertTrue(j.get(1).num==4);
         assertTrue(j.get(0).ilots==j.get(1).ilots);
         assertTrue(j.get(0).score==j.get(1).score);
+        control.afficheRanking(j);
 
 
 

@@ -66,12 +66,12 @@ public class Joueur implements Comparable<Joueur>{
 	public int getScore() {
 		return score;
 	}
+	public int getNum() {
+		return num;
+	}
 
 	public int getIlots(){return ilots;}
 
-	public int num() {
-		return num;
-	}
 
 	public void addScore(int val) {
 		score += val;
