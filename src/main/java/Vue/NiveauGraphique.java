@@ -15,8 +15,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
     Jeu jeu;
     int largeurCase, hauteurCase;
 
-    int[] tabCases = new int[2];
-
     public NiveauGraphique(Jeu j) {
         jeu = j;
         jeu.ajouteObservateur(this);

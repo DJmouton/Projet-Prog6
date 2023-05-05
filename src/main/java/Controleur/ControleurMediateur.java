@@ -1,85 +1,172 @@
 package Controleur;
 
-/*
- * Morpion pédagogique
-
- * Copyright (C) 2016 Guillaume Huard
-
- * Ce programme est libre, vous pouvez le redistribuer et/ou le
- * modifier selon les termes de la Licence Publique Générale GNU publiée par la
- * Free Software Foundation (version 2 ou bien toute autre version ultérieure
- * choisie par vous).
-
- * Ce programme est distribué car potentiellement utile, mais SANS
- * AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
- * commercialisation ou d'adaptation dans un but spécifique. Reportez-vous à la
- * Licence Publique Générale GNU pour plus de détails.
-
- * Vous devez avoir reçu une copie de la Licence Publique Générale
- * GNU en même temps que ce programme ; si ce n'est pas le cas, écrivez à la Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,
- * États-Unis.
-
- * Contact: Guillaume.Huard@imag.fr
- *          Laboratoire LIG
- *          700 avenue centrale
- *          Domaine universitaire
- *          38401 Saint Martin d'Hères
- */
-
-import Modele.IA;
-import Modele.Jeu;
-import Modele.Joueur;
+import Modele.*;
 import Vue.CollecteurEvenements;
-import jdk.nashorn.api.tree.ArrayLiteralTree;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class ControleurMediateur implements CollecteurEvenements {
+public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	Jeu jeu;
-	int joueurCourant;
-	final int lenteurAttente = 50;
-	int decompte;
+	boolean EoT; // end of turn
+	Coup coup;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
+		setEoT(false);
+		/////////////////////////////////////////
+		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new Joueur(5, jeu);
+		this.jeu.joueurs[1] = new IA(5, jeu);
+		/////////////////////////////////////////
 
 	}
-	public void reset(){
+
+	/***************************************************************************
+	 * Traitement d'un clic sur le bouton reset, réinitialise et relance le jeu.
+	 ****************************************************************************/
+	public void reset() {
 		jeu.reset();
+		setEoT(false);
+		/////////////////////////////////////////
+		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
 		this.jeu.joueurs[0] = new Joueur(4, jeu);
 		this.jeu.joueurs[1] = new Joueur(5, jeu);
+		/////////////////////////////////////////
+		partie();
+	}
 
-
+	/****************************************************************************************
+	 * Traitement d'un clic sur le bouton IA, bascule le joueur de mode.
+	 * L'IHM doit faire appel à ces fonctions peut importe le bouton IA cliqué.
+	 * Il donneront en paramètre le numéro du joueur car ils savent quel bouton a été cliqué.
+	 *****************************************************************************************/
+	public void basculeIA(int num) {
+		jeu.changeModeJoueur(num);
 	}
 
 
-	@Override
+	/**************************************************************************************************
+	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
+	 ***************************************************************************************************/
 	public void clicSouris(int l, int c) {
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
 
-		switch (jeu.etatCourant())
-		{
+
+		switch (jeu.etatCourant()) {
 			case Initialisation:
-				jeu.InitPingou(l, c);
+				if (this.jeu.plateau[l][c] == 1) {
+					new Placement(jeu, l, c).execute();
+					setEoT(true); // le tour d'un humain peut s'arreter ici
+					System.out.println("Pingouin placé en (" + l + "," + c + ")");
+
+				}
 				break;
 
 			case Selection:
-				jeu.SelectPingou(l, c);
+				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
+					coup = new Coup(l, c, this.jeu);
+					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
+					jeu.setEtat(Etats.Deplacement);
+					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+
+
+				}else{
+					System.out.println("Coup impossible");
+				}
 				break;
 
 			case Deplacement:
-				jeu.DeplacePingou(l, c);
+				if (jeu.contains(new int[]{l, c}, jeu.hex_accessible(coup.sourcel, coup.sourcec))){
+					coup.destl = l;
+					coup.destc = c;
+					coup.execute();
+					jeu.setEtat(Etats.Selection);
+					System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
+					setEoT(true); // le tour d'un humain peut s'arreter ici
+				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
+					coup = new Coup(l, c, this.jeu);
+					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
+					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+				}else {
+					System.out.println("Coup impossible");
+				}
 				break;
 		}
+
 		jeu.metAJour();
 	}
+
+	/*****************************************
+	 * Passe au prochain joueur qui peut jouer
+	 ******************************************/
+	public void joueurSuivant() {
+		jeu.prochainJoueur();
+	}
+
+	/**************************
+	 * Déroulement d'un tour
+	 ***************************/
+	public void tour() {
+		System.out.println("--------------------------------------------------");
+		System.out.println("Au tour du joueur " + jeu.joueurCourant);
+		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+
+		if (!(jeu.joueurs[jeu.joueurCourant].estIA)) {
+			while (!isEoT());// on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
+			setEoT(false);
+
+		} else {// ajouter temporisation ici ?
+			try { // TEMPORAIRE
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			switch (jeu.etatCourant()) {
+				case Initialisation:
+					Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
+					placement.execute();
+					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
+					break;
+
+				case Selection:
+					coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
+					coup.execute();
+					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
+					break;
+
+				case Deplacement:
+					System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
+					break;
+			}
+		}
+		joueurSuivant();
+		jeu.metAJour();
+	}
+
+	/**************************
+	 * Déroulement d'une partie
+	 ***************************/
+	public void partie() {
+		while (jeu.enCours())
+			tour();
+
+		// affichage des scores finals
+		System.out.println("--------------------------------------------------");
+		System.out.println("Partie terminée");
+		System.out.println("Joueur 0 : " + jeu.joueurs[0].getScore() + " poissons");
+		System.out.println("Joueur 1 : " + jeu.joueurs[1].getScore() + " poissons");
+	}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// FONCTIONS A SUPPRIMER POUR LA PREMIERE VERSION
+//
+//////////////////////////////////////////////////////////////////////////
 
 	public void annuler(){
 
@@ -152,10 +239,19 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		return this.joueurCourant;
+		return jeu.joueurCourant;
 	}
 
-	public ArrayList<int[]> caseSelection() {
-		return this.jeu.hexAccess;
+	public synchronized boolean isEoT() {
+		return EoT;
+	}
+
+	public synchronized void setEoT(boolean eoT) {
+		EoT = eoT;
+	}
+
+	@Override
+	public void run() {
+		partie();
 	}
 }
