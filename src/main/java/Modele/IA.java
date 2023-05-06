@@ -177,15 +177,23 @@ public class IA extends Joueur{
 //        pingouins.remove(i);
 //    }
 
-    public static int getNombre(Jeu jeu){
-        int result = 0;
-        for(int[] coord : jeu.getPingouins()){
-            result+=Dijkstra(jeu,coord).size();
+    public static ArrayList<ArrayList<int[]>> getNombre(Jeu jeu, ArrayList<int[]> pingouins){
+        ArrayList<ArrayList<int[]>> result = new ArrayList<>();
+        if(pingouins.isEmpty()){
+            return result;
         }
+        ArrayList<int[]> ilot = ilot(jeu,pingouins);
+        if(ilot.size()>0){
+            ilot.set(0, pingouins.get(0));
+            result.add(ilot);
+        }
+        pingouins.remove(0);
+        result.addAll(getNombre(jeu, pingouins));
         return result;
     }
 
-    public static ArrayList<int[]> Dijkstra(Jeu jeu, int[] source){
+    public static ArrayList<int[]> ilot(Jeu jeu, ArrayList<int[]> pingouins){
+        int[] source = pingouins.get(0);
         int pingouin = jeu.plateau[source[0]][source[1]];
         ArrayList<int[]> accessible = new ArrayList<>();
         accessible.add(source);
@@ -195,10 +203,13 @@ public class IA extends Joueur{
                 int valeur = jeu.plateau[cote[0]][cote[1]];
                 if(valeur > 0){
                     if(valeur > 3 && valeur != pingouin){//2 pingouins sur une ilot
-                        System.out.println("2 pingouins sur une ilot");
+                        removeCoordFromList(cote, pingouins);
                         return new ArrayList<>();
                     }else if(!jeu.contains(cote,accessible)){
-                        System.out.println("on ajoute un accessible");
+//                        System.out.println("on ajoute un accessible");
+                        if(valeur == pingouin){
+                            removeCoordFromList(cote, pingouins);
+                        }
                         accessible.add(cote);
                     }
                 }
@@ -206,8 +217,17 @@ public class IA extends Joueur{
             i++;
         }
         return accessible;
+    }
 
-
+    public static void removeCoordFromList(int[] cote, ArrayList<int[]> pingouins){
+        int j = 1;
+        while (j < pingouins.size()){
+            if(cote[0]==pingouins.get(j)[0] && cote[1]==pingouins.get(j)[1]){
+                pingouins.remove(j);
+                j=pingouins.size();
+            }
+            j++;
+        }
     }
 
 

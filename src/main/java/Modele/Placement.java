@@ -22,7 +22,7 @@ public class Placement implements Commande
 		jeu.joueurs[jeu.joueurCourant].addIlots();
 		jeu.joueurs[jeu.joueurCourant].addScore(1);
 		jeu.nombreP++;
-		if (jeu.nombreP == 2-jeu.e)
+		if (jeu.nombreP == 4-jeu.e)
 			jeu.etat = Etats.Selection;
 
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;

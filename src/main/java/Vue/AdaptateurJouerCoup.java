@@ -32,6 +32,7 @@ import Modele.Jeu;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class AdaptateurJouerCoup implements ActionListener {
 	CollecteurEvenements control;
@@ -56,7 +57,21 @@ public class AdaptateurJouerCoup implements ActionListener {
 			int valY = Integer.parseInt(y);
 //			control.clicSouris(valX, valY);
 //			System.out.println("ILOT: "+IA.getIlot((Jeu) control.getJeu(), ((Jeu) control.getJeu()).getPingouins()));
-			System.out.println("ILOT: " + IA.getNombre((Jeu) control.getJeu()));
+			Jeu jeu = (Jeu) control.getJeu();
+			ArrayList<ArrayList<int[]>> result = IA.getNombre(jeu,jeu.getPingouins());
+			System.out.println("ILOT: ");
+			for(ArrayList<int[]> l : result){
+				System.out.print("Pingouin: "+jeu.plateau[l.get(0)[0]][l.get(0)[1]]);
+				int somme = 0;
+				for(int i =1; i < l.size(); i++){
+					int[] coord = l.get(i);
+					int value = jeu.plateau[coord[0]][coord[1]];
+					if(value < 4) {
+						somme += value;
+					}
+				}
+				System.out.println(" "+somme);
+			}
 		} catch (Exception ex) {
 			// On ne fait rien si la valeur est invalide
 		}
