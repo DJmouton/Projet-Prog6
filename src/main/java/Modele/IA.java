@@ -13,6 +13,9 @@ public class IA extends Joueur{
     public IA(int n, Jeu p) {
         super(n, p);
         this.random = new Random();
+        long seed = random.nextLong();
+        System.out.println("Seed IA: "+seed);
+        random.setSeed(seed);
         this.estIA = true;
     }
 
@@ -61,6 +64,7 @@ public class IA extends Joueur{
         for(int i = 0; i< taille; i++){
             Jeu j = (Jeu) jeu.clone();
             while(j.enCours()){
+
                 ArrayList<Commande> coups = getCoups(j, j.joueurs[j.joueurCourant].num);
                 if(coups.size()>0)
                     coups.get(random.nextInt(coups.size())).execute();
@@ -123,6 +127,90 @@ public class IA extends Joueur{
             return Pair.with(valeur,coup);
         }
     }
+
+//
+//    public static int getIlot(Jeu jeu, ArrayList<int[]> pingouins){
+//        int result = 0;
+//        if(pingouins.isEmpty()){
+//            return result;
+//        }
+//        result += getTuiles(jeu, pingouins, new ArrayList<>(), pingouins.get(0));
+//        System.out.println("result: "+result);
+//        pingouins.remove(0);
+//        return result+getIlot(jeu,pingouins);
+//    }
+//
+//    public static int getTuiles(Jeu jeu, ArrayList<int[]> pingouins, ArrayList<int[]> tuiles, int[] tuile){
+//        int pingouin = jeu.plateau[pingouins.get(0)[0]][pingouins.get(0)[1]];
+//        int result = 0;
+//        for (int[] cote : jeu.getCotes(tuile[0],tuile[1])){
+//            int valeur = jeu.plateau[cote[0]][cote[1]];
+//            if(valeur>0){
+//                 if (valeur > 3 && valeur != pingouin) {
+//                    //2 different pingouin sur le meme ilot
+//                    supprimerPingouinListe(cote,pingouins);
+//                    return 0;
+//                }
+//                //ilot
+//                if(!jeu.contains(cote,tuiles)){
+//                    tuiles.add(cote);
+//                    getTuiles(jeu,pingouins,tuiles, cote);
+//                    if(valeur == pingouin){
+//                        //2 meme pingouin sur le meme ilot
+//                        supprimerPingouinListe(cote,pingouins);
+//                    }else {
+//                        result+=valeur;
+//                    }
+//                }
+//            }
+//        }
+//        return result;
+//    }
+//
+//    private static void supprimerPingouinListe(int[] cote, ArrayList<int[]> pingouins){
+//        int i;
+//        for (i = 0; i < pingouins.size();i++){
+//            if(pingouins.get(i)[0]==cote[0] && pingouins.get(i)[1]==cote[1]){
+//                break;
+//            }
+//        }
+//        pingouins.remove(i);
+//    }
+
+    public static int getNombre(Jeu jeu){
+        int result = 0;
+        for(int[] coord : jeu.getPingouins()){
+            result+=Dijkstra(jeu,coord).size();
+        }
+        return result;
+    }
+
+    public static ArrayList<int[]> Dijkstra(Jeu jeu, int[] source){
+        int pingouin = jeu.plateau[source[0]][source[1]];
+        ArrayList<int[]> accessible = new ArrayList<>();
+        accessible.add(source);
+        int i = 0;
+        while (i<accessible.size()){
+            for (int[] cote : jeu.getCotes(accessible.get(i)[0],accessible.get(i)[1])){
+                int valeur = jeu.plateau[cote[0]][cote[1]];
+                if(valeur > 0){
+                    if(valeur > 3 && valeur != pingouin){//2 pingouins sur une ilot
+                        System.out.println("2 pingouins sur une ilot");
+                        return new ArrayList<>();
+                    }else if(!jeu.contains(cote,accessible)){
+                        System.out.println("on ajoute un accessible");
+                        accessible.add(cote);
+                    }
+                }
+            }
+            i++;
+        }
+        return accessible;
+
+
+    }
+
+
 
 
 }

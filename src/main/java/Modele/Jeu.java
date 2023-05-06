@@ -138,9 +138,21 @@ public class Jeu extends Observable {
 		return result;
 	}
 
+	public ArrayList<int[]> getPingouins(){
+		ArrayList<int[]> result = new ArrayList<>();
+		for(int i = 0; i < largeur; i++){
+			for(int j = 0 ; j < hauteur; j++){
+				if(plateau[i][j]>3){
+					result.add(new int[]{i,j});
+				}
+			}
+		}
+		return result;
+	}
+
 	/********************************************
-	* Renvoie si la liste contient la coordonnée
-	*********************************************/
+	 * Renvoie si la liste contient la coordonnée
+	 *********************************************/
 	public boolean contains(int[] valeur, ArrayList<int[]> list){
 		boolean res = false;
 		for (int i = 0; i < list.size(); i++) {
@@ -169,8 +181,7 @@ public class Jeu extends Observable {
 	public void changeModeJoueur(int num){
 		if(joueurs[num].estIA){
 			joueurs[num].estIA=false;
-		}
-		else{
+		} else{
 			joueurs[num].estIA=true;
 		}
 	}
@@ -183,7 +194,11 @@ public class Jeu extends Observable {
 		List<Integer> list =new ArrayList<>(Collections.nCopies(30, 1));
 		list.addAll(Collections.nCopies(20, 2));
 		list.addAll(Collections.nCopies(10, 3));
-		Collections.shuffle(list, new Random());
+		Random random = new Random();
+		long seed = random.nextLong();
+		System.out.println("Seed Plateau: "+seed);
+		random.setSeed(seed);
+		Collections.shuffle(list,random);
 
 		int x=0;
 		plateau=new int[hauteur][largeur];
@@ -199,7 +214,7 @@ public class Jeu extends Observable {
 		}
 	}
 
-	private ArrayList<int[]> getCotes(int x, int y){
+	public ArrayList<int[]> getCotes(int x, int y){
 		ArrayList<int[]>res=new ArrayList<>();
 		transformtableau(res,x,y-1);
 		transformtableau(res,x,y+1);

@@ -27,6 +27,7 @@
 package Vue;
 
 import Modele.IA;
+import Modele.Jeu;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -54,7 +55,8 @@ public class AdaptateurJouerCoup implements ActionListener {
 			int valX = Integer.parseInt(x);
 			int valY = Integer.parseInt(y);
 //			control.clicSouris(valX, valY);
-			IA.profondeur = valY;
+//			System.out.println("ILOT: "+IA.getIlot((Jeu) control.getJeu(), ((Jeu) control.getJeu()).getPingouins()));
+			System.out.println("ILOT: " + IA.getNombre((Jeu) control.getJeu()));
 		} catch (Exception ex) {
 			// On ne fait rien si la valeur est invalide
 		}
