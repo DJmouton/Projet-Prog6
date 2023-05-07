@@ -2,10 +2,9 @@ package Vue;
 
 import javax.swing.*;
 
-public class ComposantPanneauMenu extends Box {
+public class ComposantPanneauMenu extends JPanel {
 
 
 	ComposantPanneauMenu(CollecteurEvenements control) {
-		super(BoxLayout.Y_AXIS);
 	}
 }
