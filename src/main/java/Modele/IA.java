@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 4;
+    public static int profondeur = 2;
 
     public IA(int n, Jeu p) {
         super(n, p);

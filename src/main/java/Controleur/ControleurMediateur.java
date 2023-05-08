@@ -6,63 +6,38 @@ import Vue.CollecteurEvenements;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class ControleurMediateur implements CollecteurEvenements, Runnable {
+public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
-	boolean EoT; // end of turn
 	Coup coup;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		setEoT(false);
-		/////////////////////////////////////////
-		// a deplacer plus tard dans Jeu
-		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new IA(5, jeu);
-		/////////////////////////////////////////
-
+		tour();
 	}
 
-	/***************************************************************************
-	 * Traitement d'un clic sur le bouton reset, réinitialise et relance le jeu.
-	 ****************************************************************************/
+	/*****************************************************************
+	 * Traitement d'un clic sur le bouton reset, réinitialise le jeu.
+	 *****************************************************************/
 	public void reset() {
 		jeu.reset();
-		setEoT(false);
-		/////////////////////////////////////////
-		// a deplacer plus tard dans Jeu
-		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new Joueur(5, jeu);
-		/////////////////////////////////////////
-		partie();
+		tour();
 	}
-
-	/****************************************************************************************
-	 * Traitement d'un clic sur le bouton IA, bascule le joueur de mode.
-	 * L'IHM doit faire appel à ces fonctions peut importe le bouton IA cliqué.
-	 * Il donneront en paramètre le numéro du joueur car ils savent quel bouton a été cliqué.
-	 *****************************************************************************************/
-	public void basculeIA(int num) {
-		jeu.changeModeJoueur(num);
-	}
-
 
 	/**************************************************************************************************
 	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
 	 ***************************************************************************************************/
 	public void clicSouris(int l, int c) {
-		if (jeu.joueurs[jeu.joueurCourant].estIA)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
-
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
 					new Placement(jeu, l, c).execute();
-					setEoT(true); // le tour d'un humain peut s'arreter ici
 					System.out.println("Pingouin placé en (" + l + "," + c + ")");
-
+					jeu.metAJour();
+					jeu.prochainJoueur();
+					tour();
 				}
 				break;
 
@@ -71,7 +46,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 					coup = new Coup(l, c, this.jeu);
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
-				}else{
+				} else {
 					System.out.println("Coup impossible");
 				}
 				break;
@@ -83,7 +58,9 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 					coup.execute();
 					jeu.setEtat(Etats.Selection);
 					System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
-					setEoT(true); // le tour d'un humain peut s'arreter ici
+					jeu.metAJour();
+					jeu.prochainJoueur();
+					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
@@ -92,69 +69,65 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 				}
 				break;
 		}
-
-		jeu.metAJour();
 	}
 
-	/*****************************************
-	 * Passe au prochain joueur qui peut jouer
-	 ******************************************/
-	public void joueurSuivant() {
-		jeu.prochainJoueur();
+	/**********************************************************************************
+	 * Traitement d'un tic du timer, ignoré si ce n'est pas au tour d'une IA de jouer.
+	 **********************************************************************************/
+	public void tictac() {
+		if (!jeu.enCours() || !jeu.joueurs[jeu.joueurCourant].estIA)
+			return;
+
+		switch (jeu.etatCourant()) {
+			case Initialisation:
+				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
+				placement.execute();
+				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
+				jeu.metAJour();
+				jeu.prochainJoueur();
+				tour();
+				break;
+
+			case Selection:
+				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
+				coup.execute();
+				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
+				jeu.metAJour();
+				jeu.prochainJoueur();
+				tour();
+				break;
+
+			case Deplacement:
+				System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
+				break;
+		}
 	}
 
-	/**************************
-	 * Déroulement d'un tour
+	/***************************
+	 * Gestion du début du tour
 	 ***************************/
 	public void tour() {
+		if (!jeu.enCours()) {
+			finPartie();
+			return;
+		}
 		System.out.println("--------------------------------------------------");
 		System.out.println("Au tour du joueur " + jeu.joueurCourant);
 		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-
-		if (!(jeu.joueurs[jeu.joueurCourant].estIA)) {
-			while (!isEoT());// on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
-			setEoT(false);
-
-		} else {// ajouter temporisation ici ?
-			try { // TEMPORAIRE
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-			switch (jeu.etatCourant()) {
-				case Initialisation:
-					Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-					placement.execute();
-					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
-					break;
-
-				case Selection:
-					coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
-					coup.execute();
-					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
-					break;
-
-				case Deplacement:
-					System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
-					break;
-			}
-		}
-		joueurSuivant();
-		jeu.metAJour();
 	}
 
-	/**************************
-	 * Déroulement d'une partie
+	/***************************
+	 * Gestion de fin de partie
 	 ***************************/
-	public void partie() {
-		while (jeu.enCours())
-			tour();
-
-		// affichage des scores finals
+	public void finPartie() {
 		System.out.println("--------------------------------------------------");
 		System.out.println("Partie terminée");
 		afficheRanking(jeu.Ranking());
 	}
+
+	/********************************
+	 * Affichage du classement final
+	 ********************************/
 	public void afficheRanking(List<Joueur> joueur){
 		for (int i=0;i<joueur.size();i++){
 			if(i+1<joueur.size() && joueur.get(i).getScore()==joueur.get(i+1).getScore()){
@@ -184,25 +157,6 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 
 	public void refaire(){
 
-	}
-
-	public void tictac() {
-		if (jeu.enCours()) {/*
-			if (decompte == 0) {
-				int type = typeJoueur[joueurCourant];
-				// Lorsque le temps est écoulé on le transmet au joueur courant.
-				// Si un coup a été joué (IA) on change de joueur.
-				if (joueurs[joueurCourant][type].tempsEcoule()) {
-					changeJoueur();
-				} else {
-				// Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on l'attend.
-					System.out.println("On vous attend, joueur " + joueurs[joueurCourant][type].num());
-					decompte = lenteurAttente;
-				}
-			} else {
-				decompte--;
-			}*/
-		}
 	}
 
 	@Override
@@ -250,18 +204,5 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 
 	public int joueurCourant() {
 		return jeu.joueurCourant;
-	}
-
-	public synchronized boolean isEoT() {
-		return EoT;
-	}
-
-	public synchronized void setEoT(boolean eoT) {
-		EoT = eoT;
-	}
-
-	@Override
-	public void run() {
-		partie();
 	}
 }
