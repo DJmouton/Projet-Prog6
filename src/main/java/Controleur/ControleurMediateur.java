@@ -9,6 +9,7 @@ import java.util.List;
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Coup coup;
+	int poissons;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
@@ -34,10 +35,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
 					new Placement(jeu, l, c).execute();
-					System.out.println("Pingouin placé en (" + l + "," + c + ")");
+					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
+					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 					jeu.metAJour();
 					jeu.prochainJoueur();
 					tour();
+				} else {
+					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
 				}
 				break;
 
@@ -47,18 +51,19 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 				} else {
-					System.out.println("Coup impossible");
+					System.out.println("Sélectionne un de tes pingouins");
 				}
 				break;
 
 			case Deplacement:
 				if (jeu.contains(new int[]{l, c}, jeu.hex_accessible(coup.sourcel, coup.sourcec))){
+					poissons = jeu.plateau[l][c];
 					coup.destl = l;
 					coup.destc = c;
 					coup.execute();
 					jeu.setEtat(Etats.Selection);
-					System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
-					jeu.metAJour();
+					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");					jeu.metAJour();
+					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 					jeu.prochainJoueur();
 					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
@@ -82,7 +87,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Initialisation:
 				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
 				placement.execute();
-				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
+				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
+				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 				jeu.metAJour();
 				jeu.prochainJoueur();
 				tour();
@@ -90,8 +96,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 			case Selection:
 				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
+				poissons = jeu.plateau[coup.destl][coup.destc];
 				coup.execute();
-				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
+				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
+				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 				jeu.metAJour();
 				jeu.prochainJoueur();
 				tour();
@@ -112,8 +120,22 @@ public class ControleurMediateur implements CollecteurEvenements {
 			return;
 		}
 		System.out.println("--------------------------------------------------");
-		System.out.println("Au tour du joueur " + jeu.joueurCourant);
-		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+		System.out.print("Au tour du joueur " + jeu.joueurCourant + " !");
+
+		if (jeu.joueurs[joueurCourant()].estIA)
+			System.out.println("(IA)");
+		else
+			System.out.println();
+
+		switch (jeu.etatCourant()) {
+			case Initialisation:
+				System.out.println("Place le prochain pingouin");
+				break;
+
+			case Selection:
+				System.out.println("Sélectionne un pingouin");
+				break;
+		}
 	}
 
 	/***************************
@@ -121,7 +143,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 ***************************/
 	public void finPartie() {
 		System.out.println("--------------------------------------------------");
-		System.out.println("Partie terminée");
+		System.out.println("Partie terminée, voici le classement final :");
 		afficheRanking(jeu.Ranking());
 	}
 
@@ -140,7 +162,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joeur numero " +(joueur.get(i).getNum()-4) + " avec le score " + joueur.get(i).getScore()+ " et nombre d'ilots "+ jeu.joueurs[joueur.get(i).getNum()-4].getIlots());
+			System.out.println("Joueur " + (joueur.get(i).getNum()-4) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
 		}
 	}
 
