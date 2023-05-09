@@ -57,7 +57,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			} else {
 				largeur = y * largeurCase;
 			}
-			if (jeu.valeur(x, y) == 0) continue;
+			if (jeu.valeur(x, y) == 0);
 			else
 				g.drawImage(assetsPlateau[jeu.valeur(x, y) + 7], largeur, hauteur,
 						largeurCase, hauteurCase, this);
@@ -71,7 +71,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
-		BufferedImage[] assetsPlateau = new BufferedImage[15];
+		BufferedImage[] assetsPlateau = new BufferedImage[20];
 		BufferedImage sablier = null;
 
 		try {
@@ -87,10 +87,15 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[8] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
 			assetsPlateau[9] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
 			assetsPlateau[10] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
-			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
-			assetsPlateau[12] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
-			assetsPlateau[13] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
-			assetsPlateau[14] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
+			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinBleuC.png"));
+			assetsPlateau[12] = ImageIO.read(new File("resources/assets/penguinVertC.png"));
+			assetsPlateau[13] = ImageIO.read(new File("resources/assets/penguinRougeC.png"));
+			assetsPlateau[14] = ImageIO.read(new File("resources/assets/penguinJauneC.png"));
+			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
+			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
+			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
+			assetsPlateau[18] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
+
 
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
@@ -146,6 +151,23 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				System.out.println("Erreur d'initialisation de liste");
 			}
 
+		// Montre le pingouins selectionné par le joueur courant
+		/*
+		if (jeu.etatCourant() == Etats.Deplacement)
+			x = clicSouris.l
+			y = clicSouris.c
+			hauteur = Math.round((float) x * height);
+			if (x % 2 == 1) {
+				largeur = y * largeurCase + largeurCase / 2;
+			} else {
+				largeur = y * largeurCase;
+			}
+			if (jeu.valeur(x, y) == 0);
+			else
+				g.drawImage(assetsPlateau[jeu.valeur(x, y) + 11], largeur, hauteur,
+						largeurCase, hauteurCase, this);
+		 */
+
 		// Dessine un sablier si l'IA joue
 		if (jeu.joueurs[jeu.joueurCourant].estIA)
 			g.drawImage(sablier, 0, 0, largeurCase, hauteurCase, this);
@@ -153,6 +175,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// TODO : Dessine l'animation de déplacement d'un pingouins
 		if (jeu.etatCourant() != Etats.Initialisation)
 			;
+			// Need : sources et destination
+		
 	}
 
 	int largeur() {
