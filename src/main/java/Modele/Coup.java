@@ -4,8 +4,8 @@ import Patterns.Commande;
 
 public class Coup implements Commande
 {
-	public int sourcel, sourcec;
-	public int destl, destc;
+	int sourcel, sourcec;
+	int destl, destc;
 	Jeu jeu;
 
 	public Coup(Jeu jeu, int sourcel, int sourcec, int destl, int destc) {
@@ -33,7 +33,6 @@ public class Coup implements Commande
 		jeu.joueurs[jeu.joueurCourant].addScore(jeu.plateau[destl][destc]);
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
 		jeu.plateau[sourcel][sourcec] = 0;
-		jeu.EnlevePingou(destl, destc);
 	}
 
 	public void desexecute() {
