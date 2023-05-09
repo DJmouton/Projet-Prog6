@@ -49,8 +49,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 					new Placement(jeu, l, c).execute();
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
 					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-					jeu.metAJour();
 					jeu.prochainJoueur();
+					jeu.metAJour();
 					tour();
 				} else {
 					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
@@ -74,9 +74,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 					coup.destc = c;
 					coup.execute();
 					jeu.setEtat(Etats.Selection);
-					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");					jeu.metAJour();
+					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");
 					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 					jeu.prochainJoueur();
+					jeu.metAJour();
 					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
@@ -101,8 +102,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 				placement.execute();
 				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
 				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-				jeu.metAJour();
 				jeu.prochainJoueur();
+				jeu.metAJour();
 				tour();
 				break;
 
@@ -112,8 +113,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 				coup.execute();
 				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
 				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-				jeu.metAJour();
 				jeu.prochainJoueur();
+				jeu.metAJour();
 				tour();
 				break;
 
