@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import Patterns.Commande;
 
 public class Jeu extends Observable {
 	public int[][] plateau;
@@ -138,6 +139,30 @@ public class Jeu extends Observable {
 		}
 		return result;
 	}
+
+	/*********************************************************************
+	 * Renvoie les déplacements possibles des pingouins portant le numéro
+	 *********************************************************************/
+	public ArrayList<Commande> getCoups(Jeu jeu, int num){
+        ArrayList<Commande> coups = new ArrayList<>();
+        if(jeu.getEtat().equals(Etats.Initialisation)){
+            for (int l =0; l < jeu.plateau.length;l++){
+                for (int c =0; c < jeu.plateau[l].length;c++){
+                    if(jeu.plateau[l][c]==1){
+                        coups.add(new Placement(jeu,l,c));
+                    }
+                }
+            }
+        }else {
+            ArrayList<int[]> pingouins = jeu.getPingouins(num);
+            for (int[] pingouin : pingouins) {
+                for (int[] emplacement : jeu.hex_accessible(pingouin[0], pingouin[1])) {
+                    coups.add(new Coup(jeu, pingouin[0], pingouin[1], emplacement[0], emplacement[1]));
+                }
+            }
+        }
+        return coups;
+    }
 
 	/********************************************
 	 * Renvoie si la liste contient la coordonnée

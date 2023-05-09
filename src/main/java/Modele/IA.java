@@ -29,29 +29,6 @@ public class IA extends Joueur{
         return (Coup) result.getValue1();
     }
 
-
-    public ArrayList<Commande> getCoups(Jeu jeu, int num){
-        ArrayList<Commande> coups = new ArrayList<>();
-        if(jeu.getEtat().equals(Etats.Initialisation)){
-            for (int l =0; l < jeu.plateau.length;l++){
-                for (int c =0; c < jeu.plateau[l].length;c++){
-                    if(jeu.plateau[l][c]==1){
-                        coups.add(new Placement(jeu,l,c));
-                    }
-                }
-            }
-        }else {
-            ArrayList<int[]> pingouins = jeu.getPingouins(num);
-            for (int[] pingouin : pingouins) {
-                for (int[] emplacement : jeu.hex_accessible(pingouin[0], pingouin[1])) {
-                    coups.add(new Coup(jeu, pingouin[0], pingouin[1], emplacement[0], emplacement[1]));
-                }
-            }
-        }
-        return coups;
-    }
-
-
     private int Evaluation(Jeu j){
         return MonteCarlo(j, 1);
     }
@@ -61,7 +38,7 @@ public class IA extends Joueur{
         for(int i = 0; i< taille; i++){
             Jeu j = (Jeu) jeu.clone();
             while(j.enCours()){
-                ArrayList<Commande> coups = getCoups(j, j.joueurs[j.joueurCourant].num);
+                ArrayList<Commande> coups = jeu.getCoups(j, j.joueurs[j.joueurCourant].num);
                 if(coups.size()>0)
                     coups.get(random.nextInt(coups.size())).execute();
                 j.prochainJoueur();
@@ -93,7 +70,7 @@ public class IA extends Joueur{
             }
             ArrayList<Commande> coups;
 
-            coups = getCoups(jeu, jeu.joueurs[jeu.joueurCourant].num);
+            coups = jeu.getCoups(jeu, jeu.joueurs[jeu.joueurCourant].num);
             for(Commande c : coups){
                 Jeu j = (Jeu) jeu.clone();
                 c.setJeu(j);
