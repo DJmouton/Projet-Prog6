@@ -1,6 +1,4 @@
 package Vue;
 
-import javax.swing.*;
-
-public class ComposantPanneauNouvellePartie extends JPanel {
+public class ComposantPanneauNouvellePartie {
 }
