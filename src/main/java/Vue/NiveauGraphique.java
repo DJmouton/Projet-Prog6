@@ -169,8 +169,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		 */
 
 		// Dessine un sablier si l'IA joue
-		if (jeu.joueurs[jeu.joueurCourant].estIA)
-			g.drawImage(sablier, 0, 0, largeurCase, hauteurCase, this);
+		/* if (jeu.joueurs[jeu.joueurCourant].estIA)
+			g.drawImage(sablier, 0, 0, largeurCase, hauteurCase, this); */
 
 		// TODO : Dessine l'animation de déplacement d'un pingouins
 		if (jeu.etatCourant() != Etats.Initialisation)

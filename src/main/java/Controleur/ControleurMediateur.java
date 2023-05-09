@@ -63,6 +63,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+					jeu.metAJour();
 				} else {
 					System.out.println("Sélectionne un de tes pingouins");
 				}
@@ -84,6 +85,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					coup = new Coup(l, c, this.jeu);
 					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+					jeu.metAJour();
 				}else {
 					System.out.println("Coup impossible");
 				}
@@ -255,5 +257,5 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return score;
 	}
 
-	public boolean estIA() { return jeu.joueurs[jeu.joueurCourant].estIA; }
+	// public boolean estIA() { return jeu.joueurs[jeu.joueurCourant].estIA; }
 }

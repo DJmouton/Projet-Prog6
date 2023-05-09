@@ -55,8 +55,16 @@ public class InterfaceGraphique implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// Création de la fenêtre
+
+		// Nom de la fenetre
 		JFrame frame = new JFrame("Hey, that's my fish !");
+
+		// Jeu principal
+		NiveauGraphique niv = new NiveauGraphique(j);
+		niv.addMouseListener(new AdaptateurSouris(niv, control));
+		frame.add(niv);
+
+		// Change l'icone de la fenetre principale
 		try {
 			frame.setIconImage(ImageIO.read(new File("resources/assets/penguin.png")));
 		}
@@ -64,10 +72,15 @@ public class InterfaceGraphique implements Runnable {
 			System.out.println("Erreur de chargement de l'icone");
 		}
 
-		// Ajout des composants
-		ComposantBarreHaute barreHaute = new ComposantBarreHaute(control);
+		ComposantMenuPartie menuLateral = new ComposantMenuPartie(BoxLayout.Y_AXIS, control);
+		ComposantBarreHaute barreHaute = new ComposantBarreHaute(BoxLayout.X_AXIS, control, menuLateral);
+
+		// Non utilisé pour l'instant
+		// ComposantJoueurs EtatJoueur = new ComposantJoueurs(BoxLayout.Y_AXIS, control);
+
 		frame.add(barreHaute, BorderLayout.PAGE_START);
-    
+		frame.add(menuLateral, BorderLayout.LINE_END);
+
 		Timer chrono = new Timer(2000, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
