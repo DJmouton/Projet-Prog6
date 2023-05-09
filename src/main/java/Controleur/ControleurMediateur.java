@@ -14,7 +14,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(2,0,0,1);
+		nouvellePartie(2,1,1,1);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -134,7 +134,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		System.out.println("--------------------------------------------------");
 		System.out.print("Au tour du joueur " + jeu.joueurCourant + " !");
 
-		if (jeu.joueurs[joueurCourant()].estIA)
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
 			System.out.println("(IA)");
 		else
 			System.out.println();
