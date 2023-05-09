@@ -10,10 +10,10 @@ public class IA extends Joueur{
     private Random random;
     public static int profondeur = 2;
 
-    public IA(int n, Jeu p) {
+    public IA(int n, Jeu p, int typeJoueur) {
         super(n, p);
         this.random = new Random();
-        this.estIA = true;
+        this.typeJoueur = typeJoueur;
     }
 
     public Placement placement() {

@@ -48,7 +48,7 @@ public class Jeu extends Observable {
 		nombreP=0;
 		e=0;
 		initPlateau();
-		initJoueurs();
+		//initJoueurs();
 		metAJour();
 	}
 
@@ -167,6 +167,7 @@ public class Jeu extends Observable {
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 	}
 
+
 	/********************************************************************
 	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
 	 ********************************************************************/
@@ -180,6 +181,34 @@ public class Jeu extends Observable {
 		return joueur;
 	}
 
+	public void initJoueurs(List<Integer> typesJoueurs) {
+		int typeJoueur;
+		for (int i = 0; i < typesJoueurs.size(); i++) {
+			typeJoueur = typesJoueurs.get(i);
+			if (typeJoueur == 0) {
+				typesJoueurs.remove(i);
+				i--;
+			}
+		}
+		joueurs = new Joueur[typesJoueurs.size()];
+		for(int i = 0; i < typesJoueurs.size(); i++) {
+			typeJoueur = typesJoueurs.get(i);
+			if (typeJoueur == 1) {
+				joueurs[i]=new Joueur(this,i+4,0,typeJoueur);
+			} else if(typeJoueur>=2) {
+				joueurs[i]=new IA(i+4,this,typeJoueur);
+			}
+			else{
+				i++;
+			}
+		}
+	}
+	public void resetJoueur() {
+		for(int i = 0; i < joueurs.length; i++) {
+			joueurs[i].score=0;
+			joueurs[i].ilots=0;
+		}
+	}
 //
 //-----------------------------------------------------------------------------------------
 //
@@ -204,11 +233,11 @@ public class Jeu extends Observable {
 		}
 	}
 
-	private void initJoueurs(){
+	/*private void initJoueurs(){
 		joueurs = new Joueur[2];
 		joueurs[0] = new IA(4, this);
 		joueurs[1] = new Joueur(5, this);
-	}
+	}*/
 
 	private ArrayList<int[]> getCotes(int x, int y){
 		ArrayList<int[]>res=new ArrayList<>();
