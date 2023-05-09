@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AdaptateurOuvreMenu implements ActionListener {
+public class AdaptateurOuvreFenetre implements ActionListener {
 
 	JToggleButton toggle;
 	Box box;
 
-	AdaptateurOuvreMenu(JToggleButton t, Box b) {
+	AdaptateurOuvreFenetre(JToggleButton t, Box b) {
 		toggle = t;
 		box = b;
 		box.setVisible(false);

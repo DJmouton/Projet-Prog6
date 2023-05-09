@@ -1,31 +1,6 @@
 package Vue;
-/*
- * Morpion pédagogique
 
- * Copyright (C) 2016 Guillaume Huard
-
- * Ce programme est libre, vous pouvez le redistribuer et/ou le
- * modifier selon les termes de la Licence Publique Générale GNU publiée par la
- * Free Software Foundation (version 2 ou bien toute autre version ultérieure
- * choisie par vous).
-
- * Ce programme est distribué car potentiellement utile, mais SANS
- * AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
- * commercialisation ou d'adaptation dans un but spécifique. Reportez-vous à la
- * Licence Publique Générale GNU pour plus de détails.
-
- * Vous devez avoir reçu une copie de la Licence Publique Générale
- * GNU en même temps que ce programme ; si ce n'est pas le cas, écrivez à la Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,
- * États-Unis.
-
- * Contact: Guillaume.Huard@imag.fr
- *          Laboratoire LIG
- *          700 avenue centrale
- *          Domaine universitaire
- *          38401 Saint Martin d'Hères
- */
-
+import Modele.Etats;
 import Modele.Jeu;
 import Patterns.Observateur;
 
@@ -35,19 +10,60 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
-	int largeurCase, hauteurCase;
+
+	// Variables de positionnement pour le dessin
+	int x, y, hauteur, largeur, lignes, colonnes, largeurCase, hauteurCase;
+
+	// Formule pour calculer la distance entre 2 hexagons
+	float height;
+
+	Timer timer;
+
+	// Liste des coordonnées d'hexagones à dessiner
+	ArrayList<int[]> dessinplat;
 
 	public NiveauGraphique(Jeu j) {
 		jeu = j;
 		jeu.ajouteObservateur(this);
 	}
 
-	/*
-	 * Peindre le plateau de jeu
-	 */
+	private void grille(Graphics g, BufferedImage[] assetsPlateau) {
+		for (int i = 0; i < (lignes); i++) {
+			hauteur = Math.round((float) i * height);
+			for (int j = 0; j < (colonnes); j++) {
+				if (jeu.valeur(i, j) == 0) continue;
+				if (i % 2 == 1)
+					largeur = j * largeurCase + largeurCase / 2;
+				else
+					largeur = j * largeurCase;
+				g.drawImage(assetsPlateau[jeu.valeur(i, j)], largeur, hauteur,
+						largeurCase, hauteurCase, this);
+			}
+		}
+	}
+
+	private void feedforward(Graphics g, BufferedImage[] assetsPlateau,
+	                         ArrayList<int[]> dessinplat) {
+		for (int[] plat : dessinplat) {
+			x = plat[0];
+			y = plat[1];
+			hauteur = Math.round((float) x * height);
+			if (x % 2 == 1) {
+				largeur = y * largeurCase + largeurCase / 2;
+			} else {
+				largeur = y * largeurCase;
+			}
+			if (jeu.valeur(x, y) == 0);
+			else
+				g.drawImage(assetsPlateau[jeu.valeur(x, y) + 7], largeur, hauteur,
+						largeurCase, hauteurCase, this);
+		}
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 
@@ -55,12 +71,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
-		BufferedImage[] assetsPlateau = new BufferedImage[8];
-		BufferedImage waterBG = null;
-
+		BufferedImage[] assetsPlateau = new BufferedImage[20];
+		BufferedImage sablier = null;
 
 		try {
-			waterBG = ImageIO.read(new File("resources/assets/waterTile.png"));
+			sablier = ImageIO.read(new File("resources/assets/sablier.png"));
 			assetsPlateau[0] = ImageIO.read(new File("resources/assets/water.png"));
 			assetsPlateau[1] = ImageIO.read(new File("resources/assets/poisson1.png"));
 			assetsPlateau[2] = ImageIO.read(new File("resources/assets/poisson2.png"));
@@ -69,6 +84,17 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+			assetsPlateau[8] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
+			assetsPlateau[9] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
+			assetsPlateau[10] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
+			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinBleuC.png"));
+			assetsPlateau[12] = ImageIO.read(new File("resources/assets/penguinVertC.png"));
+			assetsPlateau[13] = ImageIO.read(new File("resources/assets/penguinRougeC.png"));
+			assetsPlateau[14] = ImageIO.read(new File("resources/assets/penguinJauneC.png"));
+			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
+			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
+			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
+			assetsPlateau[18] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
 
 
 		} catch (IOException exc) {
@@ -80,34 +106,77 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
 		}
 
-		int lignes = jeu.hauteur();
-		int colonnes = jeu.largeur();
-		largeurCase = largeur() / colonnes;
-		hauteurCase = hauteur() / lignes;
-
 		// Rectangle d'océan (bleu) en fond
-		g.drawImage(waterBG, 0, 0, getWidth(), getHeight(), this);
+		g.setColor(new Color(51, 153, 255));
+		g.fillRect(0, 0, getWidth(), getHeight());
+		g.setColor(Color.BLACK);
 
 		// DIMINUE LA TAILLE DES IMAGES IMPORTANT A PRENDRE EN COMPTE POUR LE CALCUL DES POSITIONS
 		((Graphics2D) g).scale(0.9, 1.3);
 
+		// Variable du plateau
+		lignes = jeu.hauteur();
+		colonnes = jeu.largeur();
+		largeurCase = largeur() / colonnes;
+		hauteurCase = hauteur() / lignes;
+		height = (3f / 4f) * (float) hauteurCase;
+
 		// Grille
-		float height;
-		// Formule pour calculer la distance entre 2 hexagons
-		height = (float) 3 / 4 * (float) hauteurCase;
-		int hauteur, largeur;
-		for (int i = 0; i < (lignes); i++) {
-			hauteur = (int) ((float) i * (height));
-			for (int j = 0; j < (colonnes); j++) {
-				if (jeu.valeur(i, j) == 0) continue;
-				if (i % 2 == 1)
-					largeur = j * largeurCase + largeurCase / 2;
-				else
-					largeur = j * largeurCase;
-				g.drawImage(assetsPlateau[jeu.valeur(i, j)], largeur, hauteur,
-							largeurCase, hauteurCase, this);
+		grille(drawable, assetsPlateau);
+
+		// Case selectionnable durant la partie de placement des pingouins
+		if (jeu.etatCourant() == Etats.Initialisation)
+			try {
+				dessinplat = new ArrayList<>(jeu.getPingouins(1));
+				feedforward(g, assetsPlateau, dessinplat);
+			} catch (NullPointerException e) {
+				System.out.println("Erreur d'initialisation de liste");
 			}
-		}
+
+		// Pingouins selectionnable durant son tour
+		if (jeu.etatCourant() != Etats.Initialisation)
+			try {
+				dessinplat = new ArrayList<>(jeu.getPingouins(jeu.joueurCourant + 4));
+				feedforward(g, assetsPlateau, dessinplat);
+			} catch (NullPointerException e) {
+				System.out.println("Erreur d'initialisation de liste");
+			}
+
+		// Case Selectionnable après sélection d'un pingouins
+		if (jeu.etatCourant() == Etats.Deplacement)
+			try {
+				dessinplat = new ArrayList<>(jeu.hexAccess);
+				feedforward(g, assetsPlateau, dessinplat);
+			} catch (NullPointerException e) {
+				System.out.println("Erreur d'initialisation de liste");
+			}
+
+		// Montre le pingouins selectionné par le joueur courant
+		/*
+		if (jeu.etatCourant() == Etats.Deplacement)
+			x = clicSouris.l
+			y = clicSouris.c
+			hauteur = Math.round((float) x * height);
+			if (x % 2 == 1) {
+				largeur = y * largeurCase + largeurCase / 2;
+			} else {
+				largeur = y * largeurCase;
+			}
+			if (jeu.valeur(x, y) == 0);
+			else
+				g.drawImage(assetsPlateau[jeu.valeur(x, y) + 11], largeur, hauteur,
+						largeurCase, hauteurCase, this);
+		 */
+
+		// Dessine un sablier si l'IA joue
+		if (jeu.joueurs[jeu.joueurCourant].estIA)
+			g.drawImage(sablier, 0, 0, largeurCase, hauteurCase, this);
+
+		// TODO : Dessine l'animation de déplacement d'un pingouins
+		if (jeu.etatCourant() != Etats.Initialisation)
+			;
+			// Need : sources et destination
+		
 	}
 
 	int largeur() {
@@ -120,8 +189,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		return taille();
 	}
 
-	int taille(){
-		if(getWidth() < getHeight())
+	int taille() {
+		if (getWidth() < getHeight())
 			return getWidth();
 		else
 			return getHeight();
