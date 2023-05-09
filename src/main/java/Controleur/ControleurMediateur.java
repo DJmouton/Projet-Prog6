@@ -4,6 +4,7 @@ import Modele.*;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControleurMediateur implements CollecteurEvenements {
@@ -12,6 +13,16 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
+		nouvellePartie(2,0,0,1);
+	}
+
+	public void nouvellePartie(int j1, int j2, int j3, int j4) {
+		List<Integer> typesJoueurs = new ArrayList<Integer>();
+		typesJoueurs.add(j1);
+		typesJoueurs.add(j2);
+		typesJoueurs.add(j3);
+		typesJoueurs.add(j4);
+		jeu.initJoueurs(typesJoueurs);
 		tour();
 	}
 
@@ -27,7 +38,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
 	 ***************************************************************************************************/
 	public void clicSouris(int l, int c) {
-		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].estIA)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()>1)
 			return;
 
 		switch (jeu.etatCourant()) {
@@ -75,7 +86,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 * Traitement d'un tic du timer, ignoré si ce n'est pas au tour d'une IA de jouer.
 	 **********************************************************************************/
 	public void tictac() {
-		if (!jeu.enCours() || !jeu.joueurs[jeu.joueurCourant].estIA)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()<2)
 			return;
 
 		switch (jeu.etatCourant()) {

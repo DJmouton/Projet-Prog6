@@ -36,25 +36,22 @@ package Modele;
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
 public class Joueur implements Comparable<Joueur>{
 	Jeu jeu;
+	int typeJoueur; // 0=absent, 1=humain, 2=IAfacile, 3=IAnormale, 4=IAdifficile
 	int num;
 	int score;
 	int ilots;
-	public boolean estIA;
+	boolean estIA;
 
-	// Le joueur connait son numéro, cela lui permet d'inspecter le plateau en
-	// sachant
-	// repérer ses pions et évaluer où il en est
 	public Joueur(int n, Jeu p) {
 		num = n;
-		estIA = false;
 		jeu = p;
 	}
 
-	public Joueur(Jeu jeu, int num, int score, boolean estIA) {
+	public Joueur(Jeu jeu, int num, int score, int typeJoueur) {
 		this.jeu = jeu;
 		this.num = num;
 		this.score = score;
-		this.estIA = estIA;
+		this.typeJoueur = typeJoueur;
 	}
 
 	public Joueur(int score, int num) {
@@ -62,7 +59,9 @@ public class Joueur implements Comparable<Joueur>{
 		this.num = num;
 
 	}
-
+	public int getTypeJoueur() {
+		return this.typeJoueur;
+	}
 	public int getScore() {
 		return score;
 	}
@@ -83,7 +82,7 @@ public class Joueur implements Comparable<Joueur>{
 
 	@Override
 	protected Object clone() {
-		return new Joueur(jeu, num, score, estIA);
+		return new Joueur(jeu, num, score, typeJoueur);
 	}
 
 	@Override
