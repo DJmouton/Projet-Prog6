@@ -262,6 +262,8 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 		EoT = eoT;
 	}
 
+	public boolean estIA() { return jeu.joueurs[jeu.joueurCourant].estIA; }
+
 	@Override
 	public void run() {
 		partie();
