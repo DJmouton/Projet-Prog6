@@ -30,6 +30,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 * Traitement d'un clic sur le bouton reset, réinitialise le jeu.
 	 *****************************************************************/
 	public void reset() {
+		jeu.resetJoueur();
 		jeu.reset();
 		tour();
 	}

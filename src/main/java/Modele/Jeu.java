@@ -167,6 +167,7 @@ public class Jeu extends Observable {
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 	}
 
+
 	/********************************************************************
 	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
 	 ********************************************************************/
@@ -200,6 +201,12 @@ public class Jeu extends Observable {
 			else{
 				i++;
 			}
+		}
+	}
+	public void resetJoueur() {
+		for(int i = 0; i < joueurs.length; i++) {
+			joueurs[i].score=0;
+			joueurs[i].ilots=0;
 		}
 	}
 //

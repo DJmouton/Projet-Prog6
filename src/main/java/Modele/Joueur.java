@@ -40,7 +40,7 @@ public class Joueur implements Comparable<Joueur>{
 	int num;
 	int score;
 	int ilots;
-	boolean estIA;
+
 
 	public Joueur(int n, Jeu p) {
 		num = n;
