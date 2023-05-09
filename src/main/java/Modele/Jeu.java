@@ -48,6 +48,7 @@ public class Jeu extends Observable {
 		nombreP=0;
 		e=0;
 		initPlateau();
+		initJoueurs();
 		metAJour();
 	}
 
@@ -166,14 +167,6 @@ public class Jeu extends Observable {
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 	}
 
-	public void changeModeJoueur(int num){
-		if(joueurs[num].estIA){
-			joueurs[num].estIA=false;
-		} else{
-			joueurs[num].estIA=true;
-		}
-	}
-
 	/********************************************************************
 	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
 	 ********************************************************************/
@@ -209,6 +202,12 @@ public class Jeu extends Observable {
 				}
 			}
 		}
+	}
+
+	private void initJoueurs(){
+		joueurs = new Joueur[2];
+		joueurs[0] = new IA(4, this);
+		joueurs[1] = new Joueur(5, this);
 	}
 
 	private ArrayList<int[]> getCotes(int x, int y){

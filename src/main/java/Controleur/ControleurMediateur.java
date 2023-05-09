@@ -6,63 +6,42 @@ import Vue.CollecteurEvenements;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class ControleurMediateur implements CollecteurEvenements, Runnable {
+public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
-	boolean EoT; // end of turn
 	Coup coup;
+	int poissons;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		setEoT(false);
-		/////////////////////////////////////////
-		// a deplacer plus tard dans Jeu
-		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new IA(5, jeu);
-		/////////////////////////////////////////
-
+		tour();
 	}
 
-	/***************************************************************************
-	 * Traitement d'un clic sur le bouton reset, réinitialise et relance le jeu.
-	 ****************************************************************************/
+	/*****************************************************************
+	 * Traitement d'un clic sur le bouton reset, réinitialise le jeu.
+	 *****************************************************************/
 	public void reset() {
 		jeu.reset();
-		setEoT(false);
-		/////////////////////////////////////////
-		// a deplacer plus tard dans Jeu
-		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new Joueur(5, jeu);
-		/////////////////////////////////////////
-		partie();
+		tour();
 	}
-
-	/****************************************************************************************
-	 * Traitement d'un clic sur le bouton IA, bascule le joueur de mode.
-	 * L'IHM doit faire appel à ces fonctions peut importe le bouton IA cliqué.
-	 * Il donneront en paramètre le numéro du joueur car ils savent quel bouton a été cliqué.
-	 *****************************************************************************************/
-	public void basculeIA(int num) {
-		jeu.changeModeJoueur(num);
-	}
-
 
 	/**************************************************************************************************
 	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
 	 ***************************************************************************************************/
 	public void clicSouris(int l, int c) {
-		if (jeu.joueurs[jeu.joueurCourant].estIA)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].estIA)
 			return;
-
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
 					new Placement(jeu, l, c).execute();
-					setEoT(true); // le tour d'un humain peut s'arreter ici
-					System.out.println("Pingouin placé en (" + l + "," + c + ")");
-
+					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
+					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+					jeu.metAJour();
+					jeu.prochainJoueur();
+					tour();
+				} else {
+					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
 				}
 				break;
 
@@ -71,19 +50,22 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 					coup = new Coup(l, c, this.jeu);
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
-				}else{
-					System.out.println("Coup impossible");
+				} else {
+					System.out.println("Sélectionne un de tes pingouins");
 				}
 				break;
 
 			case Deplacement:
 				if (jeu.contains(new int[]{l, c}, jeu.hex_accessible(coup.sourcel, coup.sourcec))){
+					poissons = jeu.plateau[l][c];
 					coup.destl = l;
 					coup.destc = c;
 					coup.execute();
 					jeu.setEtat(Etats.Selection);
-					System.out.println("Pingouin déplacé en (" + l + "," + c + ")");
-					setEoT(true); // le tour d'un humain peut s'arreter ici
+					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");					jeu.metAJour();
+					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+					jeu.prochainJoueur();
+					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
@@ -92,69 +74,82 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 				}
 				break;
 		}
-
-		jeu.metAJour();
 	}
 
-	/*****************************************
-	 * Passe au prochain joueur qui peut jouer
-	 ******************************************/
-	public void joueurSuivant() {
-		jeu.prochainJoueur();
+	/**********************************************************************************
+	 * Traitement d'un tic du timer, ignoré si ce n'est pas au tour d'une IA de jouer.
+	 **********************************************************************************/
+	public void tictac() {
+		if (!jeu.enCours() || !jeu.joueurs[jeu.joueurCourant].estIA)
+			return;
+
+		switch (jeu.etatCourant()) {
+			case Initialisation:
+				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
+				placement.execute();
+				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
+				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+				jeu.metAJour();
+				jeu.prochainJoueur();
+				tour();
+				break;
+
+			case Selection:
+				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
+				poissons = jeu.plateau[coup.destl][coup.destc];
+				coup.execute();
+				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
+				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+				jeu.metAJour();
+				jeu.prochainJoueur();
+				tour();
+				break;
+
+			case Deplacement:
+				System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
+				break;
+		}
 	}
 
-	/**************************
-	 * Déroulement d'un tour
+	/***************************
+	 * Gestion du début du tour
 	 ***************************/
 	public void tour() {
-		System.out.println("--------------------------------------------------");
-		System.out.println("Au tour du joueur " + jeu.joueurCourant);
-		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-
-		if (!(jeu.joueurs[jeu.joueurCourant].estIA)) {
-			while (!isEoT());// on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
-			setEoT(false);
-
-		} else {// ajouter temporisation ici ?
-			try { // TEMPORAIRE
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-			switch (jeu.etatCourant()) {
-				case Initialisation:
-					Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-					placement.execute();
-					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
-					break;
-
-				case Selection:
-					coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
-					coup.execute();
-					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
-					break;
-
-				case Deplacement:
-					System.err.println("L'IA ne devrait pas commencer son tour à l'état déplacement");
-					break;
-			}
+		if (!jeu.enCours()) {
+			finPartie();
+			return;
 		}
-		joueurSuivant();
-		jeu.metAJour();
+		System.out.println("--------------------------------------------------");
+		System.out.print("Au tour du joueur " + jeu.joueurCourant + " !");
+
+		if (jeu.joueurs[joueurCourant()].estIA)
+			System.out.println("(IA)");
+		else
+			System.out.println();
+
+		switch (jeu.etatCourant()) {
+			case Initialisation:
+				System.out.println("Place le prochain pingouin");
+				break;
+
+			case Selection:
+				System.out.println("Sélectionne un pingouin");
+				break;
+		}
 	}
 
-	/**************************
-	 * Déroulement d'une partie
+	/***************************
+	 * Gestion de fin de partie
 	 ***************************/
-	public void partie() {
-		while (jeu.enCours())
-			tour();
-
-		// affichage des scores finals
+	public void finPartie() {
 		System.out.println("--------------------------------------------------");
-		System.out.println("Partie terminée");
+		System.out.println("Partie terminée, voici le classement final :");
 		afficheRanking(jeu.Ranking());
 	}
+
+	/********************************
+	 * Affichage du classement final
+	 ********************************/
 	public void afficheRanking(List<Joueur> joueur){
 		for (int i=0;i<joueur.size();i++){
 			if(i+1<joueur.size() && joueur.get(i).getScore()==joueur.get(i+1).getScore()){
@@ -167,7 +162,7 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joeur numero " +(joueur.get(i).getNum()-4) + " avec le score " + joueur.get(i).getScore()+ " et nombre d'ilots "+ jeu.joueurs[joueur.get(i).getNum()-4].getIlots());
+			System.out.println("Joueur " + (joueur.get(i).getNum()-4) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
 		}
 	}
 
@@ -184,25 +179,6 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 
 	public void refaire(){
 
-	}
-
-	public void tictac() {
-		if (jeu.enCours()) {/*
-			if (decompte == 0) {
-				int type = typeJoueur[joueurCourant];
-				// Lorsque le temps est écoulé on le transmet au joueur courant.
-				// Si un coup a été joué (IA) on change de joueur.
-				if (joueurs[joueurCourant][type].tempsEcoule()) {
-					changeJoueur();
-				} else {
-				// Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on l'attend.
-					System.out.println("On vous attend, joueur " + joueurs[joueurCourant][type].num());
-					decompte = lenteurAttente;
-				}
-			} else {
-				decompte--;
-			}*/
-		}
 	}
 
 	@Override
@@ -250,18 +226,5 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 
 	public int joueurCourant() {
 		return jeu.joueurCourant;
-	}
-
-	public synchronized boolean isEoT() {
-		return EoT;
-	}
-
-	public synchronized void setEoT(boolean eoT) {
-		EoT = eoT;
-	}
-
-	@Override
-	public void run() {
-		partie();
 	}
 }
