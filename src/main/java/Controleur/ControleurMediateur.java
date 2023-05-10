@@ -1,6 +1,7 @@
 package Controleur;
 
 import Modele.*;
+import Patterns.Observateur;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
@@ -11,7 +12,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Coup coup;
 	int poissons;
-	public ArrayList<int[]> hexAccess;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
@@ -61,7 +61,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Selection:
 				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
-					hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
@@ -84,7 +83,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 					tour();
 				} else if(jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
-					hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
 				}else {
@@ -293,4 +291,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return jeu.etatCourant();
 	}
 
+	public void ajouteObservateur(Observateur o) {
+		jeu.ajouteObservateur(o);
+	}
+
+	public int valeur(int l, int c) {
+		return jeu.valeur(l, c);
+	}
+
+	public boolean partieEnCours() {
+		return jeu.enCours();
+	}
 }

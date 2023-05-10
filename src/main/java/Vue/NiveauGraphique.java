@@ -1,8 +1,7 @@
 package Vue;
 
 import Patterns.Observateur;
-import Modele.Jeu;
-import Modele.*;
+import Modele.Etats;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
-	Jeu jeu;
 
 	CollecteurEvenements control;
 
@@ -28,22 +26,21 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
 
-	public NiveauGraphique(Jeu j, CollecteurEvenements c) {
-		jeu = j;
-		jeu.ajouteObservateur(this);
+	public NiveauGraphique(CollecteurEvenements c) {
 		control = c;
+		control.ajouteObservateur(this);
 	}
 
 	private void grille(Graphics g, BufferedImage[] assetsPlateau) {
 		for (int i = 0; i < (lignes); i++) {
 			hauteur = Math.round((float) i * height);
 			for (int j = 0; j < (colonnes); j++) {
-				if (jeu.valeur(i, j) == 0) continue;
+				if (control.valeur(i, j) == 0) continue;
 				if (i % 2 == 1)
 					largeur = j * largeurCase + largeurCase / 2;
 				else
 					largeur = j * largeurCase;
-				g.drawImage(assetsPlateau[jeu.valeur(i, j)], largeur, hauteur,
+				g.drawImage(assetsPlateau[control.valeur(i, j)], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 			}
 		}
@@ -60,9 +57,9 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			} else {
 				largeur = y * largeurCase;
 			}
-			if (jeu.valeur(x, y) == 0);
+			if (control.valeur(x, y) == 0);
 			else
-				g.drawImage(assetsPlateau[jeu.valeur(x, y) + 7], largeur, hauteur,
+				g.drawImage(assetsPlateau[control.valeur(x, y) + 7], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 		}
 	}
@@ -106,7 +103,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		}
 
 		// Fin de la partie
-		if (!jeu.enCours()) {
+		if (!control.partieEnCours()) {
 			g.drawString("La partie est terminée", largeur() / 3, hauteur() / 2);
 		}
 
@@ -177,7 +174,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawImage(sablier, 0, 0, largeurCase, hauteurCase, this); */
 
 		// TODO : Dessine l'animation de déplacement d'un pingouins
-		if (jeu.etatCourant() != Etats.Initialisation)
+		if (control.etatCourant() != Etats.Initialisation)
 			;
 			// Need : sources et destination
 

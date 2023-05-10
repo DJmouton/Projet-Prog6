@@ -27,6 +27,7 @@
 package Vue;
 
 import Modele.Etats;
+import Patterns.Observateur;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,6 @@ public interface CollecteurEvenements {
 	ArrayList<int[]> hexAccessible(int l, int c);
 
 	ArrayList<int[]> getPinguins(int numeroJ);
-
-
 
 	int coupSrcL();
 
@@ -74,4 +73,11 @@ public interface CollecteurEvenements {
 	int joueurCourant();
 
 	Etats etatCourant();
+
+	void ajouteObservateur(Observateur o);
+
+	int valeur(int l, int c);
+
+	boolean partieEnCours();
+
 }

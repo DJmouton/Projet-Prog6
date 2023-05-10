@@ -26,9 +26,6 @@ package Vue;
  *          Domaine universitaire
  *          38401 Saint Martin d'Hères
  */
-
-import Modele.Jeu;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -36,18 +33,16 @@ import java.io.File;
 import java.io.IOException;
 
 public class InterfaceGraphique implements Runnable {
-	Jeu j;
 	CollecteurEvenements control;
 	int size;
 
-	InterfaceGraphique(Jeu jeu, CollecteurEvenements c) {
-		j = jeu;
+	InterfaceGraphique(CollecteurEvenements c) {
 		control = c;
 		size = 3;
 	}
 
-	public static void demarrer(Jeu j, CollecteurEvenements control) {
-		SwingUtilities.invokeLater(new InterfaceGraphique(j, control));
+	public static void demarrer(CollecteurEvenements control) {
+		SwingUtilities.invokeLater(new InterfaceGraphique(control));
 	}
 
 	/*
@@ -60,7 +55,7 @@ public class InterfaceGraphique implements Runnable {
 		JFrame frame = new JFrame("Hey, that's my fish !");
 
 		// Jeu principal
-		NiveauGraphique niv = new NiveauGraphique(j, control);
+		NiveauGraphique niv = new NiveauGraphique(control);
 		niv.addMouseListener(new AdaptateurSouris(niv, control));
 		frame.add(niv);
 
