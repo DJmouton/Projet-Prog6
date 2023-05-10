@@ -26,10 +26,23 @@
  */
 package Vue;
 
+import java.util.ArrayList;
+
 /*
  * Tous les évènements à gérer lors de l'éxecution du programme
  */
 public interface CollecteurEvenements {
+
+	ArrayList<int[]> hexAccessible(int l, int c);
+
+	int coupSrcL();
+
+	int coupSrcC();
+
+	int coupDestL();
+
+	int coupDestC();
+
 	void clicSouris(int l, int c);
 
 	void tictac();

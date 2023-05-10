@@ -60,7 +60,7 @@ public class InterfaceGraphique implements Runnable {
 		JFrame frame = new JFrame("Hey, that's my fish !");
 
 		// Jeu principal
-		NiveauGraphique niv = new NiveauGraphique(j);
+		NiveauGraphique niv = new NiveauGraphique(j, control);
 		niv.addMouseListener(new AdaptateurSouris(niv, control));
 		frame.add(niv);
 

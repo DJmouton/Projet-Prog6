@@ -1,10 +1,13 @@
 package Vue;
 
-import Modele.Etats;
-import Modele.Jeu;
+import Controleur.ControleurMediateur;
 import Patterns.Observateur;
+import Modele.Jeu;
+import Modele.Coup;
+import Modele.*;
 
 import javax.imageio.ImageIO;
+import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,6 +17,10 @@ import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
+
+	Coup coup;
+
+	CollecteurEvenements control;
 
 	// Variables de positionnement pour le dessin
 	int x, y, hauteur, largeur, lignes, colonnes, largeurCase, hauteurCase;
@@ -26,9 +33,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
 
-	public NiveauGraphique(Jeu j) {
+	public NiveauGraphique(Jeu j, CollecteurEvenements c) {
 		jeu = j;
 		jeu.ajouteObservateur(this);
+		control = c;
 	}
 
 	private void grille(Graphics g, BufferedImage[] assetsPlateau) {
@@ -71,7 +79,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
-		BufferedImage[] assetsPlateau = new BufferedImage[19];
+		BufferedImage[] assetsPlateau = new BufferedImage[23];
 
 		try {
 			assetsPlateau[0] = ImageIO.read(new File("resources/assets/sablier.png"));
@@ -93,7 +101,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/vertSel.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/rougeSel.png"));
 			assetsPlateau[18] = ImageIO.read(new File("resources/assets/jauneSel.png"));
-
+			assetsPlateau[19] = ImageIO.read(new File("resources/assets/bleuH.png"));
+			assetsPlateau[20] = ImageIO.read(new File("resources/assets/vertH.png"));
+			assetsPlateau[21] = ImageIO.read(new File("resources/assets/rougeH.png"));
+			assetsPlateau[22] = ImageIO.read(new File("resources/assets/jauneH.png"));
 
 		} catch (IOException exc) {
 			System.out.println("Erreur dans le chargement des images");
@@ -143,7 +154,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Case Selectionnable après sélection d'un pingouins
 		if (jeu.etatCourant() == Etats.Deplacement)
 			try {
-				dessinplat = new ArrayList<>(jeu.hexAccess);
+				dessinplat = (control.hexAccessible(control.coupSrcL(), control.coupSrcC()));
 				feedforward(g, assetsPlateau, dessinplat);
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
@@ -174,7 +185,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (jeu.etatCourant() != Etats.Initialisation)
 			;
 			// Need : sources et destination
-		
+
 	}
 
 	int largeur() {

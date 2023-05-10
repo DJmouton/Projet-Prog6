@@ -19,10 +19,6 @@ public class Jeu extends Observable {
 	public int joueurCourant;
 	int nombreP=0;
 	int e=0;
-
-	// Liste des Cases accessibles par un pingouins
-	public ArrayList<int[]> hexAccess;
-
 	public Jeu() {
 		reset();
 	}
@@ -262,11 +258,13 @@ public class Jeu extends Observable {
 		}
 	}
 
-	/*private void initJoueurs(){
+	/*
+	private void initJoueurs(){
 		joueurs = new Joueur[2];
 		joueurs[0] = new IA(4, this);
 		joueurs[1] = new Joueur(5, this);
-	}*/
+	}
+	*/
 
 	private ArrayList<int[]> getCotes(int x, int y){
 		ArrayList<int[]>res=new ArrayList<>();

@@ -11,10 +11,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Coup coup;
 	int poissons;
+	public ArrayList<int[]> hexAccess;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1, 2, 0, 0);
+		nouvellePartie(1, 1, 0, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -60,7 +61,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Selection:
 				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
-					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
+					hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
@@ -81,9 +82,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.prochainJoueur();
 					jeu.metAJour();
 					tour();
-				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
+				} else if(jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
-					jeu.hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
+					hexAccess = new ArrayList<>(jeu.hex_accessible(l, c));
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
 				}else {
@@ -258,4 +259,21 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	// public boolean estIA() { return jeu.joueurs[jeu.joueurCourant].estIA; }
+
+	public ArrayList<int[]> hexAccessible(int l, int c) {
+		return jeu.hex_accessible(l, c);
+	}
+
+	public int coupSrcL() {
+		return coup.sourcel;
+	}
+	public int coupSrcC() {
+		return coup.sourcec;
+	}
+	public int coupDestL() {
+		return coup.destl;
+	}
+	public int coupDestC() {
+		return coup.destc;
+	}
 }
