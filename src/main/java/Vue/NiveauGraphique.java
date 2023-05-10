@@ -1,13 +1,10 @@
 package Vue;
 
-import Controleur.ControleurMediateur;
 import Patterns.Observateur;
 import Modele.Jeu;
-import Modele.Coup;
 import Modele.*;
 
 import javax.imageio.ImageIO;
-import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,8 +14,6 @@ import java.util.ArrayList;
 
 public class NiveauGraphique extends JComponent implements Observateur {
 	Jeu jeu;
-
-	Coup coup;
 
 	CollecteurEvenements control;
 
@@ -124,8 +119,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		((Graphics2D) g).scale(1, 1);
 
 		// Variable du plateau
-		lignes = jeu.hauteur();
-		colonnes = jeu.largeur();
+		lignes = control.hauteur();
+		colonnes = control.largeur();
 		largeurCase = largeur() / colonnes;
 		hauteurCase = hauteur() / lignes;
 		height = (3f / 4f) * (float) hauteurCase;
@@ -134,25 +129,25 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		grille(drawable, assetsPlateau);
 
 		// Case selectionnable durant la partie de placement des pingouins
-		if (jeu.etatCourant() == Etats.Initialisation)
+		if (control.etatCourant() == Etats.Initialisation)
 			try {
-				dessinplat = new ArrayList<>(jeu.getPingouins(1));
+				dessinplat = new ArrayList<>(control.getPinguins(1));
 				feedforward(g, assetsPlateau, dessinplat);
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
 			}
 
 		// Pingouins selectionnable durant son tour
-		if (jeu.etatCourant() != Etats.Initialisation)
+		if (control.etatCourant() != Etats.Initialisation)
 			try {
-				dessinplat = new ArrayList<>(jeu.getPingouins(jeu.joueurCourant + 4));
+				dessinplat = new ArrayList<>(control.getPinguins(control.joueurCourant() + 4));
 				feedforward(g, assetsPlateau, dessinplat);
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
 			}
 
 		// Case Selectionnable après sélection d'un pingouins
-		if (jeu.etatCourant() == Etats.Deplacement)
+		if (control.etatCourant() == Etats.Deplacement)
 			try {
 				dessinplat = (control.hexAccessible(control.coupSrcL(), control.coupSrcC()));
 				feedforward(g, assetsPlateau, dessinplat);

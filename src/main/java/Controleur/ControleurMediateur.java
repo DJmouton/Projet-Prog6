@@ -276,4 +276,21 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public int coupDestC() {
 		return coup.destc;
 	}
+
+	public int largeur() {
+		return jeu.largeur();
+	}
+
+	public int hauteur() {
+		return jeu.hauteur();
+	}
+
+	public ArrayList<int[]> getPinguins(int numeroJ) {
+		return jeu.getPingouins(numeroJ);
+	}
+
+	public Etats etatCourant() {
+		return jeu.etatCourant();
+	}
+
 }

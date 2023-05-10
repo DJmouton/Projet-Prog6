@@ -26,6 +26,8 @@
  */
 package Vue;
 
+import Modele.Etats;
+
 import java.util.ArrayList;
 
 /*
@@ -35,6 +37,10 @@ public interface CollecteurEvenements {
 
 	ArrayList<int[]> hexAccessible(int l, int c);
 
+	ArrayList<int[]> getPinguins(int numeroJ);
+
+
+
 	int coupSrcL();
 
 	int coupSrcC();
@@ -42,6 +48,10 @@ public interface CollecteurEvenements {
 	int coupDestL();
 
 	int coupDestC();
+
+	int hauteur();
+
+	int largeur();
 
 	void clicSouris(int l, int c);
 
@@ -62,4 +72,6 @@ public interface CollecteurEvenements {
 	void reset();
 
 	int joueurCourant();
+
+	Etats etatCourant();
 }
