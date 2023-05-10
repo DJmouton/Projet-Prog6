@@ -2,10 +2,10 @@ package Vue;
 
 import javax.swing.*;
 
-public class ComposantHistorique extends Box {
+public class ComposantAnnulerRefaire extends Box {
 
-	ComposantHistorique(CollecteurEvenements control) {
-		super(BoxLayout.X_AXIS);
+	ComposantAnnulerRefaire(int axis, CollecteurEvenements control) {
+		super(axis);
 		JButton annuler = new JButton("Annuler");
 		annuler.addActionListener(new AdaptateurAnnuler(control));
 		add(annuler);

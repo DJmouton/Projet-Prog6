@@ -26,27 +26,34 @@
  */
 package Vue;
 
-/*
- * Tous les évènements à gérer lors de l'éxecution du programme
- */
-public interface CollecteurEvenements {
-	void clicSouris(int l, int c);
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-	void tictac();
+public class AdaptateurTaille implements ActionListener {
+	CollecteurEvenements control;
+	JTextField tailleX;
+	JTextField tailleY;
 
-	void changeJoueur(int j, int t);
+	AdaptateurTaille(CollecteurEvenements c, JTextField x, JTextField y) {
+		control = c;
+		tailleX = x;
+		tailleY = y;
+	}
 
-	void changeTaille(int x, int y);
-
-	void sauver(String fichier);
-
-	void charger(String fichier);
-
-	void annuler();
-
-	void refaire();
-
-	void reset();
-
-	int joueurCourant();
+	/*
+	 * Une taille a été entrée. On la convertie en entier et on envoie un évènement.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String x = tailleX.getText();
+		String y = tailleY.getText();
+		try {
+			int valX = Integer.parseInt(x);
+			int valY = Integer.parseInt(y);
+			control.changeTaille(valX, valY);
+		} catch (Exception ex) {
+			// On ne fait rien si la valeur est invalide
+		}
+	}
 }

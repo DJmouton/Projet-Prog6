@@ -1,32 +1,5 @@
 package Controleur;
 
-/*
- * Morpion pédagogique
-
- * Copyright (C) 2016 Guillaume Huard
-
- * Ce programme est libre, vous pouvez le redistribuer et/ou le
- * modifier selon les termes de la Licence Publique Générale GNU publiée par la
- * Free Software Foundation (version 2 ou bien toute autre version ultérieure
- * choisie par vous).
-
- * Ce programme est distribué car potentiellement utile, mais SANS
- * AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
- * commercialisation ou d'adaptation dans un but spécifique. Reportez-vous à la
- * Licence Publique Générale GNU pour plus de détails.
-
- * Vous devez avoir reçu une copie de la Licence Publique Générale
- * GNU en même temps que ce programme ; si ce n'est pas le cas, écrivez à la Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,
- * États-Unis.
-
- * Contact: Guillaume.Huard@imag.fr
- *          Laboratoire LIG
- *          700 avenue centrale
- *          Domaine universitaire
- *          38401 Saint Martin d'Hères
- */
-
 import Modele.*;
 import Vue.CollecteurEvenements;
 
@@ -36,7 +9,6 @@ import java.util.List;
 
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
-  
 	Coup coup;
 	int poissons;
 
@@ -44,7 +16,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		jeu = j;
 		nouvellePartie(1,1,0,0);
 	}
-  
+
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
@@ -70,7 +42,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void clicSouris(int l, int c) {
 		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()>1)
 			return;
-
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
@@ -267,18 +238,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		int jc = 0;
-		try {
-			jc = jeu.joueurCourant;
-		} catch (Exception e) {}
-		return jc;
-	}
-
-	public int scoreJoueur(int joueur){
-		int score = 0;
-		try {
-			score = jeu.joueurs[joueur].getScore();
-		} catch (Exception e) {}
-		return score;
+		return jeu.joueurCourant;
 	}
 }

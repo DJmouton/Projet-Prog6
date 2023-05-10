@@ -26,27 +26,29 @@
  */
 package Vue;
 
-/*
- * Tous les évènements à gérer lors de l'éxecution du programme
- */
-public interface CollecteurEvenements {
-	void clicSouris(int l, int c);
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-	void tictac();
+public class AdaptateurJoueur implements ActionListener {
+	CollecteurEvenements control;
+	JToggleButton toggle;
+	int num;
 
-	void changeJoueur(int j, int t);
+	AdaptateurJoueur(CollecteurEvenements c, JToggleButton b, int n) {
+		control = c;
+		toggle = b;
+		num = n;
+	}
 
-	void changeTaille(int x, int y);
-
-	void sauver(String fichier);
-
-	void charger(String fichier);
-
-	void annuler();
-
-	void refaire();
-
-	void reset();
-
-	int joueurCourant();
+	/*
+	 * Le bouton IA a été cliqué. On bascule le joueur de type.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (toggle.isSelected())
+			control.changeJoueur(num, 1);
+		else
+			control.changeJoueur(num, 0);
+	}
 }
