@@ -191,7 +191,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void refaire(){
-
+		jeu.refaire();
+		jeu.metAJour();
 	}
 
 
