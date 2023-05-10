@@ -5,8 +5,7 @@ import javax.swing.*;
 public class ComposantPanneauMenu extends Box {
 
 
-	ComposantPanneauMenu() {
+	ComposantPanneauMenu(CollecteurEvenements control) {
 		super(BoxLayout.Y_AXIS);
-		add(new JLabel("Non implémenté"));
 	}
 }
