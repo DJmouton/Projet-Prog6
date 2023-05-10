@@ -46,10 +46,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
-					new Placement(jeu, l, c).execute();
+					jeu.faire(new Placement(jeu, l, c));
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
 					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-					jeu.prochainJoueur();
 					jeu.metAJour();
 					tour();
 				} else {
@@ -72,11 +71,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 					poissons = jeu.plateau[l][c];
 					coup.destl = l;
 					coup.destc = c;
-					coup.execute();
+					jeu.faire(coup);
 					jeu.setEtat(Etats.Selection);
 					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");
 					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-					jeu.prochainJoueur();
 					jeu.metAJour();
 					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
@@ -99,10 +97,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-				placement.execute();
+				jeu.faire(placement);
 				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
 				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-				jeu.prochainJoueur();
 				jeu.metAJour();
 				tour();
 				break;
@@ -110,10 +107,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Selection:
 				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
 				poissons = jeu.plateau[coup.destl][coup.destc];
-				coup.execute();
+				jeu.faire(coup);
 				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
 				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-				jeu.prochainJoueur();
 				jeu.metAJour();
 				tour();
 				break;

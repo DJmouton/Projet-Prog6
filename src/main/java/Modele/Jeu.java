@@ -50,6 +50,7 @@ public class Jeu extends Observable {
 		joueurCourant=0;
 		nombreP=0;
 		e=0;
+		historique = new Historique();
 		initPlateau();
 		//initJoueurs();
 		metAJour();

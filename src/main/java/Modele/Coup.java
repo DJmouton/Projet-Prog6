@@ -34,6 +34,7 @@ public class Coup implements Commande
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
 		jeu.plateau[sourcel][sourcec] = 0;
 		jeu.EnlevePingou(destl, destc);
+		jeu.prochainJoueur();
 	}
 
 	public void desexecute() {
