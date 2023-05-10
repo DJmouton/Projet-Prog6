@@ -71,30 +71,28 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		/* Load Assets */
-		BufferedImage[] assetsPlateau = new BufferedImage[20];
-		BufferedImage sablier = null;
+		BufferedImage[] assetsPlateau = new BufferedImage[19];
 
 		try {
-			sablier = ImageIO.read(new File("resources/assets/sablier.png"));
-			assetsPlateau[0] = ImageIO.read(new File("resources/assets/water.png"));
+			assetsPlateau[0] = ImageIO.read(new File("resources/assets/sablier.png"));
 			assetsPlateau[1] = ImageIO.read(new File("resources/assets/poisson1.png"));
 			assetsPlateau[2] = ImageIO.read(new File("resources/assets/poisson2.png"));
 			assetsPlateau[3] = ImageIO.read(new File("resources/assets/poisson3.png"));
-			assetsPlateau[4] = ImageIO.read(new File("resources/assets/penguinBleu.png"));
-			assetsPlateau[5] = ImageIO.read(new File("resources/assets/penguinVert.png"));
-			assetsPlateau[6] = ImageIO.read(new File("resources/assets/penguinRouge.png"));
-			assetsPlateau[7] = ImageIO.read(new File("resources/assets/penguinJaune.png"));
+			assetsPlateau[4] = ImageIO.read(new File("resources/assets/bleu.png"));
+			assetsPlateau[5] = ImageIO.read(new File("resources/assets/vert.png"));
+			assetsPlateau[6] = ImageIO.read(new File("resources/assets/rouge.png"));
+			assetsPlateau[7] = ImageIO.read(new File("resources/assets/jaune.png"));
 			assetsPlateau[8] = ImageIO.read(new File("resources/assets/poisson1Sel.png"));
 			assetsPlateau[9] = ImageIO.read(new File("resources/assets/poisson2Sel.png"));
 			assetsPlateau[10] = ImageIO.read(new File("resources/assets/poisson3Sel.png"));
-			assetsPlateau[11] = ImageIO.read(new File("resources/assets/penguinBleuC.png"));
-			assetsPlateau[12] = ImageIO.read(new File("resources/assets/penguinVertC.png"));
-			assetsPlateau[13] = ImageIO.read(new File("resources/assets/penguinRougeC.png"));
-			assetsPlateau[14] = ImageIO.read(new File("resources/assets/penguinJauneC.png"));
-			assetsPlateau[15] = ImageIO.read(new File("resources/assets/penguinBleuSel.png"));
-			assetsPlateau[16] = ImageIO.read(new File("resources/assets/penguinVertSel.png"));
-			assetsPlateau[17] = ImageIO.read(new File("resources/assets/penguinRougeSel.png"));
-			assetsPlateau[18] = ImageIO.read(new File("resources/assets/penguinJauneSel.png"));
+			assetsPlateau[11] = ImageIO.read(new File("resources/assets/bleuC.png"));
+			assetsPlateau[12] = ImageIO.read(new File("resources/assets/vertC.png"));
+			assetsPlateau[13] = ImageIO.read(new File("resources/assets/rougeC.png"));
+			assetsPlateau[14] = ImageIO.read(new File("resources/assets/jauneC.png"));
+			assetsPlateau[15] = ImageIO.read(new File("resources/assets/bleuSel.png"));
+			assetsPlateau[16] = ImageIO.read(new File("resources/assets/vertSel.png"));
+			assetsPlateau[17] = ImageIO.read(new File("resources/assets/rougeSel.png"));
+			assetsPlateau[18] = ImageIO.read(new File("resources/assets/jauneSel.png"));
 
 
 		} catch (IOException exc) {
@@ -112,7 +110,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		g.setColor(Color.BLACK);
 
 		// DIMINUE LA TAILLE DES IMAGES IMPORTANT A PRENDRE EN COMPTE POUR LE CALCUL DES POSITIONS
-		((Graphics2D) g).scale(0.9, 1.3);
+		((Graphics2D) g).scale(1, 1);
 
 		// Variable du plateau
 		lignes = jeu.hauteur();
