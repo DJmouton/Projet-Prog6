@@ -1,6 +1,7 @@
 package Modele;
 import java.util.*;
 
+import Modele.Historique;
 import Patterns.Observable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ public class Jeu extends Observable {
 	public int joueurCourant;
 	int nombreP=0;
 	int e=0;
+	Historique historique;
 
 	public Jeu() {
 		reset();
@@ -427,7 +429,12 @@ public class Jeu extends Observable {
 	 * Annuler un coup
 	 */
 	public void annuler(){
-
+		reset();
+		resetJoueur();
+		while(historique.passe.size()!=1) {
+			historique.annuler();
+			prochainJoueur();
+		}
 	}
 
 	public Etats getEtat() {
