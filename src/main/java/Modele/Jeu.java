@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import Patterns.Commande;
 
 public class Jeu extends Observable {
 	int[][] plateau;
@@ -44,6 +45,7 @@ public class Jeu extends Observable {
 		nombreP=0;
 		e=0;
 		initPlateau();
+		//initJoueurs();
 		metAJour();
 	}
 
@@ -180,9 +182,33 @@ public class Jeu extends Observable {
 		return result;
 	}
 
+	/*********************************************************************
+	 * Renvoie les déplacements possibles des pingouins portant le numéro
+	 *********************************************************************/
+	public ArrayList<Commande> getCoups(Jeu jeu, int num){
+        ArrayList<Commande> coups = new ArrayList<>();
+        if(jeu.getEtat().equals(Etats.Initialisation)){
+            for (int l =0; l < jeu.plateau.length;l++){
+                for (int c =0; c < jeu.plateau[l].length;c++){
+                    if(jeu.plateau[l][c]==1){
+                        coups.add(new Placement(jeu,l,c));
+                    }
+                }
+            }
+        }else {
+            ArrayList<int[]> pingouins = jeu.getPingouins(num);
+            for (int[] pingouin : pingouins) {
+                for (int[] emplacement : jeu.hex_accessible(pingouin[0], pingouin[1])) {
+                    coups.add(new Coup(jeu, pingouin[0], pingouin[1], emplacement[0], emplacement[1]));
+                }
+            }
+        }
+        return coups;
+    }
+
 	/********************************************
-	* Renvoie si la liste contient la coordonnée
-	*********************************************/
+	 * Renvoie si la liste contient la coordonnée
+	 *********************************************/
 	public boolean contains(int[] valeur, ArrayList<int[]> list){
 		boolean res = false;
 		for (int i = 0; i < list.size(); i++) {
@@ -201,7 +227,55 @@ public class Jeu extends Observable {
 
 		return res;
 	}
+  
+	public void prochainJoueur() {
+		joueurCourant=(joueurCourant+1)%this.joueurs.length;
+		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty() && enCours())
+			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
+	}
 
+
+	/********************************************************************
+	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
+	 ********************************************************************/
+	public List<Joueur> Ranking(){
+		List<Joueur> joueur = new ArrayList<Joueur>();
+		for (int i = 0; i < joueurs.length; i++) {
+			joueur.add(new Joueur(joueurs[i].score,joueurs[i].num));
+		}
+		Collections.sort(joueur);
+		Collections.reverse(joueur);
+		return joueur;
+	}
+
+	public void initJoueurs(List<Integer> typesJoueurs) {
+		int typeJoueur;
+		for (int i = 0; i < typesJoueurs.size(); i++) {
+			typeJoueur = typesJoueurs.get(i);
+			if (typeJoueur == 0) {
+				typesJoueurs.remove(i);
+				i--;
+			}
+		}
+		joueurs = new Joueur[typesJoueurs.size()];
+		for(int i = 0; i < typesJoueurs.size(); i++) {
+			typeJoueur = typesJoueurs.get(i);
+			if (typeJoueur == 1) {
+				joueurs[i]=new Joueur(this,i+4,0,typeJoueur);
+			} else if(typeJoueur>=2) {
+				joueurs[i]=new IA(i+4,this,typeJoueur);
+			}
+			else{
+				i++;
+			}
+		}
+	}
+	public void resetJoueur() {
+		for(int i = 0; i < joueurs.length; i++) {
+			joueurs[i].score=0;
+			joueurs[i].ilots=0;
+		}
+	}
 //
 //-----------------------------------------------------------------------------------------
 //
@@ -226,38 +300,12 @@ public class Jeu extends Observable {
 		}
 	}
 
-	private void prochainJoueur() {
-		if (!enCours()) {
-			System.out.println("------------------------------------------------------------------");
-			System.out.println("Partie terminée !");
-			for (int i = 0; i < joueurs.length; i++)
-				System.out.println("Joueur " + i + " : " + joueurs[i].score + " poissons");
-			return;
-		}
-
-		joueurCourant=(joueurCourant+1)%this.joueurs.length;
-		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty())
-			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
-
-		System.out.println("------------------------------------------------------------------");
-		System.out.println("Au tour du joueur " + joueurCourant + " !");
-		System.out.println("Score : " + joueurs[joueurCourant].score);
-		if (etat == Etats.Initialisation)
-			System.out.println("Place le prochain pingouin sur une case 1 poisson");
-		else if (etat == Etats.Selection)
-			System.out.println("Sélectionne un pingouin");
-		else
-			System.err.println("ERREUR : Le joueur commence son tour dans un mauvais état");
-
-		if (joueurs[joueurCourant].estIA){
-			if (etat == Etats.Initialisation){
-				joueurs[joueurCourant].placement();
-			}else{
-				joueurs[joueurCourant].jeu();
-			}
-		}
-	}
-
+	/*private void initJoueurs(){
+		joueurs = new Joueur[2];
+		joueurs[0] = new IA(4, this);
+		joueurs[1] = new Joueur(5, this);
+	}*/
+  
 	private ArrayList<int[]> getCotes(int x, int y){
 		ArrayList<int[]>res=new ArrayList<>();
 		transformtableau(res,x,y-1);
