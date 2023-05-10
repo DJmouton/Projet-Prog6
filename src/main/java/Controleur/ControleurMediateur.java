@@ -51,7 +51,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 					jeu.metAJour();
 					tour();
-				} else {
+				}
+				else if(jeu.getNombreP() == 8-jeu.getE()){
+					jeu.setEtat(Etats.Selection);
+				}
+				else {
 					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
 				}
 				break;
@@ -176,6 +180,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void annuler(){
+		jeu.setEtat(Etats.Initialisation);
+		jeu.annuler();
+		if (jeu.getNombreP()==8){
+			jeu.setEtat(Etats.Selection);
+		}
+		jeu.metAJour();
+
 
 	}
 

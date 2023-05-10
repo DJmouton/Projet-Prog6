@@ -31,7 +31,7 @@ public class Placement implements Commande
 	}
 
 	public void desexecute() {
-		jeu.annuler();
+
 	}
 
 	@Override
