@@ -436,6 +436,12 @@ public class Jeu extends Observable {
 			prochainJoueur();
 		}
 	}
+	public void refaire(){
+		historique.refaire();
+	}
+	public void faire(Commande cmd){
+		historique.faire(cmd);
+	}
 
 	public Etats getEtat() {
 		return etat;
