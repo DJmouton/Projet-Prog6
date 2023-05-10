@@ -1,12 +1,9 @@
 package Modele;
 
-
-
 import Patterns.Commande;
 
 
 import java.util.Stack;
-
 
 
 public class Historique
