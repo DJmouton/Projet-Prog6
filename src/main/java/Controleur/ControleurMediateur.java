@@ -27,9 +27,7 @@ package Controleur;
  *          38401 Saint Martin d'Hères
  */
 
-import Modele.IA;
-import Modele.Jeu;
-import Modele.Joueur;
+import Modele.*;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
