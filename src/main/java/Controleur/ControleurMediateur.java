@@ -135,7 +135,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			return;
 		}
 		System.out.println("--------------------------------------------------");
-		System.out.print("Au tour du joueur " + jeu.joueurCourant + " !");
+		System.out.print("Au tour du joueur " + (jeu.joueurCourant+1) + " !");
 
 		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
 			System.out.println("(IA)");
@@ -177,7 +177,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joueur " + (joueur.get(i).getNum()-4) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
+			System.out.println("Joueur " + (joueur.get(i).getNum()-3) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
 		}
 	}
 

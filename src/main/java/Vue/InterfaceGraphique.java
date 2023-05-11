@@ -77,7 +77,7 @@ public class InterfaceGraphique implements Runnable {
 		frame.add(niv);
 
 		// Lancement de la fenêtre
-		Timer chrono = new Timer(16, new AdaptateurTemps(control));
+		Timer chrono = new Timer(2000, new AdaptateurTemps(control));
 		chrono.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 500);
