@@ -238,6 +238,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		return jeu.joueurCourant;
+		int jc = 0;
+		try {
+			jc = jeu.joueurCourant;
+		} catch (Exception e) {}
+		return jc;
+	}
+
+	public int scoreJoueur(int joueur){
+		int score = 0;
+		try {
+			score = jeu.joueurs[joueur].getScore();
+		} catch (Exception e) {}
+		return score;
 	}
 }
