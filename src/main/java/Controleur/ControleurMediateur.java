@@ -18,12 +18,14 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
+		System.out.println("Création d'une partie avec ("+j1+", "+j2+", "+j3+", "+j4+")");
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
 		typesJoueurs.add(j3);
 		typesJoueurs.add(j4);
 		jeu.initJoueurs(typesJoueurs);
+		jeu.reset();
 		tour();
 	}
 
@@ -194,7 +196,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	}
 
-	@Override
+	//@Override
 	public void changeJoueur(int j, int t) {
         /*
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
@@ -213,11 +215,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		*/
 	}
 
-	@Override
-	public void changeTaille(int x, int y) {
-		System.out.println("Nouvelle taille: " + x + ", " + y);
-		jeu.reset();
-	}
 
 	public void sauver(String fichier){
 		try {

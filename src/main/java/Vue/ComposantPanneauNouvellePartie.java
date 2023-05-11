@@ -11,7 +11,7 @@ public class ComposantPanneauNouvellePartie extends JPanel {
     ComposantPanneauNouvellePartie(){
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Border matteBorder = BorderFactory.createMatteBorder(3, 1, 1, 1, Color.black);
-        Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "Choisir options:",
+        Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "Options pour une partie custom:",
                 TitledBorder.LEFT,TitledBorder.TOP,
                 new Font("Arial", Font.PLAIN , 13), Color.black);
         setBorder(titledBorder);
@@ -29,7 +29,9 @@ public class ComposantPanneauNouvellePartie extends JPanel {
         String[] typeJoueur = {
                 "Vide",
                 "Humain",
-                "Robot"
+                "Robot Facile",
+                "Robot Normal",
+                "Robot Difficile"
         };
         JComboBox<String> joueur = new JComboBox<>(typeJoueur);
         box.add(joueur);
