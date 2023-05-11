@@ -241,6 +241,14 @@ public class Jeu extends Observable {
 		}
 	}
 
+	public boolean peutAnnuler() {
+		return historique.peutAnnuler();
+	}
+
+	public boolean peutRefaire() {
+		return historique.peutRefaire();
+	}
+
 	public void annuler() {
 		for (int i = 0; i < copy_plateau.length; i++) {
 			plateau[i] = copy_plateau[i].clone();

@@ -177,19 +177,24 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void annuler(){
-		jeu.setEtat(Etats.Initialisation);
-		jeu.annuler();
-		if (jeu.getNombreP()==8){
-			jeu.setEtat(Etats.Selection);
+		if (jeu.peutAnnuler()) {
+			jeu.setEtat(Etats.Initialisation);
+			jeu.annuler();
+			if (jeu.getNombreP() == 8)
+			{
+				jeu.setEtat(Etats.Selection);
+			}
+			jeu.metAJour();
+			tour();
 		}
-		jeu.metAJour();
-		tour();
 	}
 
 	public void refaire(){
-		jeu.refaire();
-		jeu.metAJour();
-		tour();
+		if (jeu.peutRefaire()) {
+			jeu.refaire();
+			jeu.metAJour();
+			tour();
+		}
 	}
 
 
