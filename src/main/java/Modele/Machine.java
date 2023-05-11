@@ -1,8 +1,5 @@
 package Modele;
 
-public class Machine
-{
+public class Machine {
 	private Etats etat;
-
-
 }

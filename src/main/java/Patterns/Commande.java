@@ -2,9 +2,9 @@ package Patterns;
 
 import Modele.Jeu;
 
-public interface Commande
-{
+public interface Commande {
 	void execute();
+
 	void desexecute();
 
 	void setJeu(Jeu jeu);

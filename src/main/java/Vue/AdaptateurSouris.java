@@ -53,9 +53,7 @@ public class AdaptateurSouris extends MouseAdapter {
 		} else {
 			x = (float) e.getX() / niv.largeurCase();
 		}
-
-		System.out.println("PosX = " + x );
-		System.out.println("PosY = " + y);
+		
 		if ((int) x > 7 || (int) y > 7) {
 			return;
 		} else {
