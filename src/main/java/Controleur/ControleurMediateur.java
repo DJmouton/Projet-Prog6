@@ -14,7 +14,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1,1,0,0);
+		nouvellePartie(1,2,0,0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -48,7 +48,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 				if (this.jeu.plateau[l][c] == 1) {
 					jeu.faire(new Placement(jeu, l, c));
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
-					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 					jeu.metAJour();
 					tour();
 				}
@@ -78,7 +77,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.faire(coup);
 					jeu.setEtat(Etats.Selection);
 					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");
-					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 					jeu.metAJour();
 					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
@@ -103,7 +101,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
 				jeu.faire(placement);
 				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
-				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 				jeu.metAJour();
 				tour();
 				break;
@@ -113,7 +110,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 				poissons = jeu.plateau[coup.destl][coup.destc];
 				jeu.faire(coup);
 				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
-				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 				jeu.metAJour();
 				tour();
 				break;
@@ -133,12 +129,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 			return;
 		}
 		System.out.println("--------------------------------------------------");
-		System.out.print("Au tour du joueur " + jeu.joueurCourant + " !");
-
-		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
-			System.out.println("(IA)");
-		else
-			System.out.println();
+		System.out.println("Au tour du joueur " + jeu.joueurCourant + " !");
+		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
@@ -149,6 +141,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 				System.out.println("Sélectionne un pingouin");
 				break;
 		}
+
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
+			System.out.println("L'IA réfléchit...");
+		else
+			System.out.println();
 	}
 
 	/***************************
@@ -186,13 +183,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 			jeu.setEtat(Etats.Selection);
 		}
 		jeu.metAJour();
-
-
+		tour();
 	}
 
 	public void refaire(){
 		jeu.refaire();
 		jeu.metAJour();
+		tour();
 	}
 
 
