@@ -8,19 +8,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.*;
+import Patterns.Commande;
 
 public class Jeu extends Observable {
 	public int[][] plateau;
 	public Joueur[] joueurs;
-	public int joueurCourant;
-	int[][] copy_plateau;
-	int largeur = 8;
-	int hauteur = 8;
+
+	int largeur=8;
+	int hauteur=8;
 	Etats etat = Etats.Initialisation;
 	Coup coup;
-	int nombreP = 0;
-	int e = 0;
-	Historique historique;
+	public int joueurCourant;
+	int nombreP=0;
+	int e=0;
 
 	public Jeu() {
 		reset();
@@ -206,10 +206,10 @@ public class Jeu extends Observable {
 	/********************************************************************
 	 * Renvoie la liste de joueur tire par rapport a score/ilots et les affiche
 	 ********************************************************************/
-	public List<Joueur> Ranking() {
+	public List<Joueur> Ranking(){
 		List<Joueur> joueur = new ArrayList<Joueur>();
 		for (int i = 0; i < joueurs.length; i++) {
-			joueur.add(new Joueur(joueurs[i].score, joueurs[i].num));
+			joueur.add(new Joueur(joueurs[i].score,joueurs[i].num));
 		}
 		Collections.sort(joueur);
 		Collections.reverse(joueur);
@@ -226,61 +226,24 @@ public class Jeu extends Observable {
 			}
 		}
 		joueurs = new Joueur[typesJoueurs.size()];
-		for (int i = 0; i < typesJoueurs.size(); i++) {
+		for(int i = 0; i < typesJoueurs.size(); i++) {
 			typeJoueur = typesJoueurs.get(i);
 			if (typeJoueur == 1) {
-				joueurs[i] = new Joueur(this, i + 4, 0, typeJoueur);
-			} else if (typeJoueur >= 2) {
-				joueurs[i] = new IA(i + 4, this, typeJoueur);
-			} else {
+				joueurs[i]=new Joueur(this,i+4,0,typeJoueur);
+			} else if(typeJoueur>=2) {
+				joueurs[i]=new IA(i+4,this,typeJoueur);
+			}
+			else{
 				i++;
 			}
 		}
 	}
-
 	public void resetJoueur() {
-		for (int i = 0; i < joueurs.length; i++) {
-			joueurs[i].score = 0;
-			joueurs[i].ilots = 0;
+		for(int i = 0; i < joueurs.length; i++) {
+			joueurs[i].score=0;
+			joueurs[i].ilots=0;
 		}
 	}
-
-	public boolean peutAnnuler() {
-		return historique.peutAnnuler();
-	}
-
-	public boolean peutRefaire() {
-		return historique.peutRefaire();
-	}
-
-	public void annuler() {
-		for (int i = 0; i < copy_plateau.length; i++) {
-			plateau[i] = copy_plateau[i].clone();
-		}
-		nombreP = 0;
-		e = 0;
-		joueurCourant = 0;
-		resetJoueur();
-		historique.annuler();
-		//prochainJoueur();
-	}
-
-	public void refaire() {
-		historique.refaire();
-	}
-
-	public void faire(Commande cmd) {
-		historique.faire(cmd);
-	}
-
-	public Etats getEtat() {
-		return etat;
-	}
-
-	public void setEtat(Etats etat) {
-		this.etat = etat;
-	}
-
 //
 //-----------------------------------------------------------------------------------------
 //

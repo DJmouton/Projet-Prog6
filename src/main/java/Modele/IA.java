@@ -103,6 +103,4 @@ public class IA extends Joueur {
 			return Pair.with(valeur, coup);
 		}
 	}
-
-
 }

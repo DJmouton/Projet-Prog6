@@ -37,17 +37,17 @@ public class AdaptateurNouvellePartie implements ActionListener {
         );
         switch (option){
             case 0:
-                System.out.println("Création de nouvelle partie rapide");
-
+                control.nouvellePartie(2, 1, 0, 0);
                 break;
-
             case 1:
-                System.out.println("Création de nouvelle partie custom");
-
+                control.nouvellePartie(
+                        nouvelle_partie.joueur1.getSelectedIndex(),
+                        nouvelle_partie.joueur2.getSelectedIndex(),
+                        nouvelle_partie.joueur3.getSelectedIndex(),
+                        nouvelle_partie.joueur4.getSelectedIndex()
+                );
                 break;
-
             default:
-                System.out.println("Création de nouvelle partie annulée");
                 break;
         }
     }

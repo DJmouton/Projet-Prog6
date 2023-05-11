@@ -15,16 +15,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1, 2, 0, 0);
+		nouvellePartie(1, 1, 0, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
+    System.out.println("Création d'une partie avec (" + j1 + ", " + j2 + ", " + j3 + ", " + j4 + ")");
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
 		typesJoueurs.add(j3);
 		typesJoueurs.add(j4);
 		jeu.initJoueurs(typesJoueurs);
+    jeu.reset();
 		tour();
 	}
 
@@ -47,12 +49,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
-					jeu.faire(new Placement(jeu, l, c));
+					new Placement(jeu, l, c).execute();
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
+					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+					jeu.prochainJoueur();
 					jeu.metAJour();
 					tour();
-				} else if (jeu.getNombreP() == 8 - jeu.getE()) {
-					jeu.setEtat(Etats.Selection);
 				} else {
 					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
 				}
@@ -77,6 +79,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.faire(coup);
 					jeu.setEtat(Etats.Selection);
 					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");
+         
+					System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+					jeu.prochainJoueur();
 					jeu.metAJour();
 					tour();
 				} else if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
@@ -100,8 +105,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-				jeu.faire(placement);
+				placement.execute();
 				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
+				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+				jeu.prochainJoueur();
 				jeu.metAJour();
 				tour();
 				break;
@@ -109,8 +116,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Selection:
 				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
 				poissons = jeu.plateau[coup.destl][coup.destc];
-				jeu.faire(coup);
+				coup.execute();
 				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
+				System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+				jeu.prochainJoueur();
 				jeu.metAJour();
 				tour();
 				break;
@@ -130,8 +139,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 			return;
 		}
 		System.out.println("--------------------------------------------------");
-		System.out.println("Au tour du joueur " + jeu.joueurCourant + " !");
-		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
+		System.out.print("Au tour du joueur " + jeu.joueurCourant + " !");
+
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
+			System.out.println("(IA)");
+		else
+			System.out.println();
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
@@ -161,38 +174,19 @@ public class ControleurMediateur implements CollecteurEvenements {
 	/********************************
 	 * Affichage du classement final
 	 ********************************/
-	public void afficheRanking(List<Joueur> joueur) {
-		for (int i = 0; i < joueur.size(); i++) {
-			if (i + 1 < joueur.size() && joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
-				if (jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() < jeu.joueurs[joueur.get(i + 1).getNum() - 4].getIlots()) {
-					Joueur temp = joueur.get(i);
-					joueur.add(i, joueur.get(i + 1));
-					joueur.add(i + 1, temp);
-				} else if (jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() == jeu.joueurs[joueur.get(i + 1).getNum() - 4].getIlots()) {
+	public void afficheRanking(List<Joueur> joueur){
+		for (int i=0;i<joueur.size();i++){
+			if(i+1<joueur.size() && joueur.get(i).getScore()==joueur.get(i+1).getScore()){
+				if (jeu.joueurs[joueur.get(i).getNum()-4].getIlots()<jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
+					Joueur temp=joueur.get(i);
+					joueur.add(i,joueur.get(i+1));
+					joueur.add(i+1,temp);
+				}
+				else if(jeu.joueurs[joueur.get(i).getNum()-4].getIlots()==jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joueur " + (joueur.get(i).getNum() - 4) + " avec " + joueur.get(i).getScore() + " poissons et " + jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() + " ilots");
-		}
-	}
-
-	public void annuler() {
-		if (jeu.peutAnnuler()) {
-			jeu.setEtat(Etats.Initialisation);
-			jeu.annuler();
-			if (jeu.getNombreP() == 8) {
-				jeu.setEtat(Etats.Selection);
-			}
-			jeu.metAJour();
-			tour();
-		}
-	}
-
-	public void refaire() {
-		if (jeu.peutRefaire()) {
-			jeu.refaire();
-			jeu.metAJour();
-			tour();
+			System.out.println("Joueur " + (joueur.get(i).getNum()-4) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
 		}
 	}
 
@@ -203,8 +197,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 //
 //////////////////////////////////////////////////////////////////////////
 
-
-	@Override
 	public void changeJoueur(int j, int t) {
         /*
 		System.out.println("Nouveau type " + t + " pour le joueur " + j);
@@ -223,11 +215,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		*/
 	}
 
-	@Override
-	public void changeTaille(int x, int y) {
-		System.out.println("Nouvelle taille: " + x + ", " + y);
-		jeu.reset();
-	}
 
 	public void sauver(String fichier) {
 		try {
@@ -264,7 +251,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		}
 		return score;
 	}
-
+  
 	public boolean estIA() {
 		return jeu.joueurs[joueurCourant()].getTypeJoueur() > 1;
 	}
@@ -316,5 +303,4 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean partieEnCours() {
 		return jeu.enCours();
 	}
-
 }

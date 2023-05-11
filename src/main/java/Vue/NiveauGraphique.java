@@ -1,6 +1,7 @@
 package Vue;
 
 import Modele.Etats;
+
 import Patterns.Observateur;
 
 import javax.imageio.ImageIO;
@@ -63,7 +64,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 						largeurCase, hauteurCase, this);
 		}
 	}
-
+  
 	@Override
 	public void paintComponent(Graphics g) {
 
@@ -163,7 +164,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (control.etatCourant() != Etats.Initialisation)
 			;
 		// Need : sources et destination
-
 	}
 
 	int largeur() {

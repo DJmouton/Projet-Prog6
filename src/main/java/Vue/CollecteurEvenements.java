@@ -25,14 +25,13 @@ public interface CollecteurEvenements {
 	int hauteur();
 
 	int largeur();
+	void nouvellePartie(int j1, int j2, int j3, int j4);
 
 	void clicSouris(int l, int c);
 
 	void tictac();
 
 	void changeJoueur(int j, int t);
-
-	void changeTaille(int x, int y);
 
 	void sauver(String fichier);
 
@@ -57,5 +56,4 @@ public interface CollecteurEvenements {
 	int scoreJoueur(int joueur);
 
 	boolean estIA();
-
 }
