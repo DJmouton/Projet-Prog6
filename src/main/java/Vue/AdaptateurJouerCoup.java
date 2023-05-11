@@ -57,7 +57,7 @@ public class AdaptateurJouerCoup implements ActionListener {
 			int valY = Integer.parseInt(y);
 //			control.clicSouris(valX, valY);
 //			System.out.println("ILOT: "+IA.getIlot((Jeu) control.getJeu(), ((Jeu) control.getJeu()).getPingouins()));
-			Jeu jeu = (Jeu) control.getJeu();
+			/*Jeu jeu = (Jeu) control.getJeu();
 			ArrayList<ArrayList<int[]>> result = IA.getNombre(jeu,jeu.getPingouins());
 			System.out.println("ILOT: ");
 			for(ArrayList<int[]> l : result){
@@ -71,7 +71,7 @@ public class AdaptateurJouerCoup implements ActionListener {
 					}
 				}
 				System.out.println(" "+somme);
-			}
+			}*/
 		} catch (Exception ex) {
 			// On ne fait rien si la valeur est invalide
 		}

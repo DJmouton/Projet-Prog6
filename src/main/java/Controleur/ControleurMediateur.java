@@ -21,8 +21,8 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 		/////////////////////////////////////////
 		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new Joueur(5, jeu);
+		this.jeu.joueurs[0] = new IA(4, jeu);
+		this.jeu.joueurs[1] = new IA(5, jeu);
 		/////////////////////////////////////////
 
 	}
@@ -36,8 +36,8 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 		/////////////////////////////////////////
 		// a deplacer plus tard dans Jeu
 		this.jeu.joueurs = new Joueur[2];
-		this.jeu.joueurs[0] = new Joueur(4, jeu);
-		this.jeu.joueurs[1] = new Joueur(5, jeu);
+		this.jeu.joueurs[0] = new IA(4, jeu);
+		this.jeu.joueurs[1] = new IA(5, jeu);
 		/////////////////////////////////////////
 		partie();
 	}
@@ -111,10 +111,10 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 	 * Déroulement d'un tour
 	 ***************************/
 	public void tour() {
-		System.out.println("--------------------------------------------------");
+        /*System.out.println("--------------------------------------------------");
 		System.out.println("Au tour du joueur " + jeu.joueurCourant);
 		System.out.println("Score : " + jeu.joueurs[jeu.joueurCourant].getScore());
-
+*/
 		if (!(jeu.joueurs[jeu.joueurCourant].estIA)) {
 			while (!isEoT());// on attend en boucle que l'humain termine son tour (essayer avec thread pour v2)
 			setEoT(false);
@@ -129,13 +129,13 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 				case Initialisation:
 					Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
 					placement.execute();
-					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
+//					System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + ")");
 					break;
 
 				case Selection:
 					coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
 					coup.execute();
-					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
+//					System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + ")");
 					break;
 
 				case Deplacement:
@@ -159,7 +159,21 @@ public class ControleurMediateur implements CollecteurEvenements, Runnable {
 		System.out.println("Partie terminée");
 		System.out.println("Joueur 0 : " + jeu.joueurs[0].getScore() + " poissons");
 		System.out.println("Joueur 1 : " + jeu.joueurs[1].getScore() + " poissons");
+		for (Double d : IA.weight){
+			System.out.print(d+" ");
+		}
+		System.out.println();
+		double pas = 0.1;
+		int y = 1;
+		if(jeu.joueurs[0].getScore()>jeu.joueurs[1].getScore()) {//monte carlo
+			y = -1;
+		}
+		for (int i = 0; i < IA.weight.length; i++) {
+			IA.weight[i] = IA.weight[i] + pas * (y);
+		}
+		reset();
 	}
+
 
 
 //////////////////////////////////////////////////////////////////////////
