@@ -16,7 +16,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
 		consultation = false;
-		nouvellePartie(2,1,0,0);
+		nouvellePartie(1,2,0,0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -147,7 +147,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				break;
 		}
 
-		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1 && !consultation)
 			System.out.println("L'IA réfléchit...");
 		else
 			System.out.println();
