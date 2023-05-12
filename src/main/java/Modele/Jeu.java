@@ -323,6 +323,9 @@ public class Jeu extends Observable {
 		 //init. joueurs
 		int joueursLen=scanner.nextInt();
 		List<Integer> listeJoueur=new ArrayList<>();
+
+		reset();
+
 		for(int i=0;i<joueursLen;i++) {
 			listeJoueur.add(scanner.nextInt());
 		}
@@ -334,14 +337,13 @@ public class Jeu extends Observable {
 				plateau[i][j] = scanner.nextInt();
 			}
 		}
+
 		copy_plateau = new int[hauteur()][largeur()];
 		for (int i = 0; i < plateau.length; i++) {
 			copy_plateau[i] = plateau[i].clone();
 		}
 
-		nombreP=0;
-		e=0;
-		joueurCourant=0;
+
 
 		//exec. historique.past
 		s=scanner.nextLine(); // Coup 2 4
@@ -365,13 +367,18 @@ public class Jeu extends Observable {
 		}
 		while (scanner.hasNextLine()){
 			switch (s){
+				case "Placement":
+					dl=scanner.nextInt();
+					dc=scanner.nextInt();
+					historique.futur.push(new Placement(this,dl,dc));
+					break;
 				case "Coup":
 					sl=scanner.nextInt();
 					sc=scanner.nextInt();
 					dl=scanner.nextInt();
 					dc=scanner.nextInt();
 					coup=new Coup(this,sl,sc,dl,dc);
-					faire(coup);
+					historique.futur.push(coup);
 					break;
 			}
 			s=scanner.nextLine();
