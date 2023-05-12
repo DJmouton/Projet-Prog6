@@ -12,19 +12,23 @@ public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Coup coup;
 	int poissons;
+	boolean consultation;
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
+		consultation = false;
 		nouvellePartie(1,2,0,0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
+		System.out.println("Création d'une partie avec ("+j1+", "+j2+", "+j3+", "+j4+")");
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
 		typesJoueurs.add(j3);
 		typesJoueurs.add(j4);
 		jeu.initJoueurs(typesJoueurs);
+		jeu.reset();
 		tour();
 	}
 
@@ -34,6 +38,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void reset() {
 		jeu.resetJoueur();
 		jeu.reset();
+		consultation = false;
 		tour();
 	}
 
@@ -50,6 +55,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.faire(new Placement(jeu, l, c));
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
 					jeu.metAJour();
+					consultation = false;
 					tour();
 				}
 				else if(jeu.getNombreP() == 8-jeu.getE()){
@@ -79,6 +85,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.setEtat(Etats.Selection);
 					System.out.println("Pingouin déplacé en (" + l + "," + c + "), tu as gagné " + poissons + " poissons !");
 					jeu.metAJour();
+					consultation = false;
 					tour();
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
@@ -94,7 +101,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 * Traitement d'un tic du timer, ignoré si ce n'est pas au tour d'une IA de jouer.
 	 **********************************************************************************/
 	public void tictac() {
-		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()<2)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()<2 || consultation)
 			return;
 
 		switch (jeu.etatCourant()) {
@@ -143,7 +150,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				break;
 		}
 
-		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1)
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1 && !consultation)
 			System.out.println("L'IA réfléchit...");
 		else
 			System.out.println();
@@ -173,7 +180,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joueur " + (joueur.get(i).getNum()-4) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
+			System.out.println("Joueur " + (joueur.get(i).getNum()-3) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
 		}
 	}
 
@@ -186,6 +193,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				jeu.setEtat(Etats.Selection);
 			}
 			jeu.metAJour();
+			consultation = true;
 			tour();
 		}
 	}
@@ -225,11 +233,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		*/
 	}
 
-	@Override
-	public void changeTaille(int x, int y) {
-		System.out.println("Nouvelle taille: " + x + ", " + y);
-		jeu.reset();
-	}
 
 	public void sauver(String fichier){
 		try {
@@ -265,6 +268,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		return jeu.joueurCourant;
+		int jc = 0;
+		try {
+			jc = jeu.joueurCourant;
+		} catch (Exception e) {}
+		return jc;
+	}
+
+	public int scoreJoueur(int joueur){
+		int score = 0;
+		try {
+			score = jeu.joueurs[joueur].getScore();
+		} catch (Exception e) {}
+		return score;
 	}
 }

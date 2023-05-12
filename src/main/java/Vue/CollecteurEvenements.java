@@ -30,13 +30,14 @@ package Vue;
  * Tous les évènements à gérer lors de l'éxecution du programme
  */
 public interface CollecteurEvenements {
+
+	void nouvellePartie(int j1, int j2, int j3, int j4);
+
 	void clicSouris(int l, int c);
 
 	void tictac();
 
 	void changeJoueur(int j, int t);
-
-	void changeTaille(int x, int y);
 
 	void sauver(String fichier);
 
@@ -49,4 +50,7 @@ public interface CollecteurEvenements {
 	void reset();
 
 	int joueurCourant();
+
+	int scoreJoueur(int joueur);
+
 }
