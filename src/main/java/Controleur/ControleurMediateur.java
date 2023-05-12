@@ -20,12 +20,14 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
+		System.out.println("Création d'une partie avec ("+j1+", "+j2+", "+j3+", "+j4+")");
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
 		typesJoueurs.add(j3);
 		typesJoueurs.add(j4);
 		jeu.initJoueurs(typesJoueurs);
+		jeu.reset();
 		tour();
 	}
 
@@ -177,7 +179,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joueur " + (joueur.get(i).getNum()-4) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
+			System.out.println("Joueur " + (joueur.get(i).getNum()-3) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
 		}
 	}
 
@@ -229,11 +231,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		*/
 	}
 
-	@Override
-	public void changeTaille(int x, int y) {
-		System.out.println("Nouvelle taille: " + x + ", " + y);
-		jeu.reset();
-	}
 
 	public void sauver(String fichier){
 		try {
@@ -254,6 +251,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		return jeu.joueurCourant;
+		int jc = 0;
+		try {
+			jc = jeu.joueurCourant;
+		} catch (Exception e) {}
+		return jc;
+	}
+
+	public int scoreJoueur(int joueur){
+		int score = 0;
+		try {
+			score = jeu.joueurs[joueur].getScore();
+		} catch (Exception e) {}
+		return score;
 	}
 }
