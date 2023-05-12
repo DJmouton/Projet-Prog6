@@ -1,13 +1,7 @@
 package Modele;
 
-
-
 import Patterns.Commande;
-
-
 import java.util.Stack;
-
-
 
 public class Historique
 {
@@ -30,9 +24,9 @@ public class Historique
 	{
 		Commande cmd;
 		cmd = passe.pop();
-		cmd.desexecute();
 		futur.push(cmd);
-
+		for(int i=0;i<passe.size();i++)
+			passe.get(i).execute();
 	}
 
 	public void refaire()

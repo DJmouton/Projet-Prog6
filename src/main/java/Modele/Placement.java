@@ -27,10 +27,11 @@ public class Placement implements Commande
 
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
 		jeu.e=jeu.EnlevePingou(destl,destc);
+		jeu.prochainJoueur();
 	}
 
 	public void desexecute() {
-		jeu.annuler();
+
 	}
 
 	@Override
