@@ -17,7 +17,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
 		consultation = false;
-		nouvellePartie(1,2,0,0);
+		nouvellePartie(1,1,0,0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -187,7 +187,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void annuler(){
 		if (jeu.peutAnnuler()) {
 			jeu.setEtat(Etats.Initialisation);
-			jeu.annuler();
+			do {
+				jeu.annuler();
+			} while (jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
 			if (jeu.getNombreP() == 8)
 			{
 				jeu.setEtat(Etats.Selection);
