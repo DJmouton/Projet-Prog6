@@ -14,5 +14,7 @@ public class ComposantBarreHaute extends Box {
         JButton menu = new JButton("Menu");
         menu.addActionListener(new AdaptateurMenu(control, parent));
         add(menu);
+        add(Box.createGlue());
+        add(new ComposantSauverCharger(BoxLayout.X_AXIS, control));
     }
 }
