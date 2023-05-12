@@ -36,10 +36,10 @@ public class Placement implements Commande
 
 	@Override
 	public String toString() {
-		return "Coup{" +
-				"destl=" + destl +
-				", destc=" + destc +
-				", jeu=" + jeu +
-				'}';
+		return "Placement" + "\n"+
+				 + destl +
+				" " + destc
+				//", jeu=" + jeu +
+				;
 	}
 }
