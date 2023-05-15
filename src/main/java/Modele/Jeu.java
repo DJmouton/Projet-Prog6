@@ -66,6 +66,7 @@ public class Jeu extends Observable {
 			return nombreP != 0;
 	}
 	public int getNombreP(){return nombreP;}
+	public int getnombrePAvoir(){return nombrePAvoir;}
 	public int getE(){return e;}
 
 	public int largeur() {

@@ -184,7 +184,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				jeu.setEtat(Etats.Initialisation);
 				jeu.annuler();
 			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
-			if (jeu.getNombreP() == 8)
+			if (jeu.getNombreP() == jeu.getnombrePAvoir())
 			{
 				jeu.setEtat(Etats.Selection);
 			}
