@@ -26,6 +26,7 @@
  */
 package Vue;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -61,5 +62,21 @@ public class AdaptateurSouris extends MouseAdapter {
 			c = (int) y;
 		}
 		control.clicSouris(c, l);
+
+		if(!control.partieEnCours()){
+			ComposantPanneauFinPartie fin_partie = new ComposantPanneauFinPartie(control);
+			Object[] inputs = {fin_partie};
+			Object[] options = {"Bien joué!"};
+			JOptionPane.showOptionDialog(
+					null,
+					inputs,
+					"Fin de Partie",
+					0,
+					JOptionPane.PLAIN_MESSAGE,
+					null,
+					options,
+					0
+			);
+		}
 	}
 }
