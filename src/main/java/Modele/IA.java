@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public static int profondeur = 2;
+    public static int profondeur = 1;
 
     public IA(int n, Jeu p, int typeJoueur) {
         super(n, p);
@@ -17,14 +17,34 @@ public class IA extends Joueur{
     }
 
     public Placement placement() {
-        Pair<Integer, Commande> result = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
+        long start = System.currentTimeMillis();
+        Pair<Integer, Commande> result = null;
+        profondeur = 1;
+        while (start+5000 > System.currentTimeMillis()){
+            Pair<Integer, Commande> r2 = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE, start+5000);
+            if(r2!=null){
+                result = r2;
+                System.out.println(profondeur);
+            }
+            profondeur++;
+        }
         result.getValue1().setJeu(jeu);
         return (Placement) result.getValue1();
 
     }
 
     public Coup jeu() {
-        Pair<Integer, Commande> result = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE);
+        long start = System.currentTimeMillis();
+        Pair<Integer, Commande> result = null;
+        profondeur = 1;
+        while (start+5000 > System.currentTimeMillis()){
+            Pair<Integer, Commande> r2 = MinMaxJoueur(jeu, profondeur,Integer.MAX_VALUE, start+5000);
+            if(r2!=null){
+                result = r2;
+                System.out.println(profondeur);
+            }
+            profondeur++;
+        }
         result.getValue1().setJeu(jeu);
         return (Coup) result.getValue1();
     }
@@ -56,12 +76,16 @@ public class IA extends Joueur{
     }
 
 
-    public Pair<Integer, Commande> MinMaxJoueur(Jeu jeu, int profondeur, int valP){
+    public Pair<Integer, Commande> MinMaxJoueur(Jeu jeu, int profondeur, int valP, long time){
+        if(time < System.currentTimeMillis()){
+            return null;
+        }
         if(!jeu.enCours() || profondeur == 0){
             return Pair.with(Evaluation(jeu),null);
         }else{
 
-            int valeur, v2;
+            int valeur;
+            Pair<Integer, Commande> v2;
             Commande coup = null;
             if(jeu.joueurs[jeu.joueurCourant].num==this.num) {
                 valeur = Integer.MIN_VALUE;
@@ -76,18 +100,21 @@ public class IA extends Joueur{
                 c.setJeu(j);
                 c.execute();
                 j.prochainJoueur();
-                v2 = MinMaxJoueur(j, profondeur - 1,valeur).getValue0();
+                v2 = MinMaxJoueur(j, profondeur - 1,valeur, time);
+                if(v2==null){
+                    return null;
+                }
                 if(jeu.joueurs[jeu.joueurCourant].num==this.num) {//max
-                    if(v2 > valeur){
-                        valeur = v2;
+                    if(v2.getValue0() > valeur){
+                        valeur = v2.getValue0();
                         coup = c;
                     }
                     if(valeur >= valP){
                         break;
                     }
                 }else{
-                    if(v2 < valeur){
-                        valeur = v2;
+                    if(v2.getValue0() < valeur){
+                        valeur = v2.getValue0();
                         coup = c;
                     }
                     if(valeur <= valP){
