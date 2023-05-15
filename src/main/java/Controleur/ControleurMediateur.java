@@ -186,9 +186,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public void annuler(){
 		if (jeu.peutAnnuler()) {
-			jeu.setEtat(Etats.Initialisation);
 			do {
-					jeu.annuler();
+				jeu.setEtat(Etats.Initialisation);
+				jeu.annuler();
 			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
 			if (jeu.getNombreP() == 8)
 			{
