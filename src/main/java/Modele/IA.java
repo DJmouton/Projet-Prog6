@@ -1,6 +1,7 @@
 package Modele;
 
 import Patterns.Commande;
+import Structure.Arbre;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -14,16 +15,11 @@ public class IA extends Joueur{
 
     public IA(int n, Jeu p) {
         super(n, p);
-        this.random = new Random(0);
+        this.random = new Random();
         long seed = random.nextLong();
         System.out.println("Seed IA("+this.num+"): "+seed);
         random.setSeed(seed);
         this.estIA = true;
-        if(this.num == 4) {
-            profondeur = 3;
-        }else{
-            profondeur = 3;
-        }
     }
 
     public Placement placement() {
@@ -78,12 +74,7 @@ public class IA extends Joueur{
 
 
     private int Evaluation(Jeu j){
-        if(this.num == 4) {
-            return MonteCarlo(j, 1);
-        }else{
-            return MonteCarlo(j, 1);
-//            return customEvaluation(j);
-        }
+        return MonteCarlo(j, 1);
     }
 
     private int customEvaluation(Jeu jeu){//ilot + nombre de carte
@@ -194,6 +185,38 @@ public class IA extends Joueur{
             return Pair.with(valeur,coup);
         }
     }
+/**
+    public Arbre MCTS(Jeu jeu){
+        Arbre arbre = new Arbre(null);
+        long temps = System.currentTimeMillis();
+        long before = temps;
+        while (temps < before+5000){
+            Arbre current = meilleurArbre(arbre);
+            if(current)
+            temps = System.currentTimeMillis();;
+        }
+        ArrayList<Commande> coups = getCoups(jeu, jeu.joueurs[jeu.joueurCourant].num);
+        for(Commande c : coups){
+            Jeu j = (Jeu) jeu.clone();
+            c.setJeu(j);
+            c.execute();
+            j.prochainJoueur();
+            arbre.addEnfant(new Arbre(arbre));
+        }
+
+
+    }
+
+    private Arbre meilleurArbre(Arbre arbre){ // PERE
+        Arbre current = arbre;
+
+        while (!current.getEnfants().isEmpty()){
+            double c = Math.sqrt(2);
+            current = current.getEnfants().get((int) (current.getW()/current.getN()+c*Math.sqrt(Math.log(current.getPere().getN())/current.getN())));
+        }
+        return current;
+    }
+ */
 
 //[[[pingouin1X, pingouin1Y],[case1X,case2Y]],[[pingouinX, pingouinY],[case1X,case2Y]]]
     public ArrayList<ArrayList<int[]>> getNombre(Jeu jeu, ArrayList<int[]> pingouins){

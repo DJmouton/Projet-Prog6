@@ -194,7 +194,7 @@ public class Jeu extends Observable {
 		List<Integer> list =new ArrayList<>(Collections.nCopies(30, 1));
 		list.addAll(Collections.nCopies(20, 2));
 		list.addAll(Collections.nCopies(10, 3));
-		Random random = new Random(0);
+		Random random = new Random();
 		long seed = random.nextLong();
 		System.out.println("Seed Plateau: "+seed);
 		random.setSeed(seed);
