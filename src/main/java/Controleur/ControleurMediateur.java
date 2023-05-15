@@ -205,6 +205,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 			do {
 					jeu.refaire();
 			} while (jeu.peutRefaire() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
+
+			if (!jeu.peutRefaire())
+				consultation = false;
+
 			jeu.metAJour();
 			tour();
 		}
