@@ -26,6 +26,10 @@
  */
 package Vue;
 
+import Patterns.Observateur;
+
+import java.util.ArrayList;
+
 /*
  * Tous les évènements à gérer lors de l'éxecution du programme
  */
@@ -33,6 +37,33 @@ public interface CollecteurEvenements {
 
 	void nouvellePartie(int j1, int j2, int j3, int j4);
 
+	ArrayList<int[]> hexAccessible(int l, int c);
+
+	ArrayList<int[]> getPinguins(int numeroJ);
+
+	int coupSrcL();
+
+	int coupSrcC();
+
+	int coupDestL();
+
+	int coupDestC();
+
+	int hauteur();
+
+	int largeur();
+
+	void ajouteObservateur(Observateur o);
+
+	int valeur(int l, int c);
+
+	boolean estIA();
+
+	boolean etatDep();
+
+	boolean etatSel();
+
+	boolean etatPla();
 	void clicSouris(int l, int c);
 
 	void tictac();
@@ -53,4 +84,5 @@ public interface CollecteurEvenements {
 
 	int scoreJoueur(int joueur);
 
+	boolean partieEnCours();
 }
