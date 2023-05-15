@@ -33,7 +33,6 @@ public class SauvgarderChargerTest {
                 assertTrue(jeu.plateau[i][j]==copy_plateau[i][j]);
             }
         }
-        control.reset();
         control.charger("save2");
         for(int i=0;i<jeu.hauteur();i++){
             for(int j=0;j<jeu.largeur();j++){

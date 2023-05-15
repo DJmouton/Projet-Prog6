@@ -54,7 +54,7 @@ public class Jeu extends Observable {
 		e = 0;
 		nombrePAvoir=8;
 		historique = new Historique();
-		initPlateau();
+		//initPlateau();
 		//initJoueurs();
 		metAJour();
 	}
@@ -212,6 +212,35 @@ public class Jeu extends Observable {
 		Collections.sort(joueur);
 		Collections.reverse(joueur);
 		return joueur;
+	}
+
+	public void initPlateau() {
+		System.out.println("init plateau");
+		List<Integer> list = new ArrayList<>(Collections.nCopies(30, 1));
+		list.addAll(Collections.nCopies(20, 2));
+		list.addAll(Collections.nCopies(10, 3));
+		Random random = new Random();
+		long seed = random.nextLong();
+		System.out.println("Seed Plateau: "+seed);
+		random.setSeed(seed);
+		Collections.shuffle(list, new Random());
+
+		int x = 0;
+		plateau = new int[hauteur][largeur];
+		for (int i = 0; i < hauteur; i++) {
+			for (int j = 0; j < largeur; j++) {
+				if (i % 2 == 0 && j == 0) {
+					plateau[i][0] = 0;
+				} else {
+					plateau[i][j] = list.get(x);
+					x++;
+				}
+			}
+		}
+		copy_plateau = new int[hauteur()][largeur()];
+		for (int i = 0; i < plateau.length; i++) {
+			copy_plateau[i] = plateau[i].clone();
+		}
 	}
 
 	public void initJoueurs(List<Integer> typesJoueurs) {
@@ -391,34 +420,6 @@ public class Jeu extends Observable {
 //
 //-----------------------------------------------------------------------------------------
 //
-
-	private void initPlateau() {
-		List<Integer> list = new ArrayList<>(Collections.nCopies(30, 1));
-		list.addAll(Collections.nCopies(20, 2));
-		list.addAll(Collections.nCopies(10, 3));
-		Random random = new Random();
-		long seed = random.nextLong();
-		System.out.println("Seed Plateau: "+seed);
-		random.setSeed(seed);
-		Collections.shuffle(list, new Random());
-
-		int x = 0;
-		plateau = new int[hauteur][largeur];
-		for (int i = 0; i < hauteur; i++) {
-			for (int j = 0; j < largeur; j++) {
-				if (i % 2 == 0 && j == 0) {
-					plateau[i][0] = 0;
-				} else {
-					plateau[i][j] = list.get(x);
-					x++;
-				}
-			}
-		}
-		copy_plateau = new int[hauteur()][largeur()];
-		for (int i = 0; i < plateau.length; i++) {
-			copy_plateau[i] = plateau[i].clone();
-		}
-	}
 
     /*private void initJoueurs(){
 		joueurs = new Joueur[2];

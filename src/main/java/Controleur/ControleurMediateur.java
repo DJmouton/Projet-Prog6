@@ -28,17 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		typesJoueurs.add(j4);
 		jeu.reset();
 		jeu.initJoueurs(typesJoueurs);
-
-		consultation = false;
-		tour();
-	}
-
-	/*****************************************************************
-	 * Traitement d'un clic sur le bouton reset, réinitialise le jeu.
-	 *****************************************************************/
-	public void reset() {
-		jeu.resetJoueur();
-		jeu.reset();
+		jeu.initPlateau();
 		consultation = false;
 		tour();
 	}

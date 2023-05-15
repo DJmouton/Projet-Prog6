@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     private Random random;
-    public int profondeur = 4;
+    public int profondeur =1;
     public static Double[] weight = new Double[]{5.0,4.0,1.1,1.2,3.0};
 
 
