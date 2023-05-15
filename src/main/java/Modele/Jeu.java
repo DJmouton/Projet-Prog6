@@ -1,12 +1,12 @@
 package Modele;
+import java.io.*;
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import Modele.Historique;
 import Patterns.Observable;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import Patterns.Commande;
 
 public class Jeu extends Observable {
@@ -277,6 +277,115 @@ public class Jeu extends Observable {
 		this.etat = etat;
 	}
 
+	public void sauver(String fichier) throws IOException {
+		// ouvrir fichier sortie
+
+		FileOutputStream out = new FileOutputStream(fichier);
+		PrintStream sortie = new PrintStream(out);
+
+		// ecrire dedans
+
+		sortie.println(hauteur());
+		sortie.println(largeur());
+
+		sortie.println(joueurs.length);
+		for (int i=0;i<joueurs.length;i++){
+			sortie.println(joueurs[i].typeJoueur);
+		}
+
+		//ecrire le plateau init. dans le fichier (Serialization)
+		for(int i=0;i<hauteur();i++){
+			for(int j=0;j<largeur();j++){
+				sortie.println(copy_plateau[i][j]);
+			}
+
+		}
+
+		//ecrire historique
+		for (int i=0;i<historique.passe.size();i++){
+			sortie.println(historique.passe.get(i).toString());
+		}
+		sortie.println("fin");
+		for (int i=0;i<historique.futur.size();i++){
+			sortie.println(historique.futur.get(i).toString());
+		}
+	}
+
+	public void charger (String fichier) throws IOException, ClassNotFoundException {
+		FileInputStream in = new FileInputStream(fichier);
+		Scanner scanner = new Scanner(in);
+		int nbLignes = scanner.nextInt();
+		int nbColonnes = scanner.nextInt();
+		String s;
+		Coup coup;
+		Commande cmd;
+		int sl, sc,dl,dc;
+		 //init. joueurs
+		int joueursLen=scanner.nextInt();
+		List<Integer> listeJoueur=new ArrayList<>();
+
+		reset();
+
+		for(int i=0;i<joueursLen;i++) {
+			listeJoueur.add(scanner.nextInt());
+		}
+		initJoueurs(listeJoueur);
+
+		//init. plateau
+		for(int i=0;i<nbLignes;i++){
+			for(int j=0;j<nbColonnes;j++){
+				plateau[i][j] = scanner.nextInt();
+			}
+		}
+
+		copy_plateau = new int[hauteur()][largeur()];
+		for (int i = 0; i < plateau.length; i++) {
+			copy_plateau[i] = plateau[i].clone();
+		}
+
+
+
+		//exec. historique.past
+		s=scanner.nextLine(); // Coup 2 4
+		while (!s.equals("fin")){
+			switch (s){
+				case "Placement":
+					dl=scanner.nextInt();
+					dc=scanner.nextInt();
+					historique.faire(new Placement(this,dl,dc));
+					break;
+				case "Coup":
+					sl=scanner.nextInt();
+					sc=scanner.nextInt();
+					dl=scanner.nextInt();
+					dc=scanner.nextInt();
+					coup=new Coup(this,sl,sc,dl,dc);
+					faire(coup);
+					break;
+			}
+			s=scanner.nextLine();
+		}
+		while (scanner.hasNextLine()){
+			switch (s){
+				case "Placement":
+					dl=scanner.nextInt();
+					dc=scanner.nextInt();
+					historique.futur.push(new Placement(this,dl,dc));
+					break;
+				case "Coup":
+					sl=scanner.nextInt();
+					sc=scanner.nextInt();
+					dl=scanner.nextInt();
+					dc=scanner.nextInt();
+					coup=new Coup(this,sl,sc,dl,dc);
+					historique.futur.push(coup);
+					break;
+			}
+			s=scanner.nextLine();
+		}
+ 	}
+
+
 //
 //-----------------------------------------------------------------------------------------
 //
@@ -429,50 +538,8 @@ public class Jeu extends Observable {
 //
 //////////////////////////////////////////////////////////////////////////
 
-	public void reset(String fichier) throws FileNotFoundException {
-		FileInputStream in = new FileInputStream(fichier);
-		Scanner scanner = new Scanner(in);
-		int nbLignes = scanner.nextInt();
-		int nbColonnes = scanner.nextInt();
-		String s;
-		Coup coup;
-		int l, c;
-		plateau = new int[nbLignes][nbColonnes];
-		plateau[0][0] = 1;
-		s = scanner.nextLine(); // Coup 2 4
-		while (!s.equals("fin")) {
-			switch (s) {
-				case "Coup":
-					l = scanner.nextInt();
-					c = scanner.nextInt();
-					//coup=new Coup(this,l,c);
 
-			}
-			s = scanner.nextLine();
-		}
-		while (scanner.hasNextLine()) {
-			switch (s) {
-				case "Coup":
-					l = scanner.nextInt();
-					c = scanner.nextInt();
-					//coup=new Coup(this,l,c);
 
-			}
-			s = scanner.nextLine();
-		}
-	}
-
-	public void sauver(String fichier) throws FileNotFoundException {
-		// ouvrir fichier sortie
-
-		FileOutputStream out = new FileOutputStream(fichier);
-		PrintStream sortie = new PrintStream(out);
-
-		// ecrire dedans
-
-		sortie.println(hauteur());
-		sortie.println(largeur());
-	}
 
 	/*
 	 * Annuler un coup

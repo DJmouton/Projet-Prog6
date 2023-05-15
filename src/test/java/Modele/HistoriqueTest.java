@@ -136,6 +136,7 @@ class HistoriqueTest
 		*/
 		jeu.setEtat(Etats.Initialisation);
 		jeu.annuler();
+		assertEquals(1, jeu.joueurCourant);
 		jeu.setEtat(Etats.Initialisation);
 		jeu.refaire();
 		jeu.setEtat(Etats.Initialisation);

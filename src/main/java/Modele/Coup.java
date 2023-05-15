@@ -43,12 +43,12 @@ public class Coup implements Commande
 
 	@Override
 	public String toString() {
-		return "Coup{" +
-				"sourcel=" + sourcel +
-				", sourcec=" + sourcec +
-				", destl=" + destl +
-				", destc=" + destc +
-				", jeu=" + jeu +
-				'}';
+		return "Coup" +"\n"
+				+ sourcel +
+				" " + sourcec +
+				" " + destl +
+				" " + destc
+				//+ ", jeu=" + jeu +
+				;
 	}
 }

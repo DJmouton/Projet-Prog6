@@ -4,6 +4,7 @@ import Modele.*;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		consultation = false;
-		nouvellePartie(1,2,0,0);
+		nouvellePartie(1,1,0,0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -28,6 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		typesJoueurs.add(j4);
 		jeu.initJoueurs(typesJoueurs);
 		jeu.reset();
+		consultation = false;
 		tour();
 	}
 
@@ -185,8 +186,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public void annuler(){
 		if (jeu.peutAnnuler()) {
-			jeu.setEtat(Etats.Initialisation);
-			jeu.annuler();
+			do {
+				jeu.setEtat(Etats.Initialisation);
+				jeu.annuler();
+			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
 			if (jeu.getNombreP() == 8)
 			{
 				jeu.setEtat(Etats.Selection);
@@ -199,11 +202,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public void refaire(){
 		if (jeu.peutRefaire()) {
-			jeu.refaire();
+			do {
+					jeu.refaire();
+			} while (jeu.peutRefaire() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
+
+			if (!jeu.peutRefaire())
+				consultation = false;
+
 			jeu.metAJour();
 			tour();
 		}
 	}
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -237,17 +247,32 @@ public class ControleurMediateur implements CollecteurEvenements {
 			jeu.sauver(fichier);
 		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de sauvegarder dans " + fichier);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 		System.out.println("Partie sauvegardée");
 	}
 
 	public void charger(String fichier){
+		jeu.setEtat(Etats.Initialisation);
+
 		try {
-			jeu.reset(fichier);
+			jeu.charger(fichier);
 		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de charger depuis " + fichier);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
 		}
+		if (jeu.getNombreP() == 8)
+		{
+			jeu.setEtat(Etats.Selection);
+		}
+		jeu.metAJour();
 		System.out.println("Partie chargée");
+		tour();
+
 	}
 
 	public int joueurCourant() {
