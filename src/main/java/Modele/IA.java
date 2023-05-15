@@ -128,7 +128,6 @@ public class IA extends Joueur{
         }
     }
     // Methode temporaire : censé mangé tous les poissons d'un ilot
-    //
     public void ParcoursIlot(Jeu j, int num){
         // Recupérer les pingouins du joueur
         ArrayList<int[]> pingouins = j.getPingouins(num);
