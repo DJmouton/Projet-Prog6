@@ -73,6 +73,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					coup = new Coup(l, c, this.jeu);
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+					jeu.metAJour();
 				} else {
 					System.out.println("Sélectionne un de tes pingouins");
 				}
@@ -92,6 +93,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+					jeu.metAJour();
 				}else {
 					System.out.println("Coup impossible");
 				}
