@@ -7,11 +7,9 @@ import java.awt.event.ActionListener;
 public class AdaptateurNouvellePartie implements ActionListener {
 
     CollecteurEvenements control;
-    JFrame parent;
 
-    AdaptateurNouvellePartie(CollecteurEvenements c, JFrame p) {
+    AdaptateurNouvellePartie(CollecteurEvenements c) {
         control = c;
-        parent = p;
     }
 
     @Override
@@ -29,7 +27,7 @@ public class AdaptateurNouvellePartie implements ActionListener {
                 null,
                 inputs,
                 "Nouvelle Partie",
-                JOptionPane.OK_CANCEL_OPTION,
+                0,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 options,

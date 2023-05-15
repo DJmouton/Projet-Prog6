@@ -38,7 +38,7 @@ public class InterfaceGraphique implements Runnable {
 		}
 
 		// Ajout des composants
-		ComposantBarreHaute barreHaute = new ComposantBarreHaute(control, frame);
+		ComposantBarreHaute barreHaute = new ComposantBarreHaute(control);
 		frame.add(barreHaute, BorderLayout.PAGE_START);
 
 		ComposantJoueurs joueurs = new ComposantJoueurs(control);
