@@ -45,14 +45,15 @@ public class AdaptateurSouris extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {
 		int l;
 		int c;
-		float y = (float) e.getY() / (niv.hauteurCase() * (float) 1.3);
-		y *= (float) 1.3;
+		float y = (float) e.getY() / (niv.hauteurCase());
+		y *= 1.3f;
 		float x;
 		if ((int) y % 2 == 1) {
-			x = ((e.getX() - (niv.largeurCase() * (float) 0.9 / 2)) / niv.largeurCase() * (float) 1.1);
+			x = ((e.getX() - (niv.largeurCase() / 2f)) / niv.largeurCase());
 		} else {
-			x = (float) e.getX() / niv.largeurCase() * (float) 1.1;
+			x = (float) e.getX() / niv.largeurCase();
 		}
+
 		if ((int) x > 7 || (int) y > 7) {
 			return;
 		} else {
