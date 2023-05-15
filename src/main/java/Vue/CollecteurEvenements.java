@@ -83,4 +83,6 @@ public interface CollecteurEvenements {
 	int scoreJoueur(int joueur);
 
 	boolean partieEnCours();
+
+	int[] ranking();
 }
