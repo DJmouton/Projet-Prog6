@@ -16,7 +16,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		consultation = false;
 		nouvellePartie(1,1,0,0);
 	}
 
@@ -29,6 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		typesJoueurs.add(j4);
 		jeu.initJoueurs(typesJoueurs);
 		jeu.reset();
+		consultation = false;
 		tour();
 	}
 
@@ -188,8 +188,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.peutAnnuler()) {
 			jeu.setEtat(Etats.Initialisation);
 			do {
-				jeu.annuler();
-			} while (jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
+					jeu.annuler();
+			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
 			if (jeu.getNombreP() == 8)
 			{
 				jeu.setEtat(Etats.Selection);
@@ -202,7 +202,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public void refaire(){
 		if (jeu.peutRefaire()) {
-			jeu.refaire();
+			do {
+					jeu.refaire();
+			} while (jeu.peutRefaire() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
 			jeu.metAJour();
 			tour();
 		}
