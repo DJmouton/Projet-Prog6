@@ -1,4 +1,10 @@
 package Vue;
 
-public class ComposantPanneauRegles {
+import javax.swing.*;
+
+public class ComposantPanneauRegles extends JPanel {
+
+    ComposantPanneauRegles(){
+        add(new JLabel("Objectif: Survivre"));
+    }
 }

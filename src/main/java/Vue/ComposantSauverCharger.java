@@ -3,24 +3,28 @@ package Vue;
 import javax.swing.*;
 import java.awt.*;
 
-public class ComposantSauverCharger extends Box {
+public class ComposantSauverCharger extends JPanel {
 
-	CollecteurEvenements control;
 
-	ComposantSauverCharger(int axis, CollecteurEvenements c) {
-		super(axis);
-		control = c;
-		// Save and load
-		add(new JLabel("Nom fichier:"));
+	ComposantSauverCharger(CollecteurEvenements control) {
+		setLayout(new GridBagLayout());
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		add(new JLabel("Nom fichier:"), c);
+
+		c.gridy = 1;
 		JTextField fichier = new JTextField();
-		fichier.setMaximumSize(new Dimension(
-				fichier.getMaximumSize().width, fichier.getMinimumSize().height));
-		add(fichier);
+		add(fichier, c);
+
+		c.gridy = 2;
 		JButton sauver = new JButton("Sauver");
 		sauver.addActionListener(new AdaptateurSauver(control, fichier));
-		add(sauver);
+		add(sauver, c);
+
+		c.gridy = 3;
 		JButton charger = new JButton("Charger");
 		charger.addActionListener(new AdaptateurCharger(control, fichier));
-		add(charger);
+		add(charger, c);
 	}
 }
