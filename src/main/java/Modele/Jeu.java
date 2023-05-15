@@ -285,6 +285,10 @@ public class Jeu extends Observable {
 		List<Integer> list = new ArrayList<>(Collections.nCopies(30, 1));
 		list.addAll(Collections.nCopies(20, 2));
 		list.addAll(Collections.nCopies(10, 3));
+		Random random = new Random();
+		long seed = random.nextLong();
+		System.out.println("Seed Plateau: "+seed);
+		random.setSeed(seed);
 		Collections.shuffle(list, new Random());
 
 		int x = 0;
@@ -311,7 +315,7 @@ public class Jeu extends Observable {
 		joueurs[1] = new Joueur(5, this);
 	}*/
 
-	private ArrayList<int[]> getCotes(int x, int y) {
+	public ArrayList<int[]> getCotes(int x, int y) {
 		ArrayList<int[]> res = new ArrayList<>();
 		transformtableau(res, x, y - 1);
 		transformtableau(res, x, y + 1);
