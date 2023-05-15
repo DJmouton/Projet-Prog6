@@ -53,4 +53,7 @@ public interface CollecteurEvenements {
 
 	int scoreJoueur(int joueur);
 
+	int[] ranking();
+
+	boolean estFinPartie();
 }

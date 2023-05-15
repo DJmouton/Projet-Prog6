@@ -14,6 +14,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 	int poissons;
 	boolean consultation;
 
+	int[] ranks;
+
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
 		nouvellePartie(1,1,0,0);
@@ -165,10 +167,19 @@ public class ControleurMediateur implements CollecteurEvenements {
 		afficheRanking(jeu.Ranking());
 	}
 
+	public int[] ranking(){
+		return ranks;
+	}
+
+	public boolean estFinPartie(){
+		return !jeu.enCours();
+	}
+
 	/********************************
 	 * Affichage du classement final
 	 ********************************/
 	public void afficheRanking(List<Joueur> joueur){
+		ranks = new int[joueur.size()];
 		for (int i=0;i<joueur.size();i++){
 			if(i+1<joueur.size() && joueur.get(i).getScore()==joueur.get(i+1).getScore()){
 				if (jeu.joueurs[joueur.get(i).getNum()-4].getIlots()<jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
@@ -181,6 +192,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				}
 			}
 			System.out.println("Joueur " + (joueur.get(i).getNum()-3) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
+			ranks[i] = joueur.get(i).getNum()-4;
 		}
 	}
 
