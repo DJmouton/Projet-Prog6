@@ -1,6 +1,7 @@
 package Controleur;
 
 import Modele.*;
+import Patterns.Observateur;
 import Vue.CollecteurEvenements;
 
 import java.io.FileNotFoundException;
@@ -62,6 +63,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					coup = new Coup(l, c, this.jeu);
 					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+					jeu.metAJour();
 				} else {
 					System.out.println("Sélectionne un de tes pingouins");
 				}
@@ -81,6 +83,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
 					coup = new Coup(l, c, this.jeu);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
+					jeu.metAJour();
 				}else {
 					System.out.println("Coup impossible");
 				}
@@ -281,4 +284,57 @@ public class ControleurMediateur implements CollecteurEvenements {
 		} catch (Exception e) {}
 		return score;
 	}
+
+	public boolean estIA() {
+		return jeu.joueurs[joueurCourant()].getTypeJoueur() > 1;
+	}
+
+	public ArrayList<int[]> hexAccessible(int l, int c) {
+		return jeu.hex_accessible(l, c);
+	}
+
+	public int coupSrcL() {
+		return coup.sourcel;
+	}
+
+	public int coupSrcC() {
+		return coup.sourcec;
+	}
+
+	public int coupDestL() {
+		return coup.destl;
+	}
+
+	public int coupDestC() {
+		return coup.destc;
+	}
+
+	public int largeur() {
+		return jeu.largeur();
+	}
+
+	public int hauteur() {
+		return jeu.hauteur();
+	}
+
+	public ArrayList<int[]> getPinguins(int numeroJ) {
+		return jeu.getPingouins(numeroJ);
+	}
+
+	public void ajouteObservateur(Observateur o) {
+		jeu.ajouteObservateur(o);
+	}
+
+	public int valeur(int l, int c) {
+		return jeu.valeur(l, c);
+	}
+
+	public boolean partieEnCours() {
+		return jeu.enCours();
+	}
+	public boolean etatDep() { return Etats.Deplacement == jeu.etatCourant(); }
+
+	public boolean etatSel() { return Etats.Selection == jeu.etatCourant(); }
+
+	public boolean etatPla() { return Etats.Initialisation == jeu.etatCourant(); }
 }
