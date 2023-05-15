@@ -19,6 +19,7 @@ public class Jeu extends Observable {
 	Coup coup;
 	public int joueurCourant;
 	int nombreP = 0;
+	int nombrePAvoir=8;
 	int e = 0;
 	Historique historique;
 
@@ -51,6 +52,7 @@ public class Jeu extends Observable {
 		joueurCourant = 0;
 		nombreP = 0;
 		e = 0;
+		nombrePAvoir=8;
 		historique = new Historique();
 		initPlateau();
 		//initJoueurs();
@@ -222,15 +224,15 @@ public class Jeu extends Observable {
 			}
 		}
 		joueurs = new Joueur[typesJoueurs.size()];
+		if(typesJoueurs.size()==3){nombrePAvoir=9;}
 		for (int i = 0; i < typesJoueurs.size(); i++) {
 			typeJoueur = typesJoueurs.get(i);
 			if (typeJoueur == 1) {
 				joueurs[i] = new Joueur(this, i + 4, 0, typeJoueur);
 			} else if (typeJoueur >= 2) {
 				joueurs[i] = new IA(i + 4, this, typeJoueur);
-			} else {
-				i++;
 			}
+
 		}
 	}
 
