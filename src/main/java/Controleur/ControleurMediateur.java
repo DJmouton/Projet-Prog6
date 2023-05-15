@@ -20,11 +20,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1,1,1,0);
+		nouvellePartie(1, 1, 1, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
-		System.out.println("Création d'une partie avec ("+j1+", "+j2+", "+j3+", "+j4+")");
+		System.out.println("Création d'une partie avec (" + j1 + ", " + j2 + ", " + j3 + ", " + j4 + ")");
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
@@ -41,7 +41,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
 	 ***************************************************************************************************/
 	public void clicSouris(int l, int c) {
-		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()>1)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur() > 1)
 			return;
 
 		switch (jeu.etatCourant()) {
@@ -52,11 +52,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.metAJour();
 					consultation = false;
 					tour();
-				}
-				else if(jeu.getNombreP() == 8-jeu.getE()){
+				} else if (jeu.getNombreP() == 8 - jeu.getE()) {
 					jeu.setEtat(Etats.Selection);
-				}
-				else {
+				} else {
 					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
 				}
 				break;
@@ -73,7 +71,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				break;
 
 			case Deplacement:
-				if (jeu.contains(new int[]{l, c}, jeu.hex_accessible(coup.sourcel, coup.sourcec))){
+				if (jeu.contains(new int[]{l, c}, jeu.hex_accessible(coup.sourcel, coup.sourcec))) {
 					poissons = jeu.plateau[l][c];
 					coup.destl = l;
 					coup.destc = c;
@@ -83,11 +81,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.metAJour();
 					consultation = false;
 					tour();
-				}else if(jeu.plateau[l][c] == jeu.joueurCourant + 4){
+				} else if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
-				}else {
+				} else {
 					System.out.println("Coup impossible");
 				}
 				break;
@@ -98,7 +96,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 * Traitement d'un tic du timer, ignoré si ce n'est pas au tour d'une IA de jouer.
 	 **********************************************************************************/
 	public void tictac() {
-		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur()<2 || consultation)
+		if (!jeu.enCours() || jeu.joueurs[jeu.joueurCourant].getTypeJoueur() < 2 || consultation)
 			return;
 
 		switch (jeu.etatCourant()) {
@@ -147,7 +145,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				break;
 		}
 
-		if (jeu.joueurs[joueurCourant()].getTypeJoueur()>1 && !consultation)
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur() > 1 && !consultation)
 			System.out.println("L'IA réfléchit...");
 		else
 			System.out.println();
@@ -162,50 +160,46 @@ public class ControleurMediateur implements CollecteurEvenements {
 		afficheRanking(jeu.Ranking());
 	}
 
-	public int[] ranking(){
+	public int[] ranking() {
 		return ranks;
 	}
 
 	/********************************
 	 * Affichage du classement final
 	 ********************************/
-	public void afficheRanking(List<Joueur> joueur){
+	public void afficheRanking(List<Joueur> joueur) {
 		ranks = new int[joueur.size()];
-		for (int i=0;i<joueur.size();i++){
-			if(i+1<joueur.size() && joueur.get(i).getScore()==joueur.get(i+1).getScore()){
-				if (jeu.joueurs[joueur.get(i).getNum()-4].getIlots()<jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
-					Joueur temp=joueur.get(i);
-					joueur.add(i,joueur.get(i+1));
-					joueur.add(i+1,temp);
-				}
-				else if(jeu.joueurs[joueur.get(i).getNum()-4].getIlots()==jeu.joueurs[joueur.get(i+1).getNum()-4].getIlots()){
+		for (int i = 0; i < joueur.size(); i++) {
+			if (i + 1 < joueur.size() && joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
+				if (jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() < jeu.joueurs[joueur.get(i + 1).getNum() - 4].getIlots()) {
+					Joueur temp = joueur.get(i);
+					joueur.add(i, joueur.get(i + 1));
+					joueur.add(i + 1, temp);
+				} else if (jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() == jeu.joueurs[joueur.get(i + 1).getNum() - 4].getIlots()) {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joueur " + (joueur.get(i).getNum()-3) + " avec " + joueur.get(i).getScore() +  " poissons et " + jeu.joueurs[joueur.get(i).getNum()-4].getIlots() + " ilots");
-			ranks[i] = joueur.get(i).getNum()-4;
+			System.out.println("Joueur " + (joueur.get(i).getNum() - 3) + " avec " + joueur.get(i).getScore() + " poissons et " + jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() + " ilots");
+			ranks[i] = joueur.get(i).getNum() - 4;
 		}
 	}
 
-	public void annuler(){
+	public void annuler() {
 		if (jeu.peutAnnuler()) {
 			do {
 				jeu.setEtat(Etats.Initialisation);
 				jeu.annuler();
 			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
-			if (jeu.getNombreP() == jeu.getnombrePAvoir())
-			{
+			if (jeu.getNombreP() == jeu.getnombrePAvoir()) {
 				jeu.setEtat(Etats.Selection);
 			}
 			jeu.metAJour();
-			coup.sourcec = 0;
-			coup.sourcel = 0;
 			consultation = true;
 			tour();
 		}
 	}
 
-	public void refaire(){
+	public void refaire() {
 		if (jeu.peutRefaire()) {
 			do {
 				jeu.refaire();
@@ -218,7 +212,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 			tour();
 		}
 	}
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -247,7 +240,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 
-	public void sauver(String fichier){
+	public void sauver(String fichier) {
 		try {
 			jeu.sauver(fichier);
 		} catch (FileNotFoundException e) {
@@ -258,7 +251,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		System.out.println("Partie sauvegardée");
 	}
 
-	public void charger(String fichier){
+	public void charger(String fichier) {
 		jeu.setEtat(Etats.Initialisation);
 
 		try {
@@ -270,8 +263,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		if (jeu.getNombreP() == 8)
-		{
+		if (jeu.getNombreP() == 8) {
 			jeu.setEtat(Etats.Selection);
 		}
 		jeu.metAJour();
@@ -284,15 +276,17 @@ public class ControleurMediateur implements CollecteurEvenements {
 		int jc = 0;
 		try {
 			jc = jeu.joueurCourant;
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 		return jc;
 	}
 
-	public int scoreJoueur(int joueur){
+	public int scoreJoueur(int joueur) {
 		int score = 0;
 		try {
 			score = jeu.joueurs[joueur].getScore();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 		return score;
 	}
 
@@ -343,9 +337,16 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean partieEnCours() {
 		return jeu.enCours();
 	}
-	public boolean etatDep() { return Etats.Deplacement == jeu.etatCourant(); }
 
-	public boolean etatSel() { return Etats.Selection == jeu.etatCourant(); }
+	public boolean etatDep() {
+		return Etats.Deplacement == jeu.etatCourant();
+	}
 
-	public boolean etatPla() { return Etats.Initialisation == jeu.etatCourant(); }
+	public boolean etatSel() {
+		return Etats.Selection == jeu.etatCourant();
+	}
+
+	public boolean etatPla() {
+		return Etats.Initialisation == jeu.etatCourant();
+	}
 }
