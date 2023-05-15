@@ -127,55 +127,87 @@ public class IA extends Joueur{
             return Pair.with(valeur,coup);
         }
     }
+    // Methode temporaire : censé mangé tous les poissons d'un ilot
+    public void ParcoursIlot(Jeu j, int num){
+        // Recupérer les pingouins du joueur
+        ArrayList<int[]> pingouins = j.getPingouins(num);
+        // Recuperer l'îlot de tous les pingouins
+        ArrayList<ArrayList<int[]>> ilots = getNombre(j,pingouins);
+        if(ilots.isEmpty()){
+            return;
+        }
+        for(ArrayList<int[]> ilot :ilots){
+            int x = 0,y = 0;
+            for(int[] coord : ilot){
+                if(j.plateau[coord[0]][coord[1]]==num){
+                    x = coord[0];
+                    y = coord[1];
+                }
+            }
+            if(j.plateau[x][y]!=num){
+                return;
+            }
+            for(int[] poisson : ilot){
+                if(j.plateau[poisson[0]][poisson[1]]==0 || j.plateau[poisson[0]][poisson[1]]==num){
+                    continue;
+                }
+                Commande coup = new Coup(j,x,y,poisson[0],poisson[1]);
+                coup.execute();
+                j.prochainJoueur();
+                x=poisson[0];
+                y=poisson[1];
+            }
+        }
+    }
 
-//
-//    public static int getIlot(Jeu jeu, ArrayList<int[]> pingouins){
-//        int result = 0;
-//        if(pingouins.isEmpty()){
-//            return result;
-//        }
-//        result += getTuiles(jeu, pingouins, new ArrayList<>(), pingouins.get(0));
-//        System.out.println("result: "+result);
-//        pingouins.remove(0);
-//        return result+getIlot(jeu,pingouins);
-//    }
-//
-//    public static int getTuiles(Jeu jeu, ArrayList<int[]> pingouins, ArrayList<int[]> tuiles, int[] tuile){
-//        int pingouin = jeu.plateau[pingouins.get(0)[0]][pingouins.get(0)[1]];
-//        int result = 0;
-//        for (int[] cote : jeu.getCotes(tuile[0],tuile[1])){
-//            int valeur = jeu.plateau[cote[0]][cote[1]];
-//            if(valeur>0){
-//                 if (valeur > 3 && valeur != pingouin) {
-//                    //2 different pingouin sur le meme ilot
-//                    supprimerPingouinListe(cote,pingouins);
-//                    return 0;
-//                }
-//                //ilot
-//                if(!jeu.contains(cote,tuiles)){
-//                    tuiles.add(cote);
-//                    getTuiles(jeu,pingouins,tuiles, cote);
-//                    if(valeur == pingouin){
-//                        //2 meme pingouin sur le meme ilot
-//                        supprimerPingouinListe(cote,pingouins);
-//                    }else {
-//                        result+=valeur;
-//                    }
-//                }
-//            }
-//        }
-//        return result;
-//    }
-//
-//    private static void supprimerPingouinListe(int[] cote, ArrayList<int[]> pingouins){
-//        int i;
-//        for (i = 0; i < pingouins.size();i++){
-//            if(pingouins.get(i)[0]==cote[0] && pingouins.get(i)[1]==cote[1]){
-//                break;
-//            }
-//        }
-//        pingouins.remove(i);
-//    }
+
+      public static int getIlot(Jeu jeu, ArrayList<int[]> pingouins){
+        int result = 0;
+        if(pingouins.isEmpty()){
+            return result;
+        }
+        result += getTuiles(jeu, pingouins, new ArrayList<>(), pingouins.get(0));
+        System.out.println("result: "+result);
+        pingouins.remove(0);
+        return result+getIlot(jeu,pingouins);
+    }
+
+    public static int getTuiles(Jeu jeu, ArrayList<int[]> pingouins, ArrayList<int[]> tuiles, int[] tuile){
+        int pingouin = jeu.plateau[pingouins.get(0)[0]][pingouins.get(0)[1]];
+        int result = 0;
+        for (int[] cote : jeu.getCotes(tuile[0],tuile[1])){
+            int valeur = jeu.plateau[cote[0]][cote[1]];
+            if(valeur>0){
+                 if (valeur > 3 && valeur != pingouin) {
+                    //2 different pingouin sur le meme ilot
+                    supprimerPingouinListe(cote,pingouins);
+                    return 0;
+                }
+                //ilot
+                if(!jeu.contains(cote,tuiles)){
+                    tuiles.add(cote);
+                    getTuiles(jeu,pingouins,tuiles, cote);
+                    if(valeur == pingouin){
+                        //2 meme pingouin sur le meme ilot
+                        supprimerPingouinListe(cote,pingouins);
+                    }else {
+                        result+=valeur;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private static void supprimerPingouinListe(int[] cote, ArrayList<int[]> pingouins){
+        int i;
+        for (i = 0; i < pingouins.size();i++){
+            if(pingouins.get(i)[0]==cote[0] && pingouins.get(i)[1]==cote[1]){
+                break;
+            }
+        }
+       pingouins.remove(i);
+    }
 
     public static ArrayList<ArrayList<int[]>> getNombre(Jeu jeu, ArrayList<int[]> pingouins){
         ArrayList<ArrayList<int[]>> result = new ArrayList<>();
