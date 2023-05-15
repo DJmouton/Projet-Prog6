@@ -197,6 +197,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 			{
 				jeu.setEtat(Etats.Selection);
 			}
+			coup.sourcec = 0;
+			coup.sourcel = 0;
 			jeu.metAJour();
 			consultation = true;
 			tour();
