@@ -197,9 +197,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 			{
 				jeu.setEtat(Etats.Selection);
 			}
+			jeu.metAJour();
 			coup.sourcec = 0;
 			coup.sourcel = 0;
-			jeu.metAJour();
 			consultation = true;
 			tour();
 		}
@@ -208,7 +208,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void refaire(){
 		if (jeu.peutRefaire()) {
 			do {
-					jeu.refaire();
+				jeu.refaire();
 			} while (jeu.peutRefaire() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
 
 			if (!jeu.peutRefaire())
