@@ -22,7 +22,7 @@ public class Placement implements Commande
 		jeu.joueurs[jeu.joueurCourant].addIlots();
 		jeu.joueurs[jeu.joueurCourant].addScore(1);
 		jeu.nombreP++;
-		if (jeu.nombreP == 8-jeu.e)
+		if (jeu.nombreP == jeu.nombrePAvoir-jeu.e)
 			jeu.etat = Etats.Selection;
 
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
@@ -37,7 +37,7 @@ public class Placement implements Commande
 	@Override
 	public String toString() {
 		return "Placement" + "\n"+
-				 + destl +
+				+ destl +
 				" " + destc
 				//", jeu=" + jeu +
 				;

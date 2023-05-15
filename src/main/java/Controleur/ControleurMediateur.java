@@ -16,7 +16,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1,1,0,0);
+		nouvellePartie(1,1,1,0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -26,8 +26,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 		typesJoueurs.add(j2);
 		typesJoueurs.add(j3);
 		typesJoueurs.add(j4);
-		jeu.initJoueurs(typesJoueurs);
 		jeu.reset();
+		jeu.initJoueurs(typesJoueurs);
+
 		consultation = false;
 		tour();
 	}
