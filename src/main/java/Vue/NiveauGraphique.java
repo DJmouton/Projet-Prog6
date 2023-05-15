@@ -25,7 +25,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
 
-	BufferedImage[] assetsPlateau = new BufferedImage[27];
+	BufferedImage[] assetsPlateau = new BufferedImage[28];
 
 
 	public NiveauGraphique(CollecteurEvenements c) {
@@ -69,7 +69,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (control.etatSel()) {
 			try {
 				historique();
-				g.drawImage(assetsPlateau[19], largeur, hauteur,
+				g.drawImage(assetsPlateau[27], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 			} catch (NullPointerException e) {
 				System.out.println("Pas de coup disponible");
@@ -155,6 +155,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[24] = ImageIO.read(new File("resources/assets/vertP.png"));
 			assetsPlateau[25] = ImageIO.read(new File("resources/assets/rougeP.png"));
 			assetsPlateau[26] = ImageIO.read(new File("resources/assets/jauneP.png"));
+			assetsPlateau[27] = ImageIO.read(new File("resources/assets/hist.png"));
 
 
 		} catch (IOException e) {
