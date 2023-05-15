@@ -208,34 +208,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		}
 	}
 
-
-
-//////////////////////////////////////////////////////////////////////////
-//
-// FONCTIONS A SUPPRIMER POUR LA PREMIERE VERSION
-//
-//////////////////////////////////////////////////////////////////////////
-
-	@Override
-	public void changeJoueur(int j, int t) {
-        /*
-		System.out.println("Nouveau type " + t + " pour le joueur " + j);
-		if(t == 0) {
-			joueurs[j][0] = new JoueurHumain(j, jeu);
-		}
-		else if(t == 1) {
-			if(j==0) {
-				joueurs[j][1] = new IAAleatoire(j, jeu);
-			}
-			else {
-				joueurs[j][1] = new IANiveau2(j, jeu);
-			}
-		}
-		typeJoueur[j] = t;
-		*/
-	}
-
-
 	public void sauver(String fichier){
 		try {
 			jeu.sauver(fichier);
