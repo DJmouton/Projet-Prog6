@@ -79,6 +79,8 @@ public interface CollecteurEvenements {
 
 	int joueurCourant();
 
+	int nbJoueurs();
+
 	int scoreJoueur(int joueur);
 
 	boolean partieEnCours();

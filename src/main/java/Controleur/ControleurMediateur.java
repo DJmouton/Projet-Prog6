@@ -226,9 +226,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			jeu.charger(fichier);
 		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de charger depuis " + fichier);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 		if (jeu.getNombreP() == 8)
@@ -242,19 +240,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		int jc = 0;
-		try {
-			jc = jeu.joueurCourant;
-		} catch (Exception e) {}
-		return jc;
+		return jeu.joueurCourant;
+	}
+
+	public int nbJoueurs() {
+		return jeu.joueurs.length;
 	}
 
 	public int scoreJoueur(int joueur){
-		int score = 0;
-		try {
-			score = jeu.joueurs[joueur].getScore();
-		} catch (Exception e) {}
-		return score;
+		return jeu.joueurs[joueur].getScore();
 	}
 
 	public boolean estIA() {

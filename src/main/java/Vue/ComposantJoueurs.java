@@ -28,7 +28,7 @@ public class ComposantJoueurs extends Box implements Observateur {
 
 	@Override
 	public void miseAJour() {
-		for (int i = 0; i < joueurs.length; i++) {
+		for (int i = 0; i < control.nbJoueurs(); i++) {
 			joueurs[i].setScore(control.scoreJoueur(i));
 			joueurs[i].setCurrent(control.joueurCourant() == i);
 		}
