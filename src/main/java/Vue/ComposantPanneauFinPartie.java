@@ -15,7 +15,7 @@ public class ComposantPanneauFinPartie extends JPanel {
                 new ComposantInfoJoueur(3, Color.red),
                 new ComposantInfoJoueur(4, Color.yellow)
         };
-        for (int i = 0; i < joueurs.length; i++) {
+        for (int i = 0; i < control.nbJoueurs(); i++) {
             joueurs[i].setScore(control.scoreJoueur(i));
         }
         setLayout(new GridBagLayout());
