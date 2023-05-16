@@ -71,6 +71,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				historique();
 				g.drawImage(assetsPlateau[27], largeur, hauteur,
 						largeurCase, hauteurCase, this);
+				g.drawLine(largeur, hauteur, 0, 0);
 			} catch (NullPointerException e) {
 				System.out.println("Pas de coup disponible");
 			}
@@ -189,7 +190,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawImage(assetsPlateau[0], 0, 0, largeurCase, hauteurCase, this);
 
 		// TODO : Dessine l'animation de déplacement d'un pingouin
-		// dernierCoup(g);
+		dernierCoup(g);
 		// ligneHist(g);
 	}
 
