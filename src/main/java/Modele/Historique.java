@@ -5,7 +5,7 @@ import java.util.Stack;
 
 public class Historique
 {
-	Stack<Commande> passe, futur;
+	public Stack<Commande> passe, futur;
 
 	Historique()
 	{

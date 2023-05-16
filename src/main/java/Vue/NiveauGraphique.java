@@ -167,7 +167,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				dessinplat = new ArrayList<>(control.getPinguins(control.joueurCourant() + 4));
 				feedforward(g, assetsPlateau, dessinplat);
 
-				// Pingouins actuellement selectionner
+				// Pingouins actuellement selectionné
 				historique();
 				if (!(control.valeur(x, y) == 0))
 					g.drawImage(assetsPlateau[control.valeur(x, y) + 11], largeur, hauteur,
