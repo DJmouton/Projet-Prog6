@@ -20,7 +20,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1, 1, 0, 0);
+		nouvellePartie(1, 1, 2, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -69,7 +69,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.metAJour();
 					consultation = false;
 					tour();
-				} else if (jeu.getNombreP() == 8 - jeu.getE()) {
+				} else if (jeu.getNombreP() == jeu.getnombrePAvoir() - jeu.getE()) {
 					jeu.setEtat(Etats.Selection);
 				} else {
 					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
@@ -208,7 +208,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				jeu.setEtat(Etats.Initialisation);
 				jeu.annuler();
 			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
-			if (jeu.getNombreP() == jeu.getnombrePAvoir()) {
+			if (jeu.getNombreP() == jeu.getnombrePAvoir()- jeu.getE()) {
 				jeu.setEtat(Etats.Selection);
 			}
 			// le source du coup doit être celui du sommet de la pile passe
@@ -265,7 +265,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		if (jeu.getNombreP() == 8) {
+		if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
 			jeu.setEtat(Etats.Selection);
 		}
 		jeu.metAJour();

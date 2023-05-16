@@ -13,21 +13,21 @@ public class Jeu extends Observable {
 	public int[][] plateau;
 	int[][] copy_plateau ;
 	public Joueur[] joueurs;
-	int largeur = 8;
-	int hauteur = 8;
-	Etats etat = Etats.Initialisation;
+	int largeur;
+	int hauteur;
+	Etats etat ;
 	Coup coup;
 	public int joueurCourant;
-	int nombreP = 0;
-	int nombrePAvoir=8;
-	int e = 0;
+	int nombreP;
+	int nombrePAvoir;
+	int e ;
 	public Historique historique;
 
 	public Jeu() {
 		reset();
 	}
 
-	public Jeu(int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant, int nombreP) {
+	public Jeu(int[][] plateau, Joueur[] joueurs, int largeur, int hauteur, Etats etat, int joueurCourant, int nombreP,int nombrePAvoir,int e) {
 		this.joueurs = new Joueur[joueurs.length];
 		for (int i = 0; i < joueurs.length; i++) {
 			this.joueurs[i] = (Joueur) joueurs[i].clone();
@@ -38,6 +38,8 @@ public class Jeu extends Observable {
 		this.hauteur = hauteur;
 		this.plateau = new int[largeur][hauteur];
 		this.nombreP = nombreP;
+		this.nombrePAvoir=nombrePAvoir;
+		this.e=e;
 		for (int i = 0; i < largeur; i++) {
 			for (int j = 0; j < hauteur; j++) {
 				this.plateau[i][j] = plateau[i][j];
@@ -52,7 +54,6 @@ public class Jeu extends Observable {
 		joueurCourant = 0;
 		nombreP = 0;
 		e = 0;
-		nombrePAvoir=8;
 		historique = new Historique();
 		//initPlateau();
 		//initJoueurs();
@@ -255,6 +256,7 @@ public class Jeu extends Observable {
 		}
 		joueurs = new Joueur[typesJoueurs.size()];
 		if(typesJoueurs.size()==3){nombrePAvoir=9;}
+		else{nombrePAvoir=8;}
 		for (int i = 0; i < typesJoueurs.size(); i++) {
 			typeJoueur = typesJoueurs.get(i);
 			if (typeJoueur == 1) {
@@ -529,7 +531,7 @@ public class Jeu extends Observable {
 
 	@Override
 	protected Object clone() {
-		Jeu j = new Jeu(this.plateau, this.joueurs, this.largeur, this.hauteur, this.etat, this.joueurCourant, this.nombreP);
+		Jeu j = new Jeu(this.plateau, this.joueurs, this.largeur, this.hauteur, this.etat, this.joueurCourant, this.nombreP,this.nombrePAvoir,this.e);
 		for (Joueur joueur : j.joueurs) {
 			joueur.jeu = j;
 		}
