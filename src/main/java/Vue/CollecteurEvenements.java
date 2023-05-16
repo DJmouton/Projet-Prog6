@@ -37,6 +37,8 @@ public interface CollecteurEvenements {
 
 	void nouvellePartie(int j1, int j2, int j3, int j4);
 
+	void recommencer();
+
 	ArrayList<int[]> hexAccessible(int l, int c);
 
 	ArrayList<int[]> getPinguins(int numeroJ);
@@ -84,4 +86,6 @@ public interface CollecteurEvenements {
 	int scoreJoueur(int joueur);
 
 	boolean partieEnCours();
+
+	int[] ranking();
 }

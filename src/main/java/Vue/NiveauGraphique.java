@@ -89,36 +89,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		}
 	}
 
-	public void ligneHist(Graphics g) {
-		if (control.etatSel())
-			try {
-				int x1 = control.coupSrcL();
-				int y1 = control.coupSrcC();
-				int x2 = control.coupDestL();
-				int y2 = control.coupDestC();
-
-				y1 *= hauteurCase;
-				y2 *= hauteurCase;
-				y1 /= 1.3f;
-				y2 /= 1.3f;
-				if (y1 % 2 == 1)
-					x1 += (largeurCase / 2f);
-				x1 *= largeurCase;
-				if (y2 % 2 == 1)
-					x2 += (largeurCase / 2f);
-				x2 *= largeurCase;
-				System.out.println("x1 : " + x1);
-				System.out.println("y1 : " + y1);
-				System.out.println("x2 : " + x2);
-				System.out.println("y2 : " + y2);
-
-				g.drawLine(x1, y1, x2, y2);
-
-
-			} catch (NullPointerException e) {
-				System.out.println("Pas de coup disponible");
-			}
-	}
 	@Override
 	public void paintComponent(Graphics g) {
 
@@ -196,7 +166,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				dessinplat = new ArrayList<>(control.getPinguins(control.joueurCourant() + 4));
 				feedforward(g, assetsPlateau, dessinplat);
 
-				// Pingouins actuellement selectionner
+				// Pingouins actuellement selectionné
 				historique();
 				if (!(control.valeur(x, y) == 0))
 					g.drawImage(assetsPlateau[control.valeur(x, y) + 11], largeur, hauteur,
