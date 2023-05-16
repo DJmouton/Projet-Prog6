@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class NiveauGraphique extends JComponent implements Observateur {
 
 	CollecteurEvenements control;
@@ -17,10 +18,17 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Variables de positionnement pour le dessin
 	int x, y, hauteur, largeur, lignes, colonnes, largeurCase, hauteurCase;
 
+	// Variables pour dessiner l'historique du dernier coup
+	int x1, x2, y1, y2, hauteur1, largeur1, hauteur2, largeur2;
+
 	// Formule pour calculer la distance entre 2 hexagons
 	float height;
 
 	Timer timer;
+
+	float[] dashingPattern2 = {10f, 4f};
+	Stroke stroke = new BasicStroke(4f, BasicStroke.CAP_BUTT,
+			BasicStroke.JOIN_MITER, 1.0f, dashingPattern2, 0.0f);
 
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
@@ -69,9 +77,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (control.etatSel()) {
 			try {
 				historique();
+				g.setColor(Color.MAGENTA);
+				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
+				g.setColor(Color.BLACK);
 				g.drawImage(assetsPlateau[27], largeur, hauteur,
 						largeurCase, hauteurCase, this);
-				g.drawLine(largeur, hauteur, 0, 0);
 			} catch (NullPointerException e) {
 				System.out.println("Pas de coup disponible");
 			}
@@ -82,18 +92,43 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	private void historique() {
 		x = control.coupSrcL();
 		y = control.coupSrcC();
+
+		x1 = control.coupSrcL();
+		y1 = control.coupSrcC();
+		x2 = control.coupDestL();
+		y2 = control.coupDestC();
 		hauteur = Math.round((float) x * height);
-		if (x % 2 == 1) {
+		if (x % 2 == 1)
 			largeur = y * largeurCase + largeurCase / 2;
-		} else {
+		else
 			largeur = y * largeurCase;
-		}
+
+		hauteur1 = Math.round((float) x1 * height);
+		if (x1 % 2 == 1)
+			largeur1 = y1 * largeurCase + largeurCase / 2;
+		else
+			largeur1 = y1 * largeurCase;
+
+		hauteur2 = Math.round((float) x2 * height);
+		if (x2   % 2 == 1)
+			largeur2 = y2 * largeurCase + largeurCase / 2;
+		else
+			largeur2 = y2 * largeurCase;
+
+		hauteur1 += hauteurCase / 2;
+		hauteur2 += hauteurCase / 2;
+		largeur1 -= largeurCase / 2;
+		largeur2 -= largeurCase / 2;
+		largeur1 += largeurCase;
+		largeur2 += largeurCase;
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 
 		Graphics2D drawable = (Graphics2D) g;
+
+		drawable.setStroke(stroke);
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 
@@ -192,18 +227,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// TODO : Dessine l'animation de déplacement d'un pingouin
 		dernierCoup(g);
 		// ligneHist(g);
-	}
-
-	@Override
-	public void paintChildren(Graphics g) {
-
-		Graphics2D drawableC = (Graphics2D) g;
-
-		g.setFont(new Font("Arial", Font.BOLD, getHeight() / 30));
-
-		// Fin de la partie
-		if (!control.partieEnCours())
-			g.drawString("La partie est terminée.", 0, hauteur() / 2);
 	}
 
 	int largeur() {
