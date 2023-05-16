@@ -51,6 +51,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				typesJoueurs[2],
 				typesJoueurs[3]
 		);
+		jeu.metAJour();
 	}
 
 	/**************************************************************************************************
