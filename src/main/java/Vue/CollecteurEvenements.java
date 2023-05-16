@@ -89,5 +89,9 @@ public interface CollecteurEvenements {
 
 	int[] ranking();
 
+	boolean dernierCoupEstDeplacement();
+
+	int[] pingSel();
+  
 	int nombreJoueurs();
 }
