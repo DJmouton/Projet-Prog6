@@ -66,6 +66,7 @@ public interface CollecteurEvenements {
 	boolean etatSel();
 
 	boolean etatPla();
+
 	void clicSouris(int l, int c);
 
 	void tictac();
@@ -87,4 +88,6 @@ public interface CollecteurEvenements {
 	boolean partieEnCours();
 
 	int[] ranking();
+
+	int nombreJoueurs();
 }
