@@ -345,4 +345,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean etatPla() {
 		return Etats.Initialisation == jeu.etatCourant();
 	}
+
+	public int nombreJoueurs(){
+		return jeu.joueurs.length;
+	}
 }
