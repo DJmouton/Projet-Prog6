@@ -22,7 +22,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1, 1, 0, 0);
+		nouvellePartie(1, 1, 2, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -71,7 +71,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					jeu.metAJour();
 					consultation = false;
 					tour();
-				} else if (jeu.getNombreP() == 8 - jeu.getE()) {
+				} else if (jeu.getNombreP() == jeu.getnombrePAvoir() - jeu.getE()) {
 					jeu.setEtat(Etats.Selection);
 				} else {
 					System.out.println("Un pingouin doit être placé sur un ilot à 1 poisson");
@@ -212,7 +212,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				jeu.setEtat(Etats.Initialisation);
 				jeu.annuler();
 			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
-			if (jeu.getNombreP() == jeu.getnombrePAvoir()) {
+			if (jeu.getNombreP() == jeu.getnombrePAvoir()- jeu.getE()) {
 				jeu.setEtat(Etats.Selection);
 			}
 			// le source du coup doit être celui du sommet de la pile passe
@@ -250,34 +250,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		}
 	}
 
-
-//////////////////////////////////////////////////////////////////////////
-//
-// FONCTIONS A SUPPRIMER POUR LA PREMIERE VERSION
-//
-//////////////////////////////////////////////////////////////////////////
-
-	@Override
-	public void changeJoueur(int j, int t) {
-        /*
-		System.out.println("Nouveau type " + t + " pour le joueur " + j);
-		if(t == 0) {
-			joueurs[j][0] = new JoueurHumain(j, jeu);
-		}
-		else if(t == 1) {
-			if(j==0) {
-				joueurs[j][1] = new IAAleatoire(j, jeu);
-			}
-			else {
-				joueurs[j][1] = new IANiveau2(j, jeu);
-			}
-		}
-		typeJoueur[j] = t;
-		*/
-	}
-
-
-	public void sauver(String fichier) {
+	public void sauver(String fichier){
 		try {
 			jeu.sauver(fichier);
 		} catch (FileNotFoundException e) {
@@ -295,12 +268,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 			jeu.charger(fichier);
 		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de charger depuis " + fichier);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		if (jeu.getNombreP() == 8) {
+		if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
 			jeu.setEtat(Etats.Selection);
 		}
 		jeu.metAJour();
@@ -310,21 +281,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		int jc = 0;
-		try {
-			jc = jeu.joueurCourant;
-		} catch (Exception e) {
-		}
-		return jc;
+		return jeu.joueurCourant;
 	}
 
-	public int scoreJoueur(int joueur) {
-		int score = 0;
-		try {
-			score = jeu.joueurs[joueur].getScore();
-		} catch (Exception e) {
-		}
-		return score;
+	public int nbJoueurs() {
+		return jeu.joueurs.length;
+	}
+
+	public int scoreJoueur(int joueur){
+		return jeu.joueurs[joueur].getScore();
 	}
 
 	public boolean estIA() {
@@ -386,12 +351,17 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean etatPla() {
 		return Etats.Initialisation == jeu.etatCourant();
 	}
-
+  
 	public boolean dernierCoupEstDeplacement() {
 		return jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup;
 	}
 
 	public int[] pingSel() {
 		return PingSel;
+  }
+  
+	public int nombreJoueurs() {
+		return jeu.joueurs.length;
+
 	}
 }
