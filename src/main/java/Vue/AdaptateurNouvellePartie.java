@@ -19,34 +19,26 @@ public class AdaptateurNouvellePartie implements ActionListener {
                 nouvelle_partie
         };
         Object[] options = {
-                "Partie Rapide",
-                "Partie Custom",
+                "Lancer la partie",
                 "Annuler"
         };
         int option = JOptionPane.showOptionDialog(
                 null,
                 inputs,
                 "Nouvelle Partie",
-                0,
+                JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 options,
-                2
+                1
         );
-        switch (option){
-            case 0:
-                control.nouvellePartie(2, 1, 0, 0);
-                break;
-            case 1:
+        if (option == 0){
                 control.nouvellePartie(
                         nouvelle_partie.joueur1.getSelectedIndex(),
                         nouvelle_partie.joueur2.getSelectedIndex(),
                         nouvelle_partie.joueur3.getSelectedIndex(),
                         nouvelle_partie.joueur4.getSelectedIndex()
                 );
-                break;
-            default:
-                break;
         }
     }
 }
