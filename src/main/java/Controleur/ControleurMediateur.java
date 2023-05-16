@@ -244,34 +244,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		}
 	}
 
-
-//////////////////////////////////////////////////////////////////////////
-//
-// FONCTIONS A SUPPRIMER POUR LA PREMIERE VERSION
-//
-//////////////////////////////////////////////////////////////////////////
-
-	@Override
-	public void changeJoueur(int j, int t) {
-        /*
-		System.out.println("Nouveau type " + t + " pour le joueur " + j);
-		if(t == 0) {
-			joueurs[j][0] = new JoueurHumain(j, jeu);
-		}
-		else if(t == 1) {
-			if(j==0) {
-				joueurs[j][1] = new IAAleatoire(j, jeu);
-			}
-			else {
-				joueurs[j][1] = new IANiveau2(j, jeu);
-			}
-		}
-		typeJoueur[j] = t;
-		*/
-	}
-
-
-	public void sauver(String fichier) {
+	public void sauver(String fichier){
 		try {
 			jeu.sauver(fichier);
 		} catch (FileNotFoundException e) {
@@ -289,9 +262,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			jeu.charger(fichier);
 		} catch (FileNotFoundException e) {
 			System.err.println("Impossible de charger depuis " + fichier);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 		if (jeu.getNombreP() == 8) {
@@ -304,21 +275,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 	}
 
 	public int joueurCourant() {
-		int jc = 0;
-		try {
-			jc = jeu.joueurCourant;
-		} catch (Exception e) {
-		}
-		return jc;
+		return jeu.joueurCourant;
 	}
 
-	public int scoreJoueur(int joueur) {
-		int score = 0;
-		try {
-			score = jeu.joueurs[joueur].getScore();
-		} catch (Exception e) {
-		}
-		return score;
+	public int nbJoueurs() {
+		return jeu.joueurs.length;
+	}
+
+	public int scoreJoueur(int joueur){
+		return jeu.joueurs[joueur].getScore();
 	}
 
 	public boolean estIA() {
