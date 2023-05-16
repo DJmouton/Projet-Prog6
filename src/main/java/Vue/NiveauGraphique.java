@@ -29,6 +29,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	float[] dashingPattern2 = {10f, 4f};
 	Stroke stroke = new BasicStroke(4f, BasicStroke.CAP_BUTT,
 			BasicStroke.JOIN_MITER, 1.0f, dashingPattern2, 0.0f);
+	Stroke stroke2 = new BasicStroke(8f, BasicStroke.CAP_BUTT,
+			BasicStroke.JOIN_MITER, 1.0f, dashingPattern2, 0.0f);
 
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
@@ -73,11 +75,14 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		}
 	}
 
-	public void dernierCoup(Graphics g) {
-		if (control.etatSel()) {
+	public void dernierCoup(Graphics g, Graphics2D drawable) {
+		if (control.etatSel() && control.dernierCoupEstDeplacement()) {
 			try {
 				historique();
-				g.setColor(Color.MAGENTA);
+				drawable.setStroke(stroke2);
+				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
+				g.setColor(Color.RED);
+				drawable.setStroke(stroke);
 				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
 				g.setColor(Color.BLACK);
 				g.drawImage(assetsPlateau[27], largeur, hauteur,
@@ -204,7 +209,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 				// Pingouins actuellement selectionné
 				historique();
-				if (!(control.valeur(x, y) == 0))
+				if (!(control.valeur(x, y) == 0) && !(control.pingSel()[0] == 0 && control.pingSel()[1] == 0))
 					g.drawImage(assetsPlateau[control.valeur(x, y) + 11], largeur, hauteur,
 							largeurCase, hauteurCase, this);
 			} catch (NullPointerException e) {
@@ -225,7 +230,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			g.drawImage(assetsPlateau[0], 0, 0, largeurCase, hauteurCase, this);
 
 		// TODO : Dessine l'animation de déplacement d'un pingouin
-		dernierCoup(g);
+		dernierCoup(g, drawable);
 		// ligneHist(g);
 	}
 

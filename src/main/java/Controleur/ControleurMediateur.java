@@ -12,6 +12,8 @@ import java.util.List;
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Coup coup;
+
+	public int[] PingSel;
 	int poissons;
 
 	int[] ranks;
@@ -79,6 +81,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Selection:
 				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
+					PingSel = new int[]{l, c};
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
 					jeu.setEtat(Etats.Deplacement);
@@ -101,6 +104,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 					tour();
 				} else if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
+					PingSel = new int[]{l, c};
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
 				} else {
@@ -218,6 +222,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
 				jeu.setEtat(Etats.Selection);
 			}
+			PingSel = new int[]{0, 0};
 			jeu.metAJour();
 			consultation = true;
 			tour();
@@ -239,6 +244,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
 				jeu.setEtat(Etats.Selection);
 			}
+			PingSel = new int[]{0, 0};
 			jeu.metAJour();
 			tour();
 		}
@@ -379,5 +385,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public boolean etatPla() {
 		return Etats.Initialisation == jeu.etatCourant();
+	}
+
+	public boolean dernierCoupEstDeplacement() {
+		return jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup;
+	}
+
+	public int[] pingSel() {
+		return PingSel;
 	}
 }
