@@ -21,7 +21,7 @@ public class Jeu extends Observable {
 	int nombreP = 0;
 	int nombrePAvoir=8;
 	int e = 0;
-	Historique historique;
+	public Historique historique;
 
 	public Jeu() {
 		reset();

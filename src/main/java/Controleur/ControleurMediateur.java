@@ -20,7 +20,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1, 1, 1, 0);
+		nouvellePartie(1, 1, 0, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -78,9 +78,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 			case Selection:
 				if (jeu.plateau[l][c] == jeu.joueurCourant + 4) {
 					coup = new Coup(l, c, this.jeu);
-					jeu.setEtat(Etats.Deplacement);
 					System.out.println("Pingouin (" + l + "," + c + ") selectionné");
 					jeu.metAJour();
+					jeu.setEtat(Etats.Deplacement);
+
 				} else {
 					System.out.println("Sélectionne un de tes pingouins");
 				}
@@ -209,6 +210,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 			if (jeu.getNombreP() == jeu.getnombrePAvoir()) {
 				jeu.setEtat(Etats.Selection);
 			}
+			// le source du coup doit être celui du sommet de la pile passe
+			if (jeu.historique.passe.size() > 0 && jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup) {
+				coup = ((Coup) jeu.historique.passe.get(jeu.historique.passe.size()-1));
+			}
+			if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
+				jeu.setEtat(Etats.Selection);
+			}
 			jeu.metAJour();
 			consultation = true;
 			tour();
@@ -223,7 +231,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 			if (!jeu.peutRefaire())
 				consultation = false;
-
+			// le source du coup doit être celui du sommet de la pile passe
+			if (jeu.historique.passe.size() > 0 && jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup) {
+				coup = ((Coup) jeu.historique.passe.get(jeu.historique.passe.size()-1));
+			}
+			if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
+				jeu.setEtat(Etats.Selection);
+			}
 			jeu.metAJour();
 			tour();
 		}
