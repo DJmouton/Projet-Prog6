@@ -37,6 +37,22 @@ public class ControleurMediateur implements CollecteurEvenements {
 		tour();
 	}
 
+	public void recommencer(){
+		int[] typesJoueurs = new int[4];
+		for (int i = 0; i < 4; i++) {
+			if(i < jeu.joueurs.length)
+				typesJoueurs[i] = jeu.joueurs[i].getTypeJoueur();
+			else
+				typesJoueurs[i] = 0;
+		}
+		nouvellePartie(
+				typesJoueurs[0],
+				typesJoueurs[1],
+				typesJoueurs[2],
+				typesJoueurs[3]
+		);
+	}
+
 	/**************************************************************************************************
 	 * Traitement d'un clic humain sur le plateau, ignoré si ce n'est pas au tour d'un humain de jouer.
 	 ***************************************************************************************************/
