@@ -26,11 +26,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 	Timer timer;
 
-	float[] dashingPattern2 = {10f, 4f};
-	Stroke stroke = new BasicStroke(4f, BasicStroke.CAP_BUTT,
-			BasicStroke.JOIN_MITER, 1.0f, dashingPattern2, 0.0f);
-	Stroke stroke2 = new BasicStroke(8f, BasicStroke.CAP_BUTT,
-			BasicStroke.JOIN_MITER, 1.0f, dashingPattern2, 0.0f);
+	float[] dashingPattern2 = {20f, 10f};
+	Stroke stroke = new BasicStroke(2f, BasicStroke.CAP_ROUND,
+			BasicStroke.JOIN_ROUND, 2.0f, dashingPattern2, 1.0f);
+	Stroke stroke2 = new BasicStroke(4f, BasicStroke.CAP_ROUND,
+			BasicStroke.JOIN_ROUND, 2.0f, dashingPattern2, 1.0f);
 
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
@@ -79,12 +79,15 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (control.etatSel() && control.dernierCoupEstDeplacement()) {
 			try {
 				historique();
+				// Dessins d'un trait en pointillé
 				drawable.setStroke(stroke2);
 				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
 				g.setColor(Color.RED);
 				drawable.setStroke(stroke);
 				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
 				g.setColor(Color.BLACK);
+
+				// Dessin du pingouins fantôme
 				g.drawImage(assetsPlateau[27], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 			} catch (NullPointerException e) {
@@ -95,6 +98,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	}
 
 	private void historique() {
+
 		x = control.coupSrcL();
 		y = control.coupSrcC();
 
@@ -102,7 +106,9 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		y1 = control.coupSrcC();
 		x2 = control.coupDestL();
 		y2 = control.coupDestC();
+
 		hauteur = Math.round((float) x * height);
+
 		if (x % 2 == 1)
 			largeur = y * largeurCase + largeurCase / 2;
 		else
@@ -209,9 +215,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 				// Pingouins actuellement selectionné
 				historique();
-				if (!(control.valeur(x, y) == 0) && !(control.pingSel()[0] == 0 && control.pingSel()[1] == 0))
+				if (!(control.valeur(x, y) == 0) && !(control.pingSel()[0] == 0 && control.pingSel()[1] == 0)) {
+
 					g.drawImage(assetsPlateau[control.valeur(x, y) + 11], largeur, hauteur,
 							largeurCase, hauteurCase, this);
+				}
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
 			}
