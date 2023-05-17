@@ -24,8 +24,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Formule pour calculer la distance entre 2 hexagons
 	float height;
 
-	Timer timer;
-
 	float[] dashingPattern2 = {20f, 10f};
 	Stroke stroke = new BasicStroke(2f, BasicStroke.CAP_ROUND,
 			BasicStroke.JOIN_ROUND, 2.0f, dashingPattern2, 1.0f);
