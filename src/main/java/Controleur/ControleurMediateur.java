@@ -36,6 +36,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		jeu.initJoueurs(typesJoueurs);
 		jeu.initPlateau();
 		consultation = false;
+		jeu.metAJour();
 		tour();
 	}
 
