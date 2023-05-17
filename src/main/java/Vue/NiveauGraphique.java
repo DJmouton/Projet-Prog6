@@ -19,7 +19,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	int x, y, hauteur, largeur, lignes, colonnes, largeurCase, hauteurCase;
 
 	// Variables pour dessiner l'historique du dernier coup
-	int x1, x2, y1, y2, hauteur1, largeur1, hauteur2, largeur2;
+	int x2, y2, hauteur1, largeur1, hauteur2, largeur2;
 
 	// Formule pour calculer la distance entre 2 hexagons
 	float height;
@@ -100,8 +100,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		x = control.coupSrcL();
 		y = control.coupSrcC();
 
-		x1 = control.coupSrcL();
-		y1 = control.coupSrcC();
 		x2 = control.coupDestL();
 		y2 = control.coupDestC();
 
@@ -112,14 +110,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		else
 			largeur = y * largeurCase;
 
-		hauteur1 = Math.round((float) x1 * height);
-		if (x1 % 2 == 1)
-			largeur1 = y1 * largeurCase + largeurCase / 2;
-		else
-			largeur1 = y1 * largeurCase;
+		largeur1 = largeur;
+		hauteur1 = hauteur;
 
 		hauteur2 = Math.round((float) x2 * height);
-		if (x2   % 2 == 1)
+		if (x2 % 2 == 1)
 			largeur2 = y2 * largeurCase + largeurCase / 2;
 		else
 			largeur2 = y2 * largeurCase;
@@ -162,7 +157,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/bleuS.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/vertS.png"));
 			assetsPlateau[18] = ImageIO.read(new File("resources/assets/rougeS.png"));
-			assetsPlateau[19] = ImageIO.read(new File("resources/assets/jauneS.png"));;
+			assetsPlateau[19] = ImageIO.read(new File("resources/assets/jauneS.png"));
 			assetsPlateau[20] = ImageIO.read(new File("resources/assets/p1M.png"));
 			assetsPlateau[21] = ImageIO.read(new File("resources/assets/p2M.png"));
 			assetsPlateau[22] = ImageIO.read(new File("resources/assets/p3M.png"));
@@ -209,9 +204,9 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				// Pingouins actuellement selectionné
 				historique();
 				if (!(control.valeur(x, y) == 0) && !(control.pingSel()[0] == 0 && control.pingSel()[1] == 0)) {
-					if(control.valeur(x, y) > 3)
+					if (control.valeur(x, y) > 3)
 						g.drawImage(assetsPlateau[control.valeur(x, y) + 12], largeur, hauteur,
-							largeurCase, hauteurCase, this);
+								largeurCase, hauteurCase, this);
 				}
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
