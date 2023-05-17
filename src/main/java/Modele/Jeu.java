@@ -106,7 +106,7 @@ public class Jeu extends Observable {
 		}
 
 		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()) {
-			plateau[l][c] = 0;
+			plateau[l][c] = 8;
 			nombreP--;
 			e++;
 		}
