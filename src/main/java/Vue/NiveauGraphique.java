@@ -85,8 +85,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
 				g.setColor(Color.BLACK);
 
-				// Dessin du pingouins fantôme
-				g.drawImage(assetsPlateau[27], largeur, hauteur,
+				// Dessin du pingouins fantôme du dernier coup
+				g.drawImage(assetsPlateau[23], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 			} catch (NullPointerException e) {
 				System.out.println("Pas de coup disponible");
@@ -162,15 +162,11 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[16] = ImageIO.read(new File("resources/assets/bleuS.png"));
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/vertS.png"));
 			assetsPlateau[18] = ImageIO.read(new File("resources/assets/rougeS.png"));
-			assetsPlateau[19] = ImageIO.read(new File("resources/assets/jauneS.png"));
-			assetsPlateau[20] = ImageIO.read(new File("resources/assets/bleuH.png"));
-			assetsPlateau[21] = ImageIO.read(new File("resources/assets/vertH.png"));
-			assetsPlateau[22] = ImageIO.read(new File("resources/assets/rougeH.png"));
-			assetsPlateau[23] = ImageIO.read(new File("resources/assets/jauneH.png"));
-			assetsPlateau[24] = ImageIO.read(new File("resources/assets/p1M.png"));
-			assetsPlateau[25] = ImageIO.read(new File("resources/assets/p2M.png"));
-			assetsPlateau[26] = ImageIO.read(new File("resources/assets/p3M.png"));
-			assetsPlateau[27] = ImageIO.read(new File("resources/assets/hist.png"));
+			assetsPlateau[19] = ImageIO.read(new File("resources/assets/jauneS.png"));;
+			assetsPlateau[20] = ImageIO.read(new File("resources/assets/p1M.png"));
+			assetsPlateau[21] = ImageIO.read(new File("resources/assets/p2M.png"));
+			assetsPlateau[22] = ImageIO.read(new File("resources/assets/p3M.png"));
+			assetsPlateau[23] = ImageIO.read(new File("resources/assets/hist.png"));
 
 		} catch (IOException e) {
 			System.out.println("Erreur dans le chargement des images");
