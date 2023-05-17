@@ -191,9 +191,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 ********************************/
 	public void afficheRanking(List<Joueur> joueur) {
 		ranks = new int[joueur.size()];
-		for (int i = 0; i < joueur.size()-1; i++) {
+		for (int i = 0; i < joueur.size(); i++) {
 			// 16 6t ; 16 8
-			if ( joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
+			if (i+1<joueur.size()&& joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
 				if (joueur.get(i).getIlots() < joueur.get(i + 1).getIlots()) {
 					Joueur temp = joueur.get(i);
 					joueur.remove(i);
