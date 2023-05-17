@@ -244,7 +244,7 @@ public class IA extends Joueur{
             for (int[] cote : jeu.getCotes(accessible.get(i)[0],accessible.get(i)[1])){
                 int valeur = jeu.plateau[cote[0]][cote[1]];
                 if(valeur > 0){
-                    if(valeur > 3 && valeur != pingouin){//2 pingouins sur une ilot
+                    if(valeur > 3 && valeur < 8 && valeur != pingouin){//2 pingouins sur une ilot
                         removeCoordFromList(cote, pingouins);
                         return new ArrayList<>();
                     }else if(!jeu.contains(cote,accessible)){
