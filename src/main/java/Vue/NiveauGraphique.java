@@ -24,8 +24,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Formule pour calculer la distance entre 2 hexagons
 	float height;
 
-	Timer timer;
-
 	float[] dashingPattern2 = {20f, 10f};
 	Stroke stroke = new BasicStroke(2f, BasicStroke.CAP_ROUND,
 			BasicStroke.JOIN_ROUND, 2.0f, dashingPattern2, 1.0f);
@@ -35,7 +33,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	// Liste des coordonnées d'hexagones à dessiner
 	ArrayList<int[]> dessinplat;
 
-	BufferedImage[] assetsPlateau = new BufferedImage[28];
+	BufferedImage[] assetsPlateau = new BufferedImage[29];
 
 
 	public NiveauGraphique(CollecteurEvenements c) {
@@ -70,7 +68,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				largeur = y * largeurCase;
 			}
 			if (!(control.valeur(x, y) == 0))
-				g.drawImage(assetsPlateau[control.valeur(x, y) + 7], largeur, hauteur,
+				g.drawImage(assetsPlateau[control.valeur(x, y) + 8], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 		}
 	}
@@ -153,27 +151,26 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[5] = ImageIO.read(new File("resources/assets/vert.png"));
 			assetsPlateau[6] = ImageIO.read(new File("resources/assets/rouge.png"));
 			assetsPlateau[7] = ImageIO.read(new File("resources/assets/jaune.png"));
-			assetsPlateau[8] = ImageIO.read(new File("resources/assets/p1S.png"));
-			assetsPlateau[9] = ImageIO.read(new File("resources/assets/p2S.png"));
-			assetsPlateau[10] = ImageIO.read(new File("resources/assets/p3S.png"));
-			assetsPlateau[11] = ImageIO.read(new File("resources/assets/bleuC.png"));
-			assetsPlateau[12] = ImageIO.read(new File("resources/assets/vertC.png"));
-			assetsPlateau[13] = ImageIO.read(new File("resources/assets/rougeC.png"));
-			assetsPlateau[14] = ImageIO.read(new File("resources/assets/jauneC.png"));
-			assetsPlateau[15] = ImageIO.read(new File("resources/assets/bleuS.png"));
-			assetsPlateau[16] = ImageIO.read(new File("resources/assets/vertS.png"));
-			assetsPlateau[17] = ImageIO.read(new File("resources/assets/rougeS.png"));
-			assetsPlateau[18] = ImageIO.read(new File("resources/assets/jauneS.png"));
-			assetsPlateau[19] = ImageIO.read(new File("resources/assets/bleuH.png"));
-			assetsPlateau[20] = ImageIO.read(new File("resources/assets/vertH.png"));
-			assetsPlateau[21] = ImageIO.read(new File("resources/assets/rougeH.png"));
-			assetsPlateau[22] = ImageIO.read(new File("resources/assets/jauneH.png"));
-			assetsPlateau[23] = ImageIO.read(new File("resources/assets/bleuP.png"));
-			assetsPlateau[24] = ImageIO.read(new File("resources/assets/vertP.png"));
-			assetsPlateau[25] = ImageIO.read(new File("resources/assets/rougeP.png"));
-			assetsPlateau[26] = ImageIO.read(new File("resources/assets/jauneP.png"));
+			assetsPlateau[8] = ImageIO.read(new File("resources/assets/dead.png"));
+			assetsPlateau[9] = ImageIO.read(new File("resources/assets/p1S.png"));
+			assetsPlateau[10] = ImageIO.read(new File("resources/assets/p2S.png"));
+			assetsPlateau[11] = ImageIO.read(new File("resources/assets/p3S.png"));
+			assetsPlateau[12] = ImageIO.read(new File("resources/assets/bleuC.png"));
+			assetsPlateau[13] = ImageIO.read(new File("resources/assets/vertC.png"));
+			assetsPlateau[14] = ImageIO.read(new File("resources/assets/rougeC.png"));
+			assetsPlateau[15] = ImageIO.read(new File("resources/assets/jauneC.png"));
+			assetsPlateau[16] = ImageIO.read(new File("resources/assets/bleuS.png"));
+			assetsPlateau[17] = ImageIO.read(new File("resources/assets/vertS.png"));
+			assetsPlateau[18] = ImageIO.read(new File("resources/assets/rougeS.png"));
+			assetsPlateau[19] = ImageIO.read(new File("resources/assets/jauneS.png"));
+			assetsPlateau[20] = ImageIO.read(new File("resources/assets/bleuH.png"));
+			assetsPlateau[21] = ImageIO.read(new File("resources/assets/vertH.png"));
+			assetsPlateau[22] = ImageIO.read(new File("resources/assets/rougeH.png"));
+			assetsPlateau[23] = ImageIO.read(new File("resources/assets/jauneH.png"));
+			assetsPlateau[24] = ImageIO.read(new File("resources/assets/p1M.png"));
+			assetsPlateau[25] = ImageIO.read(new File("resources/assets/p2M.png"));
+			assetsPlateau[26] = ImageIO.read(new File("resources/assets/p3M.png"));
 			assetsPlateau[27] = ImageIO.read(new File("resources/assets/hist.png"));
-
 
 		} catch (IOException e) {
 			System.out.println("Erreur dans le chargement des images");
@@ -216,8 +213,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				// Pingouins actuellement selectionné
 				historique();
 				if (!(control.valeur(x, y) == 0) && !(control.pingSel()[0] == 0 && control.pingSel()[1] == 0)) {
-
-					g.drawImage(assetsPlateau[control.valeur(x, y) + 11], largeur, hauteur,
+					if(control.valeur(x, y) > 3)
+						g.drawImage(assetsPlateau[control.valeur(x, y) + 12], largeur, hauteur,
 							largeurCase, hauteurCase, this);
 				}
 			} catch (NullPointerException e) {

@@ -99,14 +99,14 @@ public class Jeu extends Observable {
 		ArrayList<int[]> cotes = getCotes(l, c);
 		for (int[] cote : cotes) {
 			if (plateau[cote[0]][cote[1]] > 3 && hex_accessible(cote[0], cote[1]).isEmpty()) {
-				plateau[cote[0]][cote[1]] = 0;
+				plateau[cote[0]][cote[1]] = 8;
 				nombreP--;
 				e++;
 			}
 		}
 
 		if (plateau[l][c] > 3 && hex_accessible(l, c).isEmpty()) {
-			plateau[l][c] = 0;
+			plateau[l][c] = 8;
 			nombreP--;
 			e++;
 		}
