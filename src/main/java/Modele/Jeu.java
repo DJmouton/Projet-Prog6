@@ -209,7 +209,7 @@ public class Jeu extends Observable {
 	public List<Joueur> Ranking() {
 		List<Joueur> joueur = new ArrayList<Joueur>();
 		for (int i = 0; i < joueurs.length; i++) {
-			joueur.add(new Joueur(joueurs[i].score, joueurs[i].num));
+			joueur.add(new Joueur(joueurs[i].score, joueurs[i].ilots, joueurs[i].num));
 		}
 		Collections.sort(joueur);
 		Collections.reverse(joueur);
