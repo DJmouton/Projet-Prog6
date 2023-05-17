@@ -187,18 +187,20 @@ public class ControleurMediateur implements CollecteurEvenements {
 	 ********************************/
 	public void afficheRanking(List<Joueur> joueur) {
 		ranks = new int[joueur.size()];
-		for (int i = 0; i < joueur.size(); i++) {
-			if (i + 1 < joueur.size() && joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
-				if (jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() < jeu.joueurs[joueur.get(i + 1).getNum() - 4].getIlots()) {
+		for (int i = 0; i < joueur.size()-1; i++) {
+			// 16 6t ; 16 8
+			if ( joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
+				if (joueur.get(i).getIlots() < joueur.get(i + 1).getIlots()) {
 					Joueur temp = joueur.get(i);
-					joueur.add(i, joueur.get(i + 1));
+					joueur.remove(i);
 					joueur.add(i + 1, temp);
-				} else if (jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() == jeu.joueurs[joueur.get(i + 1).getNum() - 4].getIlots()) {
+				} else if (joueur.get(i).getIlots() == joueur.get(i + 1).getIlots()) {
 					System.out.println("EGALITE");
 				}
 			}
-			System.out.println("Joueur " + (joueur.get(i).getNum() - 3) + " avec " + joueur.get(i).getScore() + " poissons et " + jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() + " ilots");
+			System.out.println("Joueur " + (joueur.get(i).getNum() - 4) + " avec " + joueur.get(i).getScore() + " poissons et " + jeu.joueurs[joueur.get(i).getNum() - 4].getIlots() + " ilots");
 			ranks[i] = joueur.get(i).getNum() - 4;
+
 		}
 	}
 

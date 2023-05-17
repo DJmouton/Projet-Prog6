@@ -54,8 +54,9 @@ public class Joueur implements Comparable<Joueur>{
 		this.typeJoueur = typeJoueur;
 	}
 
-	public Joueur(int score, int num) {
+	public Joueur(int score, int ilots, int num) {
 		this.score = score;
+		this.ilots=ilots;
 		this.num = num;
 
 	}
