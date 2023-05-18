@@ -9,6 +9,7 @@ public class ComposantHistorique extends Box implements Observateur {
 	JButton annuler;
 	JButton refaire;
 	CollecteurEvenements control;
+
 	ComposantHistorique(CollecteurEvenements c) {
 		super(BoxLayout.X_AXIS);
 		control = c;
@@ -27,11 +28,7 @@ public class ComposantHistorique extends Box implements Observateur {
 
 	@Override
 	public void miseAJour() {
-		if(control.etatSel()) {
-			annuler.setEnabled(true);
-		}
-		if(control.etatDep()) {
-			refaire.setEnabled(true);
-		}
+		annuler.setEnabled(control.peutAnnuler());
+		refaire.setEnabled(control.peutRefaire());
 	}
 }

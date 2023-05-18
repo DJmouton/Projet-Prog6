@@ -57,7 +57,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	}
 
 	private void feedforward(Graphics g, BufferedImage[] assetsPlateau,
-	                         ArrayList<int[]> dessinplat) {
+							 ArrayList<int[]> dessinplat) {
 		for (int[] plat : dessinplat) {
 			x = plat[0];
 			y = plat[1];
@@ -121,10 +121,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 
 		hauteur1 += hauteurCase / 2;
 		hauteur2 += hauteurCase / 2;
-		largeur1 -= largeurCase / 2;
-		largeur2 -= largeurCase / 2;
-		largeur1 += largeurCase;
-		largeur2 += largeurCase;
+		largeur1 = (largeur1 - (largeurCase / 2)) + largeurCase;
+		largeur2 = (largeur2 - (largeurCase / 2)) + largeurCase;
 	}
 
 	@Override
@@ -225,18 +223,15 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (control.estIA())
 			g.drawImage(assetsPlateau[0], 0, 0, largeurCase, hauteurCase, this);
 
-		// TODO : Dessine l'animation de déplacement d'un pingouin
+		// Dessine l'historique du dernier coup joué
 		dernierCoup(g, drawable);
-		// ligneHist(g);
 	}
 
 	int largeur() {
-		//return getWidth();
 		return taille();
 	}
 
 	int hauteur() {
-		//return getHeight();
 		return taille();
 	}
 

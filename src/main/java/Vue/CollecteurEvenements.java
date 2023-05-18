@@ -92,6 +92,10 @@ public interface CollecteurEvenements {
 	boolean dernierCoupEstDeplacement();
 
 	int[] pingSel();
-  
+
 	int nombreJoueurs();
+
+	boolean peutAnnuler();
+
+	boolean peutRefaire();
 }
