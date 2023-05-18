@@ -12,6 +12,7 @@ import java.util.List;
 public class ControleurMediateur implements CollecteurEvenements {
 	Jeu jeu;
 	Coup coup;
+	Thread thread;
 
 	public int[] PingSel;
 	int poissons;
@@ -124,18 +125,32 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
-				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-				jeu.faire(placement);
-				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
+				thread = new Thread(new IAPlacement(((IA) jeu.joueurs[jeu.joueurCourant])));
+				thread.start();
+				try {
+					thread.join();
+				} catch (InterruptedException e){
+					System.out.println("Thread IA interrompu");
+				}
+				//Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
+				//jeu.faire(placement);
+				//System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
 				jeu.metAJour();
 				tour();
 				break;
 
 			case Selection:
-				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
-				poissons = jeu.plateau[coup.destl][coup.destc];
-				jeu.faire(coup);
-				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
+				thread = new Thread(new IACoup(((IA) jeu.joueurs[jeu.joueurCourant])));
+				thread.start();
+				try {
+					thread.join();
+				} catch (InterruptedException e){
+					System.out.println("Thread IA interrompu");
+				}
+				//coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
+				//poissons = jeu.plateau[coup.destl][coup.destc];
+				//jeu.faire(coup);
+				//System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
 				jeu.metAJour();
 				tour();
 				break;
