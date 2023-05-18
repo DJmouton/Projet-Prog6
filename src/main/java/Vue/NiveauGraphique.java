@@ -19,7 +19,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	int x, y, hauteur, largeur, lignes, colonnes, largeurCase, hauteurCase;
 
 	// Variables pour dessiner l'historique du dernier coup
-	int x1, x2, y1, y2, hauteur1, largeur1, hauteur2, largeur2;
+	int x2, y2, hauteur1, largeur1, hauteur2, largeur2;
 
 	// Formule pour calculer la distance entre 2 hexagons
 	float height;
@@ -57,7 +57,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	}
 
 	private void feedforward(Graphics g, BufferedImage[] assetsPlateau,
-	                         ArrayList<int[]> dessinplat) {
+							 ArrayList<int[]> dessinplat) {
 		for (int[] plat : dessinplat) {
 			x = plat[0];
 			y = plat[1];
@@ -85,8 +85,8 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				g.drawLine(largeur1, hauteur1, largeur2, hauteur2);
 				g.setColor(Color.BLACK);
 
-				// Dessin du pingouins fantôme
-				g.drawImage(assetsPlateau[27], largeur, hauteur,
+				// Dessin du pingouins fantôme du dernier coup
+				g.drawImage(assetsPlateau[23], largeur, hauteur,
 						largeurCase, hauteurCase, this);
 			} catch (NullPointerException e) {
 				System.out.println("Pas de coup disponible");
@@ -100,8 +100,6 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		x = control.coupSrcL();
 		y = control.coupSrcC();
 
-		x1 = control.coupSrcL();
-		y1 = control.coupSrcC();
 		x2 = control.coupDestL();
 		y2 = control.coupDestC();
 
@@ -112,24 +110,19 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		else
 			largeur = y * largeurCase;
 
-		hauteur1 = Math.round((float) x1 * height);
-		if (x1 % 2 == 1)
-			largeur1 = y1 * largeurCase + largeurCase / 2;
-		else
-			largeur1 = y1 * largeurCase;
+		largeur1 = largeur;
+		hauteur1 = hauteur;
 
 		hauteur2 = Math.round((float) x2 * height);
-		if (x2   % 2 == 1)
+		if (x2 % 2 == 1)
 			largeur2 = y2 * largeurCase + largeurCase / 2;
 		else
 			largeur2 = y2 * largeurCase;
 
 		hauteur1 += hauteurCase / 2;
 		hauteur2 += hauteurCase / 2;
-		largeur1 -= largeurCase / 2;
-		largeur2 -= largeurCase / 2;
-		largeur1 += largeurCase;
-		largeur2 += largeurCase;
+		largeur1 = (largeur1 - (largeurCase / 2)) + largeurCase;
+		largeur2 = (largeur2 - (largeurCase / 2)) + largeurCase;
 	}
 
 	@Override
@@ -163,14 +156,10 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			assetsPlateau[17] = ImageIO.read(new File("resources/assets/vertS.png"));
 			assetsPlateau[18] = ImageIO.read(new File("resources/assets/rougeS.png"));
 			assetsPlateau[19] = ImageIO.read(new File("resources/assets/jauneS.png"));
-			assetsPlateau[20] = ImageIO.read(new File("resources/assets/bleuH.png"));
-			assetsPlateau[21] = ImageIO.read(new File("resources/assets/vertH.png"));
-			assetsPlateau[22] = ImageIO.read(new File("resources/assets/rougeH.png"));
-			assetsPlateau[23] = ImageIO.read(new File("resources/assets/jauneH.png"));
-			assetsPlateau[24] = ImageIO.read(new File("resources/assets/p1M.png"));
-			assetsPlateau[25] = ImageIO.read(new File("resources/assets/p2M.png"));
-			assetsPlateau[26] = ImageIO.read(new File("resources/assets/p3M.png"));
-			assetsPlateau[27] = ImageIO.read(new File("resources/assets/hist.png"));
+			assetsPlateau[20] = ImageIO.read(new File("resources/assets/p1M.png"));
+			assetsPlateau[21] = ImageIO.read(new File("resources/assets/p2M.png"));
+			assetsPlateau[22] = ImageIO.read(new File("resources/assets/p3M.png"));
+			assetsPlateau[23] = ImageIO.read(new File("resources/assets/hist.png"));
 
 		} catch (IOException e) {
 			System.out.println("Erreur dans le chargement des images");
@@ -213,9 +202,9 @@ public class NiveauGraphique extends JComponent implements Observateur {
 				// Pingouins actuellement selectionné
 				historique();
 				if (!(control.valeur(x, y) == 0) && !(control.pingSel()[0] == 0 && control.pingSel()[1] == 0)) {
-					if(control.valeur(x, y) > 3)
+					if (control.valeur(x, y) > 3)
 						g.drawImage(assetsPlateau[control.valeur(x, y) + 12], largeur, hauteur,
-							largeurCase, hauteurCase, this);
+								largeurCase, hauteurCase, this);
 				}
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
@@ -234,18 +223,15 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		if (control.estIA())
 			g.drawImage(assetsPlateau[0], 0, 0, largeurCase, hauteurCase, this);
 
-		// TODO : Dessine l'animation de déplacement d'un pingouin
+		// Dessine l'historique du dernier coup joué
 		dernierCoup(g, drawable);
-		// ligneHist(g);
 	}
 
 	int largeur() {
-		//return getWidth();
 		return taille();
 	}
 
 	int hauteur() {
-		//return getHeight();
 		return taille();
 	}
 
