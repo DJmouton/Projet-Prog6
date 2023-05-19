@@ -24,10 +24,10 @@ public class ComposantJoueurs extends Box implements Observateur {
 		joueurs[2] = new ComposantInfoJoueur(3, Color.red);
 		joueurs[3] = new ComposantInfoJoueur(4, Color.yellow);
 		for (int i = 0; i < 4; i++)
-			typeJoueurs[i] = new ComposantTypeJoueur(false);
+			typeJoueurs[i] = new ComposantTypeJoueur(false, i);
 
 		for (int i = 0; i < nombreJoueurs; i++) {
-			typeJoueurs[i].setBotHumain(control.estIA(i));
+			typeJoueurs[i].setBotHumain(control.estIA(i), i);
 			add(typeJoueurs[i]);
 			add(joueurs[i]);
 		}
@@ -40,8 +40,7 @@ public class ComposantJoueurs extends Box implements Observateur {
 		for (int i = 0; i < control.nbJoueurs(); i++) {
 			joueurs[i].setScore(control.scoreJoueur(i));
 			joueurs[i].setCurrent(control.joueurCourant() == i);
-			typeJoueurs[i].setBotHumain(control.estIA(i));
-			typeJoueurs[i].setCourant(control.joueurCourant() == i);
+			typeJoueurs[i].setBotHumain(control.estIA(i), i);
 		}
 		if (nombreJoueurs != control.nombreJoueurs()) {
 			nombreJoueurs = control.nombreJoueurs();

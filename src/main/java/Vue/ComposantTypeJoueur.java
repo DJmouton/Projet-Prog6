@@ -8,18 +8,26 @@ import java.io.IOException;
 
 public class ComposantTypeJoueur extends JLabel {
 
-	Image robot, pingouin, joue;
+	Image robot, pingouin;
 
-	ImageIcon r, p, j;
+	ImageIcon r, p;
 
-	ComposantTypeJoueur(boolean bot) {
-		setBotHumain(bot);
+	ComposantTypeJoueur(boolean bot, int joueur) {
+		setBotHumain(bot, joueur);
 	}
 
-	public void setBotHumain(boolean bot) {
+	public void setBotHumain(boolean bot, int joueur) {
 		try {
 			robot = ImageIO.read(new File("resources/assets/robot.png"));
-			pingouin = ImageIO.read(new File("resources/assets/pingouin.png"));
+
+			if(joueur == 0)
+				pingouin = ImageIO.read(new File("resources/assets/pingouinB.png"));
+			else if(joueur == 1)
+				pingouin = ImageIO.read(new File("resources/assets/pingouinV.png"));
+			else if(joueur == 2)
+				pingouin = ImageIO.read(new File("resources/assets/pingouinR.png"));
+			else if(joueur == 3)
+				pingouin = ImageIO.read(new File("resources/assets/pingouinJ.png"));
 
 			r = new ImageIcon(robot);
 			p = new ImageIcon(pingouin);
@@ -28,24 +36,7 @@ public class ComposantTypeJoueur extends JLabel {
 				setIcon(r);
 			else
 				setIcon(p);
-		} catch (IOException e) {
-			System.out.println("pas d'images");
-		}
-	}
 
-	public void setCourant(boolean courant) {
-
-		if(courant)
-			try {
-				joue = ImageIO.read(new File("resoureces/assets/pE.png"));
-
-				j = new ImageIcon(joue);
-
-				setIcon(j);
-
-			}
-			catch (IOException e) {
-				System.out.println("Pas d'image");
-			}
+		} catch (IOException e) { System.out.println("pas d'images"); }
 	}
 }
