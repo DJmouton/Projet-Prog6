@@ -2,6 +2,7 @@ package Controleur;
 
 import Modele.Jeu;
 import Modele.IA;
+import Modele.Historique;
 import Modele.Placement;
 
 public class IAPlacement extends Thread
@@ -21,15 +22,18 @@ public class IAPlacement extends Thread
 	@Override
 	public void run()
 	{
+		Historique hist_cpy = jeu.historique.copier();
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		res = ia.placement();
-		jeu.faire(res);
-		System.out.println("Placement éxecuté");
-		jeu.metAJour();
-		control.tour();
+		if (jeu.historique.egal(hist_cpy)) {
+			jeu.faire(res);
+			System.out.println("Placement éxecuté");
+			jeu.metAJour();
+			control.tour();
+		}
 	}
 }

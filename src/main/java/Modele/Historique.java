@@ -48,4 +48,27 @@ public class Historique
 	{
 		return !futur.isEmpty();
 	}
+
+	public Historique copier() {
+		Historique cpy = new Historique();
+
+		cpy.passe.addAll(passe);
+		cpy.passe.addAll(futur);
+
+		return cpy;
+	}
+
+	public boolean egal(Historique autre) {
+		for (int i = 0; i < passe.size(); i++) {
+			if (i >= autre.passe.size() || !passe.get(i).equals(autre.passe.get(i)))
+				return false;
+		}
+
+		for (int i = 0; i < futur.size(); i++) {
+			if (i >= autre.futur.size() || !futur.get(i).equals(autre.futur.get(i)))
+				return false;
+		}
+
+		return true;
+	}
 }

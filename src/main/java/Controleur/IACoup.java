@@ -1,7 +1,7 @@
 package Controleur;
 
 import Modele.Jeu;
-import Modele.Coup;
+import Modele.Historique;
 import Modele.IA;
 
 public class IACoup extends Thread
@@ -9,7 +9,6 @@ public class IACoup extends Thread
 	ControleurMediateur control;
 	Jeu jeu;
 	IA ia;
-	Coup res;
 
 	public IACoup(ControleurMediateur control, Jeu jeu, IA ia)
 	{
@@ -21,15 +20,18 @@ public class IACoup extends Thread
 	@Override
 	public void run()
 	{
+		Historique hist_cpy = jeu.historique.copier();
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		control.coup = ia.jeu();
-		jeu.faire(control.coup);
-		System.out.println("Coup éxecuté");
-		jeu.metAJour();
-		control.tour();
+		if (jeu.historique.egal(hist_cpy)) {
+			jeu.faire(control.coup);
+			System.out.println("Coup éxecuté");
+			jeu.metAJour();
+			control.tour();
+		}
 	}
 }
