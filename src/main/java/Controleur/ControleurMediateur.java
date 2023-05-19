@@ -21,7 +21,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(2, 2, 0, 0);
+		nouvellePartie(1, 1, 0, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -304,13 +304,14 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return jeu.joueurs[joueurCourant()].getTypeJoueur() > 1;
 	}
 
+	public boolean estIA(int j) { return jeu.joueurs[j].getTypeJoueur() > 1; }
+	public boolean isConsultation(){ return consultation; }
+
 	public ArrayList<int[]> hexAccessible(int l, int c) {
 		return jeu.hex_accessible(l, c);
 	}
 
-	public int coupSrcL() {
-		return coup.sourcel;
-	}
+	public int coupSrcL() { return coup.sourcel; }
 
 	public int coupSrcC() {
 		return coup.sourcec;
@@ -324,9 +325,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return coup.destc;
 	}
 
-	public int largeur() {
-		return jeu.largeur();
-	}
+	public int largeur() { return jeu.largeur(); }
 
 	public int hauteur() {
 		return jeu.hauteur();

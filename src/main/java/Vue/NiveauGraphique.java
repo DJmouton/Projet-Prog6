@@ -220,7 +220,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 			}
 
 		// Dessine un sablier si l'IA joue
-		if (control.estIA())
+		if (control.estIA() && !control.isConsultation())
 			g.drawImage(assetsPlateau[0], 0, 0, largeurCase, hauteurCase, this);
 
 		// Dessine l'historique du dernier coup joué
