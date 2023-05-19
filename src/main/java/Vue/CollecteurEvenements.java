@@ -61,6 +61,8 @@ public interface CollecteurEvenements {
 
 	boolean estIA();
 
+	boolean isConsultation();
+
 	boolean etatDep();
 
 	boolean etatSel();

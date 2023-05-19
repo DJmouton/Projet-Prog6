@@ -303,6 +303,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean estIA() {
 		return jeu.joueurs[joueurCourant()].getTypeJoueur() > 1;
 	}
+	public boolean isConsultation(){ return consultation; }
 
 	public ArrayList<int[]> hexAccessible(int l, int c) {
 		return jeu.hex_accessible(l, c);
