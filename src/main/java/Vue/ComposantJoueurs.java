@@ -28,9 +28,7 @@ public class ComposantJoueurs extends Box implements Observateur {
 
 		for (int i = 0; i < nombreJoueurs; i++) {
 			typeJoueurs[i].setBotHumain(control.estIA(i));
-			add(Box.createGlue());
 			add(typeJoueurs[i]);
-			add(Box.createGlue());
 			add(joueurs[i]);
 		}
 		add(Box.createGlue());
@@ -43,14 +41,13 @@ public class ComposantJoueurs extends Box implements Observateur {
 			joueurs[i].setScore(control.scoreJoueur(i));
 			joueurs[i].setCurrent(control.joueurCourant() == i);
 			typeJoueurs[i].setBotHumain(control.estIA(i));
+			typeJoueurs[i].setCourant(control.joueurCourant() == i);
 		}
 		if (nombreJoueurs != control.nombreJoueurs()) {
 			nombreJoueurs = control.nombreJoueurs();
 			removeAll();
 			for (int i = 0; i < nombreJoueurs; i++) {
-				add(Box.createGlue());
 				add(typeJoueurs[i]);
-				add(Box.createGlue());
 				add(joueurs[i]);
 			}
 			add(Box.createGlue());

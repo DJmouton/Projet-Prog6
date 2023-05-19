@@ -13,9 +13,9 @@ public class ComposantInfoJoueur extends JLabel {
 	int joueur;
 	Color color;
 
-	Image poisson, robot, pingouin;
+	Image poisson, joue;
 
-	ImageIcon p, r, pi;
+	ImageIcon p, j;
 
 
 	ComposantInfoJoueur(int j, Color c) {
@@ -34,9 +34,8 @@ public class ComposantInfoJoueur extends JLabel {
 
 			setText(String.valueOf(score));
 			setIcon(p);
-		} catch (IOException e) {
-			System.out.println("Pas d'image");
-		}
+
+		} catch (IOException e) { System.out.println("Pas d'image"); }
 	}
 
 	public void setCurrent(boolean isCurrent) {
@@ -53,6 +52,14 @@ public class ComposantInfoJoueur extends JLabel {
 			compound = BorderFactory.createCompoundBorder(
 					compound, titledBorder);
 			setBorder(compound);
+
+			try {
+				joue = ImageIO.read(new File("resources/assets/pE.png"));
+				j = new ImageIcon(joue);
+				setIcon(j);
+			}
+			catch (IOException e) { System.out.println("Pas d'image"); }
+
 		} else
 			setBorder(titledBorder);
 	}

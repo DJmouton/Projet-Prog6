@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class ComposantTypeJoueur extends JLabel {
 
-	Image robot, pingouin;
+	Image robot, pingouin, joue;
 
-	ImageIcon r, p;
+	ImageIcon r, p, j;
 
 	ComposantTypeJoueur(boolean bot) {
 		setBotHumain(bot);
@@ -31,5 +31,21 @@ public class ComposantTypeJoueur extends JLabel {
 		} catch (IOException e) {
 			System.out.println("pas d'images");
 		}
+	}
+
+	public void setCourant(boolean courant) {
+
+		if(courant)
+			try {
+				joue = ImageIO.read(new File("resoureces/assets/pE.png"));
+
+				j = new ImageIcon(joue);
+
+				setIcon(j);
+
+			}
+			catch (IOException e) {
+				System.out.println("Pas d'image");
+			}
 	}
 }
