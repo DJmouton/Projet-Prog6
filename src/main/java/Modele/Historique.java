@@ -59,13 +59,16 @@ public class Historique
 	}
 
 	public boolean egal(Historique autre) {
+		if (passe.size() != autre.passe.size() || futur.size() != autre.futur.size())
+			return false;
+
 		for (int i = 0; i < passe.size(); i++) {
-			if (i >= autre.passe.size() || !passe.get(i).equals(autre.passe.get(i)))
+			if (!passe.get(i).equals(autre.passe.get(i)))
 				return false;
 		}
 
 		for (int i = 0; i < futur.size(); i++) {
-			if (i >= autre.futur.size() || !futur.get(i).equals(autre.futur.get(i)))
+			if (!futur.get(i).equals(autre.futur.get(i)))
 				return false;
 		}
 
