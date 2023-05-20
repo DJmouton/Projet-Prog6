@@ -37,6 +37,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		consultation = false;
 		jeu.metAJour();
 		tour();
+		jeu.metAJour();
 	}
 
 	public void recommencer() {
