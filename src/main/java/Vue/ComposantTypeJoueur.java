@@ -26,17 +26,23 @@ public class ComposantTypeJoueur extends JLabel {
 
 	public void setBotHumain(boolean ordi, int numeroJoueur) {
 		try {
-			robot = ImageIO.read(new File("resources/assets/robot.png"));
 
-			if (numeroJoueur == 0)
+			if (numeroJoueur == 0) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinB.png"));
-			else if (numeroJoueur == 1)
+				robot = ImageIO.read(new File("resources/assets/robotB.png"));
+			}
+			else if (numeroJoueur == 1) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinV.png"));
-			else if (numeroJoueur == 2)
+				robot = ImageIO.read(new File("resources/assets/robotV.png"));
+			}
+			else if (numeroJoueur == 2) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinR.png"));
-			else if (numeroJoueur == 3)
+				robot = ImageIO.read(new File("resources/assets/robotR.png"));
+			}
+			else if (numeroJoueur == 3) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinJ.png"));
-
+				robot = ImageIO.read(new File("resources/assets/robotJ.png"));
+			}
 			r = new ImageIcon(robot);
 			p = new ImageIcon(pingouin);
 
@@ -54,8 +60,16 @@ public class ComposantTypeJoueur extends JLabel {
 
 		if (estCourant) {
 			try {
-				if (estIA)
-					joue = ImageIO.read(new File("resources/assets/mangeO.png"));
+				if (estIA) {
+					if (numeroJoueur == 0)
+						joue = ImageIO.read(new File("resources/assets/robotMB.png"));
+					else if (numeroJoueur == 1)
+						joue = ImageIO.read(new File("resources/assets/robotMV.png"));
+					else if (numeroJoueur == 2)
+						joue = ImageIO.read(new File("resources/assets/robotMR.png"));
+					else if (numeroJoueur == 3)
+						joue = ImageIO.read(new File("resources/assets/robotMJ.png"));
+				}
 				else
 					if (numeroJoueur == 0)
 						joue = ImageIO.read(new File("resources/assets/mangeB.png"));
