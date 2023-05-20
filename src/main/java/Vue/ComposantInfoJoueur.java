@@ -10,15 +10,21 @@ import java.io.IOException;
 
 public class ComposantInfoJoueur extends JLabel {
 
+
+	CollecteurEvenements control;
 	int joueur;
+	int nombreJoueur;
 	Color color;
 
 	Image poisson, joue;
 
 	ImageIcon p, j;
 
+	ComposantTypeJoueur[] typeJoueurs;
 
-	ComposantInfoJoueur(int j, Color c) {
+
+	ComposantInfoJoueur(int j, Color c, CollecteurEvenements co) {
+		control = co;
 		setScore(0);
 		joueur = j;
 		color = c;
@@ -30,6 +36,15 @@ public class ComposantInfoJoueur extends JLabel {
 		try {
 			poisson = ImageIO.read(new File("resources/assets/poisson.png"));
 
+			typeJoueurs = new ComposantTypeJoueur[4];
+			for (int i = 0; i < 4; i++)
+				typeJoueurs[i] = new ComposantTypeJoueur(false, i);
+
+			for (int i = 0; i < nombreJoueur; i++) {
+				typeJoueurs[i].setBotHumain(control.estIA(i), i);
+				add(typeJoueurs[i]);
+			}
+
 			p = new ImageIcon(poisson);
 
 			setText(String.valueOf(score));
@@ -40,7 +55,7 @@ public class ComposantInfoJoueur extends JLabel {
 
 	public void setCurrent(boolean isCurrent) {
 		Border matteBorder = BorderFactory.createMatteBorder(1, 1, 3, 1, color);
-		Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "Joueur " + joueur,
+		Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "J" + joueur,
 				TitledBorder.LEFT, TitledBorder.TOP,
 				new Font("Arial", Font.PLAIN, 13), Color.black);
 
@@ -52,13 +67,6 @@ public class ComposantInfoJoueur extends JLabel {
 			compound = BorderFactory.createCompoundBorder(
 					compound, titledBorder);
 			setBorder(compound);
-
-			try {
-				joue = ImageIO.read(new File("resources/assets/pE.png"));
-				j = new ImageIcon(joue);
-				setIcon(j);
-			}
-			catch (IOException e) { System.out.println("Pas d'image"); }
 
 		} else
 			setBorder(titledBorder);
