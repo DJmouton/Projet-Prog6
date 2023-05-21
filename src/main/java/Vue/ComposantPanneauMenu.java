@@ -15,7 +15,7 @@ public class ComposantPanneauMenu extends JPanel {
 		add(regles, c);
 
 		c.gridy = 1;
-		JButton nouvelle_partie = new JButton("Partie Custom");
+		JButton nouvelle_partie = new JButton("Nouvelle partie");
 		nouvelle_partie.addActionListener(new AdaptateurNouvellePartie(control));
 		add(nouvelle_partie, c);
 
