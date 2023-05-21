@@ -21,5 +21,7 @@ public class ComposantJoueurActuel extends JLabel implements Observateur {
 				setText("<html>Joueur " + (control.joueurCourant()+1) + " à ton tour !<br> Clique sur un case à 1 poisson</html>");
 			else
 				setText("<html>Joueur " + (control.joueurCourant()+1) + " à ton tour !<br> Clique sur un pingouin, puis sur une case</html>");
+		else
+			setText("<html>L'IA du joueur " + (control.joueurCourant()+1) + " réfléchie</html>");
 	}
 }
