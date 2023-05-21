@@ -13,6 +13,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public int[] PingSel;
 	Jeu jeu;
 	Coup coup;
+	Thread thread;
 	int poissons;
 
 	int[] ranks;
@@ -124,20 +125,20 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
-				Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-				jeu.faire(placement);
-				System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
-				jeu.metAJour();
-				tour();
+				thread = new Thread(new IAPlacement(this, jeu, ((IA) jeu.joueurs[jeu.joueurCourant])));
+				thread.start();
+				//Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
+				//jeu.faire(placement);
+				//System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
 				break;
 
 			case Selection:
-				coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
-				poissons = jeu.plateau[coup.destl][coup.destc];
-				jeu.faire(coup);
-				System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
-				jeu.metAJour();
-				tour();
+				thread = new Thread(new IACoup(this, jeu, ((IA) jeu.joueurs[jeu.joueurCourant])));
+				thread.start();
+				//coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
+				//poissons = jeu.plateau[coup.destl][coup.destc];
+				//jeu.faire(coup);
+				//System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
 				break;
 
 			case Deplacement:
@@ -168,8 +169,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 				break;
 		}
 
-		if (jeu.joueurs[joueurCourant()].getTypeJoueur() > 1 && !consultation)
+		if (jeu.joueurs[joueurCourant()].getTypeJoueur() > 1 && !consultation) {
 			System.out.println("L'IA réfléchit...");
+			tictac();
+		}
 		else
 			System.out.println();
 	}

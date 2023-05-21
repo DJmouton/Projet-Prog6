@@ -40,4 +40,30 @@ public class Historique {
 	public boolean peutRefaire() {
 		return !futur.isEmpty();
 	}
+
+	public Historique copier() {
+		Historique cpy = new Historique();
+
+		cpy.passe.addAll(passe);
+		cpy.passe.addAll(futur);
+
+		return cpy;
+	}
+
+	public boolean egal(Historique autre) {
+		if (passe.size() != autre.passe.size() || futur.size() != autre.futur.size())
+			return false;
+
+		for (int i = 0; i < passe.size(); i++) {
+			if (!passe.get(i).equals(autre.passe.get(i)))
+				return false;
+		}
+
+		for (int i = 0; i < futur.size(); i++) {
+			if (!futur.get(i).equals(autre.futur.get(i)))
+				return false;
+		}
+
+		return true;
+	}
 }
