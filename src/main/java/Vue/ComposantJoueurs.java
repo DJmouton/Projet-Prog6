@@ -5,7 +5,7 @@ import Patterns.Observateur;
 import javax.swing.*;
 import java.awt.*;
 
-public class ComposantJoueurs extends Box implements Observateur {
+public class ComposantJoueurs extends JPanel implements Observateur {
 
 	int nombreJoueurs;
 	ComposantInfoJoueur[] joueurs;
@@ -14,8 +14,9 @@ public class ComposantJoueurs extends Box implements Observateur {
 	CollecteurEvenements control;
 
 	ComposantJoueurs(CollecteurEvenements c) {
-		super(BoxLayout.Y_AXIS);
 		control = c;
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(new Color(51, 153, 255));
 		nombreJoueurs = control.nombreJoueurs();
 		joueurs = new ComposantInfoJoueur[4];
 		typeJoueurs = new ComposantTypeJoueur[4];
