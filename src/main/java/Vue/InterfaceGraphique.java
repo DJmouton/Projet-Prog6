@@ -37,14 +37,22 @@ public class InterfaceGraphique implements Runnable {
 		ComposantBarreHaute barreHaute = new ComposantBarreHaute(control);
 		frame.add(barreHaute, BorderLayout.PAGE_START);
 
-		ComposantJoueurs joueurs = new ComposantJoueurs(control);
-		control.ajouteObservateur(joueurs);
-		frame.add(joueurs, BorderLayout.LINE_START);
+		ComposantBarreBasse barreBasse = new ComposantBarreBasse(control);
+		frame.add(barreBasse, BorderLayout.PAGE_END);
+
+		ComposantBarreGauche barreGauche = new ComposantBarreGauche(control);
+		frame.add(barreGauche, BorderLayout.LINE_START);
+
+		/*
+		ComposantBarreDroite barreDroite = new ComposantBarreDroite(control);
+		frame.add(barreDroite, BorderLayout.LINE_END);
+		*/
 
 		NiveauGraphique niv = new NiveauGraphique(control);
 		niv.addMouseListener(new AdaptateurSouris(niv, control));
 		frame.add(niv);
 
+		frame.setBackground(new Color(51, 153, 255));
 		// Lancement de la fenêtre
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(640, 480);

@@ -1,8 +1,11 @@
 package Controleur;
 
 import Modele.*;
+import Patterns.Commande;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
+import Vue.InterfaceGraphique;
+import Vue.NiveauGraphique;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,6 +30,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
 		System.out.println("Création d'une partie avec (" + j1 + ", " + j2 + ", " + j3 + ", " + j4 + ")");
+		poissons = 0;
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
@@ -49,6 +53,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			else
 				typesJoueurs[i] = 0;
 		}
+		poissons = 0;
 		nouvellePartie(
 				typesJoueurs[0],
 				typesJoueurs[1],
@@ -68,6 +73,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
+					poissons = 1;
 					jeu.faire(new Placement(jeu, l, c));
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
 					jeu.metAJour();
@@ -125,6 +131,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
+				poissons = 1;
 				thread = new Thread(new IAPlacement(this, jeu, ((IA) jeu.joueurs[jeu.joueurCourant])));
 				thread.start();
 				//Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
@@ -136,7 +143,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				thread = new Thread(new IACoup(this, jeu, ((IA) jeu.joueurs[jeu.joueurCourant])));
 				thread.start();
 				//coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
-				//poissons = jeu.plateau[coup.destl][coup.destc];
+				poissons = jeu.plateau[coup.destl][coup.destc];
 				//jeu.faire(coup);
 				//System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
 				break;
@@ -226,6 +233,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 			}
 			// le source du coup doit être celui du sommet de la pile du passe
 			SourceCoup();
+			poissons = jeu.plateau[coupSrcL()][coupSrcC()];
 			consultation = true;
 			tour();
 		}
@@ -244,6 +252,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 				consultation = false;
 			// le source du coup doit être celui du sommet de la pile passe
 			SourceCoup();
+			poissons = jeu.plateau[coupSrcL()][coupSrcC()];
 			tour();
 		}
 	}
@@ -376,4 +385,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean peutAnnuler() { return jeu.historique.peutAnnuler(); }
 
 	public boolean peutRefaire() { return jeu.historique.peutRefaire(); }
+
+	public int getP() { return poissons; }
 }

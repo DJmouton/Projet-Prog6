@@ -102,4 +102,6 @@ public interface CollecteurEvenements {
 	boolean peutAnnuler();
 
 	boolean peutRefaire();
+
+	int getP();
 }
