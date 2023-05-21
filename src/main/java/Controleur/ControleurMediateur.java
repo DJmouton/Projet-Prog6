@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControleurMediateur implements CollecteurEvenements {
+	public int[] PingSel;
 	Jeu jeu;
 	Coup coup;
 	Thread thread;
-
-	public int[] PingSel;
 	int poissons;
 
 	int[] ranks;
@@ -23,7 +22,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public ControleurMediateur(Jeu j) {
 		jeu = j;
-		nouvellePartie(1, 1, 2, 0);
+		nouvellePartie(1, 1, 0, 0);
 	}
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
@@ -39,12 +38,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 		consultation = false;
 		jeu.metAJour();
 		tour();
+		jeu.metAJour();
 	}
 
-	public void recommencer(){
+	public void recommencer() {
 		int[] typesJoueurs = new int[4];
 		for (int i = 0; i < 4; i++) {
-			if(i < jeu.joueurs.length)
+			if (i < jeu.joueurs.length)
 				typesJoueurs[i] = jeu.joueurs[i].getTypeJoueur();
 			else
 				typesJoueurs[i] = 0;
@@ -212,29 +212,28 @@ public class ControleurMediateur implements CollecteurEvenements {
 		}
 	}
 
+	/**************************
+	 * Annuler le dernier coup
+	 **************************/
 	public void annuler() {
 		if (jeu.peutAnnuler()) {
 			do {
 				jeu.setEtat(Etats.Initialisation);
 				jeu.annuler();
 			} while (jeu.peutAnnuler() && jeu.joueurs[joueurCourant()].getTypeJoueur() > 1);
-			if (jeu.getNombreP() == jeu.getnombrePAvoir()- jeu.getE()) {
+			if (jeu.getNombreP() == jeu.getnombrePAvoir() - jeu.getE()) {
 				jeu.setEtat(Etats.Selection);
 			}
-			// le source du coup doit être celui du sommet de la pile passe
-			if (jeu.historique.passe.size() > 0 && jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup) {
-				coup = ((Coup) jeu.historique.passe.get(jeu.historique.passe.size()-1));
-			}
-			if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
-				jeu.setEtat(Etats.Selection);
-			}
-			PingSel = new int[]{0, 0};
-			jeu.metAJour();
+			// le source du coup doit être celui du sommet de la pile du passe
+			SourceCoup();
 			consultation = true;
 			tour();
 		}
 	}
 
+	/********************************
+	 * Refaire le dernier coup Annule
+	 ********************************/
 	public void refaire() {
 		if (jeu.peutRefaire()) {
 			do {
@@ -244,19 +243,26 @@ public class ControleurMediateur implements CollecteurEvenements {
 			if (!jeu.peutRefaire())
 				consultation = false;
 			// le source du coup doit être celui du sommet de la pile passe
-			if (jeu.historique.passe.size() > 0 && jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup) {
-				coup = ((Coup) jeu.historique.passe.get(jeu.historique.passe.size()-1));
-			}
-			if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
-				jeu.setEtat(Etats.Selection);
-			}
-			PingSel = new int[]{0, 0};
-			jeu.metAJour();
+			SourceCoup();
 			tour();
 		}
 	}
 
-	public void sauver(String fichier){
+	/*************************************************************************************************
+	 * Remet l'état du plateau au bon endroit pour l'affichage après une annulation ou un coup refait
+	 *************************************************************************************************/
+	private void SourceCoup() {
+		if (jeu.historique.passe.size() > 0 && jeu.historique.passe.get(jeu.historique.passe.size() - 1) instanceof Coup) {
+			coup = ((Coup) jeu.historique.passe.get(jeu.historique.passe.size() - 1));
+		}
+		if (jeu.getNombreP() == jeu.getnombrePAvoir() - jeu.getE()) {
+			jeu.setEtat(Etats.Selection);
+		}
+		PingSel = new int[]{0, 0};
+		jeu.metAJour();
+	}
+
+	public void sauver(String fichier) {
 		try {
 			jeu.sauver(fichier);
 		} catch (FileNotFoundException e) {
@@ -277,7 +283,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		if (jeu.getNombreP() == jeu.getnombrePAvoir()-jeu.getE()) {
+		if (jeu.getNombreP() == jeu.getnombrePAvoir() - jeu.getE()) {
 			jeu.setEtat(Etats.Selection);
 		}
 		jeu.metAJour();
@@ -294,7 +300,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return jeu.joueurs.length;
 	}
 
-	public int scoreJoueur(int joueur){
+	public int scoreJoueur(int joueur) {
 		return jeu.joueurs[joueur].getScore();
 	}
 
@@ -302,13 +308,14 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return jeu.joueurs[joueurCourant()].getTypeJoueur() > 1;
 	}
 
+	public boolean estIA(int j) { return jeu.joueurs[j].getTypeJoueur() > 1; }
+	public boolean isConsultation(){ return consultation; }
+
 	public ArrayList<int[]> hexAccessible(int l, int c) {
 		return jeu.hex_accessible(l, c);
 	}
 
-	public int coupSrcL() {
-		return coup.sourcel;
-	}
+	public int coupSrcL() { return coup.sourcel; }
 
 	public int coupSrcC() {
 		return coup.sourcec;
@@ -322,9 +329,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return coup.destc;
 	}
 
-	public int largeur() {
-		return jeu.largeur();
-	}
+	public int largeur() { return jeu.largeur(); }
 
 	public int hauteur() {
 		return jeu.hauteur();
@@ -357,17 +362,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean etatPla() {
 		return Etats.Initialisation == jeu.etatCourant();
 	}
-  
+
 	public boolean dernierCoupEstDeplacement() {
-		return jeu.historique.passe.get(jeu.historique.passe.size()-1) instanceof Coup;
+		return jeu.historique.passe.get(jeu.historique.passe.size() - 1) instanceof Coup;
 	}
 
 	public int[] pingSel() {
 		return PingSel;
-  }
-  
-	public int nombreJoueurs() {
-		return jeu.joueurs.length;
-
 	}
+
+	public int nombreJoueurs() { return jeu.joueurs.length; }
+
+	public boolean peutAnnuler() { return jeu.historique.peutAnnuler(); }
+
+	public boolean peutRefaire() { return jeu.historique.peutRefaire(); }
 }

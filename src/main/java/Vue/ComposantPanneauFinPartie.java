@@ -10,10 +10,10 @@ public class ComposantPanneauFinPartie extends JPanel {
     ComposantPanneauFinPartie(CollecteurEvenements control){
         int[] ranks = control.ranking();
         ComposantInfoJoueur[] joueurs = {
-                new ComposantInfoJoueur(1, Color.blue),
-                new ComposantInfoJoueur(2, Color.green),
-                new ComposantInfoJoueur(3, Color.red),
-                new ComposantInfoJoueur(4, Color.yellow)
+                new ComposantInfoJoueur(1, Color.blue, control),
+                new ComposantInfoJoueur(2, Color.green, control),
+                new ComposantInfoJoueur(3, Color.red, control),
+                new ComposantInfoJoueur(4, Color.yellow, control)
         };
         for (int i = 0; i < control.nbJoueurs(); i++) {
             joueurs[i].setScore(control.scoreJoueur(i));
