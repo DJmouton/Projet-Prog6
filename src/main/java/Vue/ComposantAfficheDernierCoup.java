@@ -48,7 +48,6 @@ public class ComposantAfficheDernierCoup extends JLabel implements Observateur{
 		else
 			jc = control.nombreJoueurs();
 		if (dstL >= 0 && dstC >= 0) {
-			setText("<html>+" + control.getP() + " pour J" + jc + "</html>");
 			setIcon(p);
 		}
 		setBackground(new Color(51, 153, 255));
