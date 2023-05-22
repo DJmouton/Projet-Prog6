@@ -18,14 +18,11 @@ public class RankTest {
         jeu.joueurs[1].ilots=4;
 
         List<Joueur> j= jeu.Ranking();
-        assertTrue(j.get(0).num==4);
-        assertTrue(j.get(1).num==5);
+        assertEquals(4, j.get(0).num);
+        assertEquals(5, j.get(1).num);
         control.afficheRanking(j);
-
-
-
-
     }
+
     @org.junit.jupiter.api.Test
     void rankingTest1() {
         jeu=new Jeu();
@@ -36,14 +33,11 @@ public class RankTest {
         jeu.joueurs[1].ilots=6;
 
         List<Joueur> j= jeu.Ranking();
-        assertTrue(j.get(0).num==4);
-        assertTrue(j.get(1).num==5);
+        assertEquals(4, j.get(0).num);
+        assertEquals(5, j.get(1).num);
         control.afficheRanking(j);
-
-
-
-
     }
+
     @org.junit.jupiter.api.Test
     void rankingTest2() {
         jeu=new Jeu();
@@ -53,14 +47,11 @@ public class RankTest {
         jeu.joueurs[0].ilots=31;
         jeu.joueurs[1].ilots=69;
         List<Joueur> j= jeu.Ranking();
-        assertTrue(j.get(0).num==5);
-        assertTrue(j.get(1).num==4);
+        assertEquals(5, j.get(0).num);
+        assertEquals(4, j.get(1).num);
         control.afficheRanking(j);
-
-
-
-
     }
+
     @org.junit.jupiter.api.Test
     void rankingTest3() {
         jeu=new Jeu();
@@ -70,13 +61,10 @@ public class RankTest {
         jeu.joueurs[1].ilots=6;
         jeu.joueurs[0].ilots=6;
         List<Joueur> j= jeu.Ranking();
-        assertTrue(j.get(0).num==5); //5 est preimer car on fait reverse pour ranking meme si y a un egalite entre 1 et 2
-        assertTrue(j.get(1).num==4);
-        assertTrue(j.get(0).ilots==j.get(1).ilots);
-        assertTrue(j.get(0).score==j.get(1).score);
+        assertEquals(5, j.get(0).num); //5 est preimer car on fait reverse pour ranking meme si y a un egalite entre 1 et 2
+        assertEquals(4, j.get(1).num);
+        assertEquals(j.get(0).ilots, j.get(1).ilots);
+        assertEquals(j.get(0).score, j.get(1).score);
         control.afficheRanking(j);
-
-
-
     }
 }

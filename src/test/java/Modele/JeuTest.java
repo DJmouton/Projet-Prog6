@@ -10,6 +10,7 @@ class JeuTest {
     @org.junit.jupiter.api.Test
     void hex_accessible_test1() {
         jeu = new Jeu();
+        jeu.initPlateau();
 
         for (int i=0;i<jeu.hauteur;i++){
             for (int j=0;j<jeu.largeur;j++){
@@ -34,6 +35,7 @@ class JeuTest {
     @org.junit.jupiter.api.Test
     void hex_accessible_test2() {
         jeu = new Jeu();
+        jeu.initPlateau();
 
         jeu.plateau[4][4]=4;
         ArrayList<int[]> actual = jeu.hex_accessible( 2,3);

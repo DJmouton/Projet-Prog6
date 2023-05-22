@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SauvgarderChargerTest {
     Jeu jeu;
     ControleurMediateur control;
+
     @org.junit.jupiter.api.Test
     void Test1(){
         jeu = new Jeu();
         control=new ControleurMediateur(jeu);
-        Coup coup = null;
 
         control.nouvellePartie(1,1,0,0);
         jeu.plateau[1][0]=1;
@@ -30,7 +30,7 @@ public class SauvgarderChargerTest {
         control.sauver("save2");
         for(int i=0;i<jeu.hauteur();i++){
             for(int j=0;j<jeu.largeur();j++){
-                assertTrue(jeu.plateau[i][j]==copy_plateau[i][j]);
+                assertEquals(jeu.plateau[i][j], copy_plateau[i][j]);
             }
         }
         control.charger("save2");

@@ -86,7 +86,7 @@ class HistoriqueTest
 
 		assertEquals(4, jeu.historique.passe.size());
 		assertEquals(0, jeu.historique.futur.size());
-		assertEquals(0, jeu.plateau[0][1]);
+		assertEquals(8, jeu.plateau[0][1]);
 		assertEquals(5, jeu.plateau[0][2]);
 		assertEquals(4, jeu.plateau[1][0]);
 		assertEquals(5, jeu.plateau[1][1]);
@@ -143,9 +143,9 @@ class HistoriqueTest
 
 		assertEquals(10, jeu.historique.passe.size());
 		assertEquals(0, jeu.historique.futur.size());
-		assertEquals(0, jeu.plateau[0][1]);
+		assertEquals(8, jeu.plateau[0][1]);
 		assertEquals(5, jeu.plateau[0][2]);
-		assertEquals(0, jeu.plateau[1][0]);
+		assertEquals(8, jeu.plateau[1][0]);
 		assertEquals(0, jeu.plateau[1][1]);
 		assertEquals(5, jeu.plateau[2][1]);
 		assertEquals(5, jeu.plateau[2][7]);
@@ -175,9 +175,9 @@ class HistoriqueTest
 
 		assertEquals(10, jeu.historique.passe.size());
 		assertEquals(4, jeu.historique.futur.size());
-		assertEquals(0, jeu.plateau[0][1]);
+		assertEquals(8, jeu.plateau[0][1]);
 		assertEquals(5, jeu.plateau[0][2]);
-		assertEquals(0, jeu.plateau[1][0]);
+		assertEquals(8, jeu.plateau[1][0]);
 		assertEquals(0, jeu.plateau[1][1]);
 		assertEquals(5, jeu.plateau[2][1]);
 		assertEquals(5, jeu.plateau[2][7]);
