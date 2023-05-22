@@ -30,7 +30,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	public void nouvellePartie(int j1, int j2, int j3, int j4) {
 		System.out.println("Création d'une partie avec (" + j1 + ", " + j2 + ", " + j3 + ", " + j4 + ")");
-		poissons = 0;
 		List<Integer> typesJoueurs = new ArrayList<Integer>();
 		typesJoueurs.add(j1);
 		typesJoueurs.add(j2);
@@ -53,7 +52,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 			else
 				typesJoueurs[i] = 0;
 		}
-		poissons = 0;
 		nouvellePartie(
 				typesJoueurs[0],
 				typesJoueurs[1],
@@ -73,7 +71,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 		switch (jeu.etatCourant()) {
 			case Initialisation:
 				if (this.jeu.plateau[l][c] == 1) {
-					poissons = 1;
 					jeu.faire(new Placement(jeu, l, c));
 					System.out.println("Pingouin placé en (" + l + "," + c + "), tu as gagné 1 poisson !");
 					jeu.metAJour();
@@ -131,21 +128,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 		switch (jeu.etatCourant()) {
 			case Initialisation:
-				poissons = 1;
 				thread = new Thread(new IAPlacement(this, jeu, ((IA) jeu.joueurs[jeu.joueurCourant])));
 				thread.start();
-				//Placement placement = ((IA) jeu.joueurs[jeu.joueurCourant]).placement();
-				//jeu.faire(placement);
-				//System.out.println("Pingouin placé en (" + placement.destl + "," + placement.destc + "), tu as gagné 1 poisson !");
 				break;
 
 			case Selection:
 				thread = new Thread(new IACoup(this, jeu, ((IA) jeu.joueurs[jeu.joueurCourant])));
 				thread.start();
-				//coup = ((IA) jeu.joueurs[jeu.joueurCourant]).jeu();
-				poissons = jeu.plateau[coup.destl][coup.destc];
-				//jeu.faire(coup);
-				//System.out.println("Pingouin déplacé de (" + coup.sourcel + "," + coup.sourcec + ") à (" + coup.destl + "," + coup.destc + "), tu as gagné " + poissons + " poissons !");
 				break;
 
 			case Deplacement:
@@ -203,7 +192,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void afficheRanking(List<Joueur> joueur) {
 		ranks = new int[joueur.size()];
 		for (int i = 0; i < joueur.size(); i++) {
-			// 16 6t ; 16 8
 			if (i+1<joueur.size()&& joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
 				if (joueur.get(i).getIlots() < joueur.get(i + 1).getIlots()) {
 					Joueur temp = joueur.get(i);
@@ -233,7 +221,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 			}
 			// le source du coup doit être celui du sommet de la pile du passe
 			SourceCoup();
-			poissons = jeu.plateau[coupSrcL()][coupSrcC()];
 			consultation = true;
 			tour();
 		}
@@ -252,7 +239,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 				consultation = false;
 			// le source du coup doit être celui du sommet de la pile passe
 			SourceCoup();
-			poissons = jeu.plateau[coupSrcL()][coupSrcC()];
 			tour();
 		}
 	}
@@ -385,6 +371,4 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public boolean peutAnnuler() { return jeu.historique.peutAnnuler(); }
 
 	public boolean peutRefaire() { return jeu.historique.peutRefaire(); }
-
-	public int getP() { return poissons; }
 }
