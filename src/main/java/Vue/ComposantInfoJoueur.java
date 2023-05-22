@@ -16,9 +16,9 @@ public class ComposantInfoJoueur extends JLabel {
 	int nombreJoueur;
 	Color color;
 
-	Image poisson, joue;
+	Image poisson;
 
-	ImageIcon p, j;
+	ImageIcon p;
 
 	ComposantTypeJoueur[] typeJoueurs;
 
