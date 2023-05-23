@@ -1,9 +1,6 @@
 package Vue;
 
-import Patterns.Observateur;
-
 import javax.swing.*;
-import java.awt.*;
 
 public class ComposantBarreDroite extends Box {
 

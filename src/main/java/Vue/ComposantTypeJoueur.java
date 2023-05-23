@@ -2,8 +2,6 @@ package Vue;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -30,16 +28,13 @@ public class ComposantTypeJoueur extends JLabel {
 			if (numeroJoueur == 0) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinB.png"));
 				robot = ImageIO.read(new File("resources/assets/robotB.png"));
-			}
-			else if (numeroJoueur == 1) {
+			} else if (numeroJoueur == 1) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinV.png"));
 				robot = ImageIO.read(new File("resources/assets/robotV.png"));
-			}
-			else if (numeroJoueur == 2) {
+			} else if (numeroJoueur == 2) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinR.png"));
 				robot = ImageIO.read(new File("resources/assets/robotR.png"));
-			}
-			else if (numeroJoueur == 3) {
+			} else if (numeroJoueur == 3) {
 				pingouin = ImageIO.read(new File("resources/assets/pingouinJ.png"));
 				robot = ImageIO.read(new File("resources/assets/robotJ.png"));
 			}
@@ -69,16 +64,14 @@ public class ComposantTypeJoueur extends JLabel {
 						joue = ImageIO.read(new File("resources/assets/robotMR.png"));
 					else if (numeroJoueur == 3)
 						joue = ImageIO.read(new File("resources/assets/robotMJ.png"));
-				}
-				else
-					if (numeroJoueur == 0)
-						joue = ImageIO.read(new File("resources/assets/mangeB.png"));
-					else if (numeroJoueur == 1)
-						joue = ImageIO.read(new File("resources/assets/mangeV.png"));
-					else if (numeroJoueur == 2)
-						joue = ImageIO.read(new File("resources/assets/mangeR.png"));
-					else if (numeroJoueur == 3)
-						joue = ImageIO.read(new File("resources/assets/mangeJ.png"));
+				} else if (numeroJoueur == 0)
+					joue = ImageIO.read(new File("resources/assets/mangeB.png"));
+				else if (numeroJoueur == 1)
+					joue = ImageIO.read(new File("resources/assets/mangeV.png"));
+				else if (numeroJoueur == 2)
+					joue = ImageIO.read(new File("resources/assets/mangeR.png"));
+				else if (numeroJoueur == 3)
+					joue = ImageIO.read(new File("resources/assets/mangeJ.png"));
 				j = new ImageIcon(joue);
 				setIcon(j);
 			} catch (IOException e) {

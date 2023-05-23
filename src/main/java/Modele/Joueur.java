@@ -34,7 +34,7 @@ package Modele;
 // - provoquer une temporisation (utilisé dans une IA)
 // - tenir compte d'une temporisation écoulée (utilisé dans une IA)
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
-public class Joueur implements Comparable<Joueur>{
+public class Joueur implements Comparable<Joueur> {
 	Jeu jeu;
 	int typeJoueur; // 0=absent, 1=humain, 2=IAfacile, 3=IAnormale, 4=IAdifficile
 	int num;
@@ -56,21 +56,26 @@ public class Joueur implements Comparable<Joueur>{
 
 	public Joueur(int score, int ilots, int num) {
 		this.score = score;
-		this.ilots=ilots;
+		this.ilots = ilots;
 		this.num = num;
 
 	}
+
 	public int getTypeJoueur() {
 		return this.typeJoueur;
 	}
+
 	public int getScore() {
 		return score;
 	}
+
 	public int getNum() {
 		return num;
 	}
 
-	public int getIlots(){return ilots;}
+	public int getIlots() {
+		return ilots;
+	}
 
 
 	public void addScore(int val) {
@@ -78,7 +83,7 @@ public class Joueur implements Comparable<Joueur>{
 	}
 
 	public void addIlots() {
-		ilots ++;
+		ilots++;
 	}
 
 	@Override
