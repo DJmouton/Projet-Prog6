@@ -37,8 +37,8 @@ public class IA extends Joueur{
 
     public Coup jeu() {
         etats = Etats.Deplacement;
-        ArrayList<int[]> pingouins = jeu.getPingouins(num);
-        ArrayList<ArrayList<int[]>> ilots = getNombre(jeu, jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num));
+        ArrayList<int[]> pingouins = jeu.getCases(num);
+        ArrayList<ArrayList<int[]>> ilots = getNombre(jeu, jeu.getCases(jeu.joueurs[jeu.joueurCourant].num));
         if(this.typeJoueur==2){
             profondeur = 4;
         }else if(this.typeJoueur==3){//4
