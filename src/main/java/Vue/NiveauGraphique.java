@@ -57,7 +57,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 	}
 
 	private void feedforward(Graphics g, BufferedImage[] assetsPlateau,
-							 ArrayList<int[]> dessinplat) {
+	                         ArrayList<int[]> dessinplat) {
 		for (int[] plat : dessinplat) {
 			x = plat[0];
 			y = plat[1];
@@ -187,7 +187,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Case selectionnable durant la partie de placement des pingouins
 		if (control.etatPla())
 			try {
-				dessinplat = new ArrayList<>(control.getPinguins(1));
+				dessinplat = new ArrayList<>(control.getCases(1));
 				feedforward(g, assetsPlateau, dessinplat);
 			} catch (NullPointerException e) {
 				System.out.println("Erreur d'initialisation de liste");
@@ -196,7 +196,7 @@ public class NiveauGraphique extends JComponent implements Observateur {
 		// Pingouins selectionnable durant son tour
 		if (!control.etatPla())
 			try {
-				dessinplat = new ArrayList<>(control.getPinguins(control.joueurCourant() + 4));
+				dessinplat = new ArrayList<>(control.getCases(control.joueurCourant() + 4));
 				feedforward(g, assetsPlateau, dessinplat);
 
 				// Pingouins actuellement selectionné

@@ -136,9 +136,9 @@ public class Jeu extends Observable {
 	}
 
 	/**************************************************
-	 * Renvoie la liste des pingouins portant le numéro
+	 * Renvoie la liste des cases portant le numéro
 	 ***************************************************/
-	public ArrayList<int[]> getPingouins(int num) {
+	public ArrayList<int[]> getCases(int num) {
 		ArrayList<int[]> result = new ArrayList<>();
 		for (int i = 0; i < largeur; i++) {
 			for (int j = 0; j < hauteur; j++) {
@@ -164,7 +164,7 @@ public class Jeu extends Observable {
 				}
 			}
 		} else {
-			ArrayList<int[]> pingouins = jeu.getPingouins(num);
+			ArrayList<int[]> pingouins = jeu.getCases(num);
 			for (int[] pingouin : pingouins) {
 				for (int[] emplacement : jeu.hex_accessible(pingouin[0], pingouin[1])) {
 					coups.add(new Coup(jeu, pingouin[0], pingouin[1], emplacement[0], emplacement[1]));
@@ -198,7 +198,7 @@ public class Jeu extends Observable {
 
 	public void prochainJoueur() {
 		joueurCourant = (joueurCourant + 1) % this.joueurs.length;
-		while (etat != Etats.Initialisation && getPingouins(joueurs[joueurCourant].num).isEmpty() && enCours())
+		while (etat != Etats.Initialisation && getCases(joueurs[joueurCourant].num).isEmpty() && enCours())
 			joueurCourant = (joueurCourant + 1) % this.joueurs.length;
 	}
 

@@ -12,16 +12,17 @@ public class ComposantJoueurActuel extends JLabel implements Observateur {
 	ComposantJoueurActuel(CollecteurEvenements c) {
 		control = c;
 		setFont(new Font("Arial", Font.BOLD, 20));
-		setText("<html>Joueur " + (control.joueurCourant()+1) + ", place un pingouin !</html>");
+		setText("<html>Joueur " + (control.joueurCourant() + 1) + ", place un pingouin !</html>");
 	}
+
 	@Override
 	public void miseAJour() {
-		if(!control.estIA())
-			if(control.etatPla())
-				setText("<html>Joueur " + (control.joueurCourant()+1) + ", place un pingouin !</html>");
+		if (!control.estIA())
+			if (control.etatPla())
+				setText("<html>Joueur " + (control.joueurCourant() + 1) + ", place un pingouin !</html>");
 			else
-				setText("<html>Joueur " + (control.joueurCourant()+1) + ", déplace un pingouin !</html>");
+				setText("<html>Joueur " + (control.joueurCourant() + 1) + ", déplace un pingouin !</html>");
 		else
-			setText("<html>L'IA du joueur " + (control.joueurCourant()+1) + " réfléchit</html>");
+			setText("<html>L'IA du joueur " + (control.joueurCourant() + 1) + " réfléchit</html>");
 	}
 }

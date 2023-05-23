@@ -1,12 +1,9 @@
 package Controleur;
 
 import Modele.*;
-import Patterns.Commande;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
 import Vue.ComposantPanneauFinPartie;
-import Vue.InterfaceGraphique;
-import Vue.NiveauGraphique;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
@@ -170,8 +167,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 		if (jeu.joueurs[joueurCourant()].getTypeJoueur() > 1 && !consultation) {
 			System.out.println("L'IA réfléchit...");
 			tictac();
-		}
-		else
+		} else
 			System.out.println();
 	}
 
@@ -207,7 +203,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	public void afficheRanking(List<Joueur> joueur) {
 		ranks = new int[joueur.size()];
 		for (int i = 0; i < joueur.size(); i++) {
-			if (i+1<joueur.size()&& joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
+			if (i + 1 < joueur.size() && joueur.get(i).getScore() == joueur.get(i + 1).getScore()) {
 				if (joueur.get(i).getIlots() < joueur.get(i + 1).getIlots()) {
 					Joueur temp = joueur.get(i);
 					joueur.remove(i);
@@ -318,14 +314,21 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return jeu.joueurs[joueurCourant()].getTypeJoueur() > 1;
 	}
 
-	public boolean estIA(int j) { return jeu.joueurs[j].getTypeJoueur() > 1; }
-	public boolean isConsultation(){ return consultation; }
+	public boolean estIA(int j) {
+		return jeu.joueurs[j].getTypeJoueur() > 1;
+	}
+
+	public boolean isConsultation() {
+		return consultation;
+	}
 
 	public ArrayList<int[]> hexAccessible(int l, int c) {
 		return jeu.hex_accessible(l, c);
 	}
 
-	public int coupSrcL() { return coup.sourcel; }
+	public int coupSrcL() {
+		return coup.sourcel;
+	}
 
 	public int coupSrcC() {
 		return coup.sourcec;
@@ -339,14 +342,16 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return coup.destc;
 	}
 
-	public int largeur() { return jeu.largeur(); }
+	public int largeur() {
+		return jeu.largeur();
+	}
 
 	public int hauteur() {
 		return jeu.hauteur();
 	}
 
-	public ArrayList<int[]> getPinguins(int numeroJ) {
-		return jeu.getPingouins(numeroJ);
+	public ArrayList<int[]> getCases(int numeroJ) {
+		return jeu.getCases(numeroJ);
 	}
 
 	public void ajouteObservateur(Observateur o) {
@@ -381,9 +386,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 		return PingSel;
 	}
 
-	public int nombreJoueurs() { return jeu.joueurs.length; }
+	public int nombreJoueurs() {
+		return jeu.joueurs.length;
+	}
 
-	public boolean peutAnnuler() { return jeu.historique.peutAnnuler(); }
+	public boolean peutAnnuler() {
+		return jeu.historique.peutAnnuler();
+	}
 
-	public boolean peutRefaire() { return jeu.historique.peutRefaire(); }
+	public boolean peutRefaire() {
+		return jeu.historique.peutRefaire();
+	}
 }

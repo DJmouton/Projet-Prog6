@@ -8,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class ComposantAfficheDernierCoup extends JLabel implements Observateur{
+public class ComposantAfficheDernierCoup extends JLabel implements Observateur {
 
 	CollecteurEvenements control;
 	int dstL, dstC, jc;
@@ -24,8 +24,7 @@ public class ComposantAfficheDernierCoup extends JLabel implements Observateur{
 			poisson = ImageIO.read(new File("resources/assets/poisson.png"));
 			dstL = control.coupDestL();
 			dstC = control.coupDestC();
-		}
-		catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			dstL = -1;
 			dstC = -1;
 		} catch (IOException e) {

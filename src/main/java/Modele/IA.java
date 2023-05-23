@@ -38,8 +38,8 @@ public class IA extends Joueur{
     public Coup jeu() {
         etats = Etats.Deplacement;
         System.out.println(System.currentTimeMillis());
-        ArrayList<int[]> pingouins = jeu.getPingouins(num);
-        ArrayList<ArrayList<int[]>> ilots = getNombre(jeu, jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num));
+        ArrayList<int[]> pingouins = jeu.getCases(num);
+        ArrayList<ArrayList<int[]>> ilots = getNombre(jeu, jeu.getCases(jeu.joueurs[jeu.joueurCourant].num));
         if(this.typeJoueur==2){
             profondeur = 4;
         }else if(this.typeJoueur==3){
@@ -71,7 +71,7 @@ public class IA extends Joueur{
                 }
             }
         }else {
-            ArrayList<int[]> pingouins = jeu.getPingouins(num);
+            ArrayList<int[]> pingouins = jeu.getCases(num);
             for (int[] pingouin : pingouins) {
                 for (int[] emplacement : jeu.hex_accessible(pingouin[0], pingouin[1])) {
                     coups.add(new Coup(jeu, pingouin[0], pingouin[1], emplacement[0], emplacement[1]));
@@ -104,7 +104,7 @@ public class IA extends Joueur{
     private int evaluationInit(Jeu jeu){
         int result = 0;
         int[] score = new int[6];
-        for(int[] pingouin : jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num)) {
+        for(int[] pingouin : jeu.getCases(jeu.joueurs[jeu.joueurCourant].num)) {
             ArrayList<int[]> accessible = jeu.hex_accessible(pingouin[0], pingouin[1]);
             for (int[] ilot : accessible) {
                 score[jeu.plateau[ilot[0]][ilot[1]]]++;
@@ -124,7 +124,7 @@ public class IA extends Joueur{
                 }
             }
         }
-        int k = (9*jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num).size());
+        int k = (9*jeu.getCases(jeu.joueurs[jeu.joueurCourant].num).size());
         if(k>0) {
             score[0] /=k;
         }
@@ -236,7 +236,7 @@ public class IA extends Joueur{
 
     private void expansion(Arbre pere, Jeu jeu, ArrayList<Long> hashList){
         ArrayList<int[]> pingouins = new ArrayList<>();
-        pingouins.add(jeu.getPingouins(this.num).get(0));
+        pingouins.add(jeu.getCases(this.num).get(0));
         ArrayList<int[]> ilot = ilot(jeu, pingouins);
         pingouins.remove(0);
         for(int[] coord : ilot){
