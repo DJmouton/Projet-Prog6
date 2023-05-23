@@ -1,6 +1,7 @@
 package Controleur;
 
 import Modele.Jeu;
+import Modele.Coup;
 import Modele.Historique;
 import Modele.IA;
 
@@ -20,9 +21,21 @@ public class IACoup extends Thread
 	@Override
 	public void run()
 	{
+		long tstart, tend, twait;
 		Historique hist_cpy = jeu.historique.copier();
-		control.coup = ia.jeu();
+		tstart = System.currentTimeMillis();
+		Coup coup = ia.jeu();
+		tend = System.currentTimeMillis();
+		twait = 2000 - (tend-tstart);
+		if (twait > 0) {
+			try {
+				Thread.sleep(twait);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		if (jeu.historique.egal(hist_cpy)) {
+			control.coup = coup;
 			jeu.faire(control.coup);
 			System.out.println("Coup éxecuté");
 			jeu.metAJour();
