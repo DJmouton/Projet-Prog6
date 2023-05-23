@@ -37,25 +37,26 @@ public class IA extends Joueur{
 
     public Coup jeu() {
         etats = Etats.Deplacement;
-        System.out.println(System.currentTimeMillis());
         ArrayList<int[]> pingouins = jeu.getPingouins(num);
         ArrayList<ArrayList<int[]>> ilots = getNombre(jeu, jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num));
         if(this.typeJoueur==2){
             profondeur = 4;
-        }else if(this.typeJoueur==3){
-            profondeur = 2;
-        }else{//4
+        }else if(this.typeJoueur==3){//4
             profondeur = 3;
+        }else{ //4
+            profondeur = 2;
         }
         if(pingouins.size() == ilots.size()){
             Coup coup = parcours_profondeur(jeu);
             coup.setJeu(jeu);
             return coup;
-        }else {
-
+        }else if(this.typeJoueur!=4){
             Pair<Integer, Commande> result = MinMaxJoueur(jeu, profondeur, Integer.MAX_VALUE);
             result.getValue1().setJeu(jeu);
-            System.out.println(System.currentTimeMillis());
+            return (Coup) result.getValue1();
+        }else{
+            Pair<Integer, Commande> result = MinMaxJoueur(jeu, profondeur, Integer.MAX_VALUE);
+            result.getValue1().setJeu(jeu);
             return (Coup) result.getValue1();
         }
 
@@ -93,9 +94,9 @@ public class IA extends Joueur{
             return scoreIA - scoreADV;
         }else {
             if(this.typeJoueur==3){
-                return MonteCarlo(jeu, 250);
+                return MonteCarlo(jeu, 5);
             }else {//4
-                return MonteCarlo(jeu,5);
+                return MonteCarlo(jeu,250);
             }
         }
 
