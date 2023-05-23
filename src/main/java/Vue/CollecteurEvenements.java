@@ -41,7 +41,7 @@ public interface CollecteurEvenements {
 
 	ArrayList<int[]> hexAccessible(int l, int c);
 
-	ArrayList<int[]> getPinguins(int numeroJ);
+	ArrayList<int[]> getCases(int numeroT);
 
 	int coupSrcL();
 

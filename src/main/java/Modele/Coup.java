@@ -2,8 +2,7 @@ package Modele;
 
 import Patterns.Commande;
 
-public class Coup implements Commande
-{
+public class Coup implements Commande {
 	public int sourcel, sourcec;
 	public int destl, destc;
 	Jeu jeu;
@@ -43,7 +42,7 @@ public class Coup implements Commande
 
 	@Override
 	public String toString() {
-		return "Coup" +"\n"
+		return "Coup" + "\n"
 				+ sourcel +
 				" " + sourcec +
 				" " + destl +

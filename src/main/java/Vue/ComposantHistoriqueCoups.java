@@ -1,11 +1,9 @@
 package Vue;
 
-import Patterns.Observateur;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class ComposantHistoriqueCoups extends JPanel{
+public class ComposantHistoriqueCoups extends JPanel {
 
 	CollecteurEvenements control;
 

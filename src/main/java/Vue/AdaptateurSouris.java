@@ -63,7 +63,7 @@ public class AdaptateurSouris extends MouseAdapter {
 		}
 		control.clicSouris(c, l);
 
-		if(!control.partieEnCours()){
+		if (!control.partieEnCours()) {
 			ComposantPanneauFinPartie fin_partie = new ComposantPanneauFinPartie(control);
 			Object[] inputs = {fin_partie};
 			Object[] options = {"Bien joué!"};

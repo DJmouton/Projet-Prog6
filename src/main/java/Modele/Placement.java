@@ -2,8 +2,7 @@ package Modele;
 
 import Patterns.Commande;
 
-public class Placement implements Commande
-{
+public class Placement implements Commande {
 	public int destl;
 	public int destc;
 	Jeu jeu;
@@ -22,11 +21,11 @@ public class Placement implements Commande
 		jeu.joueurs[jeu.joueurCourant].addIlots();
 		jeu.joueurs[jeu.joueurCourant].addScore(1);
 		jeu.nombreP++;
-		if (jeu.nombreP == jeu.nombrePAvoir-jeu.e)
+		if (jeu.nombreP == jeu.nombrePAvoir - jeu.e)
 			jeu.etat = Etats.Selection;
 
 		jeu.plateau[destl][destc] = jeu.joueurCourant + 4;
-		jeu.e=jeu.EnlevePingou(destl,destc);
+		jeu.e = jeu.EnlevePingou(destl, destc);
 		jeu.prochainJoueur();
 	}
 
@@ -36,8 +35,8 @@ public class Placement implements Commande
 
 	@Override
 	public String toString() {
-		return "Placement" + "\n"+
-				+ destl +
+		return "Placement" + "\n" +
+				+destl +
 				" " + destc
 				//", jeu=" + jeu +
 				;

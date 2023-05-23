@@ -1,12 +1,13 @@
 package Vue;
 
+import com.github.weisj.darklaf.LafManager;
+import com.github.weisj.darklaf.theme.SolarizedLightTheme;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import com.github.weisj.darklaf.LafManager;
-import com.github.weisj.darklaf.theme.SolarizedLightTheme;
 
 public class InterfaceGraphique implements Runnable {
 	CollecteurEvenements control;
@@ -33,8 +34,7 @@ public class InterfaceGraphique implements Runnable {
 		JFrame frame = new JFrame("Hey, that's my fish !");
 		try {
 			frame.setIconImage(ImageIO.read(new File("resources/assets/penguin.png")));
-		}
-		catch (IOException exc) {
+		} catch (IOException exc) {
 			System.out.println("Erreur de chargement de l'icone");
 		}
 

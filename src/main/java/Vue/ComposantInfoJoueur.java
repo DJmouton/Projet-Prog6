@@ -51,7 +51,9 @@ public class ComposantInfoJoueur extends JLabel {
 			setText(String.valueOf(score));
 			setIcon(p);
 
-		} catch (IOException e) { System.out.println("Pas d'image"); }
+		} catch (IOException e) {
+			System.out.println("Pas d'image");
+		}
 	}
 
 	public void setCurrent(boolean isCurrent) {
