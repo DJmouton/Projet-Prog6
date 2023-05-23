@@ -21,11 +21,6 @@ public class IACoup extends Thread
 	public void run()
 	{
 		Historique hist_cpy = jeu.historique.copier();
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 		control.coup = ia.jeu();
 		if (jeu.historique.egal(hist_cpy)) {
 			jeu.faire(control.coup);
