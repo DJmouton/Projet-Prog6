@@ -4,9 +4,11 @@ import Modele.*;
 import Patterns.Commande;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
+import Vue.ComposantPanneauFinPartie;
 import Vue.InterfaceGraphique;
 import Vue.NiveauGraphique;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -180,6 +182,19 @@ public class ControleurMediateur implements CollecteurEvenements {
 		System.out.println("--------------------------------------------------");
 		System.out.println("Partie terminée, voici le classement final :");
 		afficheRanking(jeu.Ranking());
+		ComposantPanneauFinPartie fin_partie = new ComposantPanneauFinPartie(this);
+		Object[] inputs = {fin_partie};
+		Object[] options = {"Bien joué!"};
+		JOptionPane.showOptionDialog(
+				null,
+				inputs,
+				"Fin de Partie",
+				0,
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				options,
+				0
+		);
 	}
 
 	public int[] ranking() {

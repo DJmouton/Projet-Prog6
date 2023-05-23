@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ComposantPanneauFinPartie extends JPanel {
 
-    ComposantPanneauFinPartie(CollecteurEvenements control){
+    public ComposantPanneauFinPartie(CollecteurEvenements control){
         int[] ranks = control.ranking();
         ComposantInfoJoueur[] joueurs = {
                 new ComposantInfoJoueur(1, Color.blue, control),
@@ -26,9 +26,9 @@ public class ComposantPanneauFinPartie extends JPanel {
             add(joueurs[ranks[i]], c);
             if(i == 0){
                 Border matteBorder = BorderFactory.createMatteBorder(3, 1, 1, 1, Color.black);
-                Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "VAINQUEUR",
+                Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "1er",
                         TitledBorder.CENTER,TitledBorder.TOP,
-                        new Font("Arial", Font.PLAIN , 13), Color.black);
+                        new Font("Arial", Font.BOLD , 17), Color.black);
                 Border compoundBorder = BorderFactory.createCompoundBorder(titledBorder, joueurs[ranks[i]].getBorder());
                 joueurs[ranks[i]].setBorder(compoundBorder);
             }

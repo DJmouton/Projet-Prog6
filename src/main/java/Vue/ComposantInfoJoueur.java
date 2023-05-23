@@ -29,6 +29,7 @@ public class ComposantInfoJoueur extends JLabel {
 		joueur = j;
 		color = c;
 		setCurrent(false);
+		setFont(new Font("Arial", Font.BOLD, 20));
 	}
 
 	public void setScore(int score) {
@@ -57,7 +58,7 @@ public class ComposantInfoJoueur extends JLabel {
 		Border matteBorder = BorderFactory.createMatteBorder(1, 1, 3, 1, color);
 		Border titledBorder = BorderFactory.createTitledBorder(matteBorder, "J" + joueur,
 				TitledBorder.LEFT, TitledBorder.TOP,
-				new Font("Arial", Font.PLAIN, 13), Color.black);
+				new Font("Arial", Font.PLAIN, 17), Color.black);
 
 		if (isCurrent) {
 			Border raisedbevel = BorderFactory.createRaisedBevelBorder();
