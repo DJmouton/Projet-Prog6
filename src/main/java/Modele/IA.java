@@ -2,6 +2,7 @@ package Modele;
 
 import Patterns.Commande;
 import Structure.Arbre;
+import com.kitfox.svg.A;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Random;
 
 public class IA extends Joueur{
     public Random random;
-    private int profondeur = 3;
+    private int profondeur;
     private Etats etats;
     private double[] weight = new double[]{2.366799251648115,0.6793297871850733,1.5828892078266514,1.9597206869528327,0.98823659118579,0.8488076063459944};
 
@@ -27,7 +28,7 @@ public class IA extends Joueur{
         etats = Etats.Initialisation;
         int i = jeu.nombrePAvoir-jeu.nombreP;
         Pair<Integer, Commande> result = MinMaxJoueur(jeu, Math.min(i,4), Integer.MAX_VALUE);
-        result.getValue1().setJeu(jeu);
+            result.getValue1().setJeu(jeu);
         return (Placement) result.getValue1();
 
 
@@ -36,17 +37,25 @@ public class IA extends Joueur{
 
     public Coup jeu() {
         etats = Etats.Deplacement;
+        System.out.println(System.currentTimeMillis());
         ArrayList<int[]> pingouins = jeu.getPingouins(num);
         ArrayList<ArrayList<int[]>> ilots = getNombre(jeu, jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num));
+        if(this.typeJoueur==2){
+            profondeur = 4;
+        }else if(this.typeJoueur==3){
+            profondeur = 2;
+        }else{//4
+            profondeur = 3;
+        }
         if(pingouins.size() == ilots.size()){
-            System.out.println("lalalla");
-            Coup coup = parcours_pronfondeur(jeu);
+            Coup coup = parcours_profondeur(jeu);
             coup.setJeu(jeu);
             return coup;
         }else {
 
             Pair<Integer, Commande> result = MinMaxJoueur(jeu, profondeur, Integer.MAX_VALUE);
             result.getValue1().setJeu(jeu);
+            System.out.println(System.currentTimeMillis());
             return (Coup) result.getValue1();
         }
 
@@ -63,21 +72,7 @@ public class IA extends Joueur{
             }
         }else {
             ArrayList<int[]> pingouins = jeu.getPingouins(num);
-            ArrayList<ArrayList<int[]>> ilot = getNombre(jeu, jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num));
             for (int[] pingouin : pingouins) {
-                if(pingouins.size() != ilot.size()) {
-                    boolean cont = false;
-                    for (ArrayList<int[]> liste : ilot) {
-                        if (liste.get(0)[0] == pingouin[0] && liste.get(0)[1] == pingouin[1]) {
-                            cont = true;
-                            break;
-                        }
-                    }
-                    if(cont){
-                        continue;
-                    }
-                }
-
                 for (int[] emplacement : jeu.hex_accessible(pingouin[0], pingouin[1])) {
                     coups.add(new Coup(jeu, pingouin[0], pingouin[1], emplacement[0], emplacement[1]));
                 }
@@ -88,7 +83,7 @@ public class IA extends Joueur{
 
 
     private int Evaluation(Jeu jeu){
-        if(this.etats.equals(Etats.Initialisation)){
+        if(this.typeJoueur==2 || this.etats.equals(Etats.Initialisation)){
             if(jeu.joueurs[jeu.joueurCourant].num != this.num){
                 jeu.prochainJoueur();
             }
@@ -97,7 +92,11 @@ public class IA extends Joueur{
             int scoreADV = evaluationInit(jeu);
             return scoreIA - scoreADV;
         }else {
-            return MonteCarlo(jeu, 1);
+            if(this.typeJoueur==3){
+                return MonteCarlo(jeu, 250);
+            }else {//4
+                return MonteCarlo(jeu,5);
+            }
         }
 
     }
@@ -105,7 +104,6 @@ public class IA extends Joueur{
     private int evaluationInit(Jeu jeu){
         int result = 0;
         int[] score = new int[6];
-        //int k = 0;
         for(int[] pingouin : jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num)) {
             ArrayList<int[]> accessible = jeu.hex_accessible(pingouin[0], pingouin[1]);
             for (int[] ilot : accessible) {
@@ -126,7 +124,10 @@ public class IA extends Joueur{
                 }
             }
         }
-        score[0]/=(9*jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num).size());
+        int k = (9*jeu.getPingouins(jeu.joueurs[jeu.joueurCourant].num).size());
+        if(k>0) {
+            score[0] /=k;
+        }
         for(int i = 0; i<score.length;i++){
             result+=score[i]*weight[i];
         }
@@ -152,9 +153,6 @@ public class IA extends Joueur{
             int scoreIA = j.joueurs[j.joueurCourant].score;
             j.prochainJoueur();
             int scoreADV = j.joueurs[j.joueurCourant].score;
-            /*if(scoreIA > scoreADV){
-                somme++;
-            }*/
             somme+=scoreIA-scoreADV;
         }
         return somme / taille;
@@ -205,7 +203,7 @@ public class IA extends Joueur{
         }
     }
 
-    public Coup parcours_pronfondeur(Jeu jeu){
+    public Coup parcours_profondeur(Jeu jeu){
         Arbre arbre = new Arbre(null, null);
         ArrayList<Long> hashlist = new ArrayList<>();
         expansion(arbre, jeu,hashlist);
@@ -238,9 +236,6 @@ public class IA extends Joueur{
 
     private void expansion(Arbre pere, Jeu jeu, ArrayList<Long> hashList){
         ArrayList<int[]> pingouins = new ArrayList<>();
-        if(jeu.getPingouins(this.num).size()==0){
-            System.out.println("ici");
-        }
         pingouins.add(jeu.getPingouins(this.num).get(0));
         ArrayList<int[]> ilot = ilot(jeu, pingouins);
         pingouins.remove(0);
