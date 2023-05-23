@@ -22,13 +22,19 @@ public class IAPlacement extends Thread
 	@Override
 	public void run()
 	{
+		long tstart, tend, twait;
 		Historique hist_cpy = jeu.historique.copier();
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		tstart = System.currentTimeMillis();
 		res = ia.placement();
+		tend = System.currentTimeMillis();
+		twait = 2000 - (tend-tstart);
+		if (twait > 0) {
+			try {
+				Thread.sleep(twait);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		if (jeu.historique.egal(hist_cpy)) {
 			jeu.faire(res);
 			System.out.println("Placement éxecuté");
