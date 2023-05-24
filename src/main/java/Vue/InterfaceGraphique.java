@@ -27,8 +27,6 @@ public class InterfaceGraphique implements Runnable {
 	 */
 	@Override
 	public void run() {
-		LafManager.setTheme(new SolarizedLightTheme());
-		LafManager.install();
 
 		// Création de la fenêtre
 		JFrame frame = new JFrame("Hey, that's my fish !");
