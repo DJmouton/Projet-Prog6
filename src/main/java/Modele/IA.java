@@ -42,9 +42,10 @@ public class IA extends Joueur{
         if(this.typeJoueur==2){
             profondeur = 4;
         }else if(this.typeJoueur==3){//4
-            profondeur = 3;
-        }else{ //4
             profondeur = 2;
+        }else{ //4
+            profondeur = 3;
+
         }
         if(pingouins.size() == ilots.size()){
             Coup coup = parcours_profondeur(jeu);
@@ -90,9 +91,10 @@ public class IA extends Joueur{
             return scoreIA - scoreADV;
         }else {
             if(this.typeJoueur==3){
-                return MonteCarlo(jeu, 5);
-            }else {//4
                 return MonteCarlo(jeu,250);
+
+            }else {//4
+                return MonteCarlo(jeu, 5);
             }
         }
 
